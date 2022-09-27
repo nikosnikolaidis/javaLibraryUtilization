@@ -58,10 +58,10 @@ public class Main {
         DONE foreach library in ./target/dependency
            ? jar xf nameofjar.jar
            ? parse
-        DONE  and get all method declarations (Done in Main2.java -> Main2.methodsOfLibrary)
-        DONE  foreach method
-        DONE check if it exists in our list of methods -> Main  .allMethodsCalled
-        DONE   	if exists
+        	DONE  and get all method declarations (Done in Main2.java -> Main2.methodsOfLibrary)
+        	DONE  foreach method
+        	DONE check if it exists in our list of methods -> Main  .allMethodsCalled
+        	DONE   	if exists
                     start call-graph from there
                     InvestigatorFacade facade = new InvestigatorFacade(dirOfProject, fileOfMethod, methodDeclaration);
                     Set<MethodCallSet> methodCallSets = facade.start();
