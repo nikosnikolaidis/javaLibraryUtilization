@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: Apache Commons IO
+Implementation-Version: 2.11.0
+Specification-Vendor: The Apache Software Foundation
+Specification-Title: Apache Commons IO
+Created-By: Maven Source Plugin 3.2.1
+Specification-Version: 2.11
+Implementation-Vendor: The Apache Software Foundation
+
