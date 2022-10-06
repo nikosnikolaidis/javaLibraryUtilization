@@ -79,7 +79,7 @@ public class Main {
         		Commands.makeFolder("C:\\Users\\kolid\\eclipse-workspace\\JavaTest\\target\\dependency", allFiles.get(i).toString());
         		
         		//get all method declarations
-        		LibUtil m = new LibUtil("C:\\Users\\kolid\\eclipse-workspace\\JavaTest\\");
+        		LibUtil m = new LibUtil(allFiles.get(i).toString()+"new");
                 List<MethodOfLibrary> methodsOfFile= new ArrayList<>();
                 methodsOfFile = m.getMethodsOfLibrary();
                 System.out.println(methodsOfFile);

@@ -28,7 +28,7 @@ public class LibUtil {
         System.out.println(projectRoot);
         
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-       // System.out.println("sourceRoots" + sourceRoots);
+        System.out.println("sourceRoots" + sourceRoots);
         try {
             createSymbolSolver(project);
         } catch (IllegalStateException e) {
