@@ -9,17 +9,15 @@
  ******************************************************************************/
 package callgraph.infrastructure.entities;
 
-import java.util.Objects;
-
+import java.util.Objects;			
 
 public class MethodDecl {
-
+	
     private final String filePath;
     private final String packageName;
     private final String simpleName;
     private final String qualifiedName;
-    private final CodeRange codeRange;
-
+    private final CodeRange codeRange; 
     public MethodDecl(String filePath, String packageName, String simpleName, String qualifiedName, CodeRange codeRange) {
         this.filePath = filePath;
         this.packageName = packageName;
@@ -28,9 +26,7 @@ public class MethodDecl {
         this.codeRange = codeRange;
     } 
     
-   
-    
-
+    	
     public String getSimpleName() {
         return simpleName;
     }

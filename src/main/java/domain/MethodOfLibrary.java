@@ -15,8 +15,6 @@ public class MethodOfLibrary {
     public MethodDeclaration getMethodDeclaration() {
         return methodDeclaration;
     }
-
-    
     
     public void setMethodDeclaration(MethodDeclaration methodDeclaration) {
         this.methodDeclaration = methodDeclaration;
@@ -24,7 +22,7 @@ public class MethodOfLibrary {
 
     public String getQualifiedSignature() {
         return qualifiedSignature;
-    }
+    }		    	
 
     public void setQualifiedSignature(String qualifiedSignature) {
         this.qualifiedSignature = qualifiedSignature;

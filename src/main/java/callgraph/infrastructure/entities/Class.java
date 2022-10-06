@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021-2022 UoM - University of Macedonia
+ 	* Copyright (C) 2021-2022 UoM - University of Macedonia
  * 
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -11,15 +11,14 @@ package callgraph.infrastructure.entities;
 
 import java.util.Objects;
 
-public class Class {
-
+public class Class {	
 
     private final String qualifiedName;
   
     public Class(String name) {
         this.qualifiedName = name;
-    }
-
+    } 
+    		 
     public String getQualifiedName() {
         return qualifiedName;
     }

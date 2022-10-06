@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class ClassVisitor extends VoidVisitorAdapter<Void> {
 
 
-    private final Set<MethodCallSet> methodCallSets;
+	private final Set<MethodCallSet> methodCallSets;
     private final String filePath;
     private final MethodDeclaration startingMethod;
 
@@ -41,8 +41,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
         this.filePath = filePath;
         this.startingMethod = method;
     }
-
-    
+       
     @Override
     public void visit(ClassOrInterfaceDeclaration javaClass, Void arg) {
         if (this.project.getJavaFiles().stream().anyMatch(javaFile -> javaFile.getPath().equals(this.filePath))) {
@@ -138,9 +137,10 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
         List<String> methodCallExpressionsStr = convertMethodCallExprToString(method.findAll(MethodCallExpr.class));
         if (methodCallExpressionsStr.isEmpty() || new HashSet<>(methodCallSet.getMethodCalls().stream().map(MethodDecl::getQualifiedName).collect(Collectors.toList())).containsAll(methodCallExpressionsStr))
             return;
+        
 
         for (MethodCallExpr methodCallExpr : method.findAll(MethodCallExpr.class)) {
-            JavaFile jf;
+            JavaFile jf; 
             ResolvedMethodDeclaration resolvedMethodCallExpression;
             try {
                 resolvedMethodCallExpression = methodCallExpr.resolve();
@@ -189,8 +189,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
             }
         }
         return null;
-    }
-
+    } 
     /**
      * Searches & returns the MethodDeclaration object of the method's
      * implementation.
@@ -200,6 +199,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
      *
      * @return the implementation of the MethodDeclaration object if exists, null otherwise
      */
+    	
     private MethodDeclaration getMethodImplementation(ClassOrInterfaceDeclaration interfaceDeclaration, String methodSimpleName) {
         try {
             String implementationPath = InterfaceImplementations.getImplementedTypesByInterface(interfaceDeclaration.getFullyQualifiedName().get());

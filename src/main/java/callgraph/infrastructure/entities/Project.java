@@ -21,9 +21,8 @@ public class Project {
         this.clonePath = clonePath;
         this.javaFiles = javaFiles;
     } 
-   
-
-    public Project(String clonePath) {
+     	
+    	 public Project(String clonePath) {
         this.clonePath = clonePath;
         this.javaFiles = ConcurrentHashMap.newKeySet();
     }

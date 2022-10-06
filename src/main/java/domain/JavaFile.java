@@ -1,5 +1,5 @@
 package domain;
-
+ 	
 import com.github.javaparser.ast.CompilationUnit;
 
 import java.util.Objects;
@@ -16,15 +16,15 @@ public class JavaFile {
         this.path = path;
         this.absolutePath = absolutePath;
         this.classes = classes;
-    }  
-     
+    } 
+      	 
     public JavaFile(String path){
         this.path=path;
     }
 
     public String getPath() {
         return path;
-    }
+    } 
 
     public Set<Class> getClasses() {
         return this.classes;

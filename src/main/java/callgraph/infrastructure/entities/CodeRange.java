@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021-2022 UoM - University of Macedonia
+ 	* Copyright (C) 2021-2022 UoM - University of Macedonia
  * 
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -9,9 +9,7 @@
  ******************************************************************************/
 package callgraph.infrastructure.entities;
 
-import java.util.Objects;
-
-
+import java.util.Objects;  
 public final class CodeRange {
 
     private final Integer startLine;
@@ -21,6 +19,7 @@ public final class CodeRange {
         this.startLine = startLine;
         this.endLine = endLine;
     }
+    
 
     public Integer getStartLine() {
         return startLine;

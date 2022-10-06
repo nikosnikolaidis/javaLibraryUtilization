@@ -1,5 +1,5 @@
 /*******************************************************************************
-   * Copyright (C) 2021-2022 UoM - University of Macedonia
+ * Copyright (C) 2021-2022 UoM - University of Macedonia
  * 
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -18,9 +18,8 @@ public final class InterfaceImplementations {
     public static void addImplementations(String implementedType, String implementationAbsolutePath) {
         implementationMap.put(implementedType, implementationAbsolutePath);
     }
-   
-
+    
     public static String getImplementedTypesByInterface(String implementedType) {
         return implementationMap.get(implementedType);
-    }
+    } 
 }

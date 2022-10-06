@@ -14,7 +14,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import java.util.Objects;
 import java.util.Set;
 
-
+				
 public class JavaFile {
 
     private final String path;
@@ -28,7 +28,7 @@ public class JavaFile {
         this.absolutePath = absolutePath;
         this.classes = classes;
     }
-   
+        				
 
     public String getPath() {
         return path;
@@ -53,7 +53,7 @@ public class JavaFile {
 
     public CompilationUnit getCompilationUnit() {
         return compilationUnit;
-    }
+    }  
 
     @Override
     public boolean equals(Object o) {

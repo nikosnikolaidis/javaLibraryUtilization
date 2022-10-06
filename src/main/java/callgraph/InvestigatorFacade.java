@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021-2022 UoM - University of Macedonia
+ 	* Copyright (C) 2021-2022 UoM - University of Macedonia
  * 
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
@@ -38,15 +38,14 @@ public final class InvestigatorFacade {
     private final String startingFile;
     private final MethodDeclaration startingMethod;
 
-    private final Set<MethodCallSet> methodCallSets = new HashSet<>();
-
-    
+    private final Set<MethodCallSet> methodCallSets = new HashSet<>();	
 
     public InvestigatorFacade(String projectDir, String startingFile, MethodDeclaration startingMethod) {
         this.project = new Project(projectDir);
         this.startingFile = startingFile;
         this.startingMethod = startingMethod;
     }
+    
     
 
     public InvestigatorFacade(String projectDir, String startingFile) {
@@ -137,7 +136,7 @@ public final class InvestigatorFacade {
 
     private void fillImplementationMap(List<SourceRoot> sourceRoots) {
 
-        try {
+        try {	
             sourceRoots
                     .forEach(sourceRoot -> {
                         try {
@@ -161,7 +160,7 @@ public final class InvestigatorFacade {
                     });
         } catch (Exception ignored) {
         }
-    }
+    }		
 
     /**
      * Starts the calculations
