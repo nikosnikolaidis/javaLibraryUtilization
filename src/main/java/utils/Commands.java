@@ -32,7 +32,7 @@ public class Commands {
         //For Windows
         else {
             Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
-                    "mvn dependency:copy-dependencies" + "\"");
+                    "mvn dependency:copy-dependencies -Dclassifier=sources" + "\"");
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
             String line1;
             while ((line1 = reader1.readLine()) != null) {

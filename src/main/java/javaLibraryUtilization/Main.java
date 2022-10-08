@@ -80,6 +80,8 @@ public class Main {
         		
         		//get all method declarations
         		LibUtil m = new LibUtil(allFiles.get(i).toString()+"new");
+        		//LibUtil m = new LibUtil("C:\\Users\\kolid\\eclipse-workspace\\JavaTest");
+        		
                 List<MethodOfLibrary> methodsOfFile= new ArrayList<>();
                 methodsOfFile = m.getMethodsOfLibrary();
                 System.out.println(methodsOfFile);
@@ -113,6 +115,7 @@ public class Main {
         //Setup Parser and SymbolSolver
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project.getClonePath()));
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
+        System.out.print(projectRoot.getSourceRoots());
         try {
             createSymbolSolver(project.getClonePath());
         } catch (IllegalStateException e) {
