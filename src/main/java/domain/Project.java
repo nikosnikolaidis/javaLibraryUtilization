@@ -25,7 +25,7 @@ public class Project {
     public String getClonePath() {
         return clonePath;
     }		 
-    	
+    	 
     public Set<JavaFile> getJavaFiles() {
         return javaFiles;
     }

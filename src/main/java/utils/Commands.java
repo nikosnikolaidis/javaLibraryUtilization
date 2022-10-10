@@ -32,7 +32,7 @@ public class Commands {
         //For Windows
         else {
             Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
-                    "mvn dependency:copy-dependencies -Dclassifier=sources" + "\"");
+                    "mvn dependency:copy-dependencies -Dclassifier=sources  -DexcludeTransitive" + "\"");
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
             String line1;
             while ((line1 = reader1.readLine()) != null) {
@@ -81,7 +81,7 @@ public class Commands {
     public static void makeFolder(String projectPath,String fileName) throws IOException {
     	//for windows
     	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
-                "mkdir " + fileName + "new");
+                "mkdir " + fileName + "new\\src\\main");
         BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
         String line1;
         while ((line1 = reader1.readLine()) != null) {
@@ -92,7 +92,7 @@ public class Commands {
         while ((line2 = reader2.readLine()) != null) {
             System.out.println(line2);	
         }	
-        projectPath =  fileName +"new";
+        projectPath =  fileName +"new\\src\\main";
         Commands.unJar(projectPath, fileName);
     }
     

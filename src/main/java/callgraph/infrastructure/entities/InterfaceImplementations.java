@@ -23,3 +23,4 @@ public final class InterfaceImplementations {
         return implementationMap.get(implementedType);
     } 
 }
+

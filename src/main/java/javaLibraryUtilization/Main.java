@@ -40,6 +40,7 @@ public class Main {
 	public static Project project=new Project("C:\\Users\\kolid\\eclipse-workspace\\JavaTest"); 
 	
     public static List<String> allMethodsCalled = new ArrayList<>();
+    public static List<String> allMethodsCalledNew = new ArrayList<>();
     public static List<String> librariesWithProblem = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
@@ -47,32 +48,41 @@ public class Main {
     	Commands.method2(project.getClonePath());
     	Commands.getJarDependenciesForInitParsing(project.getClonePath());  
         getMethodsCalled();
-        allMethodsCalled.forEach(System.out::println);
+        //allMethodsCalled.forEach(System.out::println);
+        
+        
+        //to check for duplicate values
+        for(String k:allMethodsCalled) {
+        	if (!allMethodsCalledNew.contains(k)) {
+        		allMethodsCalledNew.add(k.toString());
+        	}
+        }
+        allMethodsCalledNew.forEach(System.out::println);
 
         /*
-        DONE2 run "mvn clean" in cmd
-        DONE2 run "mvn dependency:copy-dependencies -Dclassifier=sources  -DexcludeTransitive" in cmd
-        DONE2 foreach library in ./target/dependency
-        DONE2 jar xf nameofjar.jar
-           ? parse
-        	DONE  and get all method declarations (Done in Main2.java -> Main2.methodsOfLibrary)
-        	DONE  foreach method
-        	DONE check if it exists in our list of methods -> Main  .allMethodsCalled
-        	DONE   	if exists
+        run "mvn clean" in cmd
+        run "mvn dependency:copy-dependencies -Dclassifier=sources  -DexcludeTransitive" in cmd
+        foreach library in ./target/dependency
+        jar xf nameofjar.jar
+            parse
+        	  and get all method declarations (Done in Main2.java -> Main2.methodsOfLibrary)
+        	  foreach method
+        	  check if it exists in our list of methods -> Main  .allMethodsCalled
+        	    	if exists
                     start call-graph from there
                     InvestigatorFacade facade = new InvestigatorFacade(dirOfProject, fileOfMethod, methodDeclaration);
                     Set<MethodCallSet> methodCallSets = facade.start();
          */
          
                 
-       // List all files of Target & jar xf nameofjar.jar
+       // List all files of Target 
         Path path = Paths.get("C:\\Users\\kolid\\eclipse-workspace\\JavaTest\\target\\dependency");
         try (Stream <Path> subPaths = Files.walk(path,1)) {
         	 List<String> allFiles = subPaths
         			 .map(Objects::toString)
         			 .collect(Collectors.toList());
         allFiles.remove(0);
-        System.out.println(allFiles);
+       // System.out.println(allFiles);
         
         
         	for (int i =0; i<allFiles.size();i++) {
@@ -80,16 +90,14 @@ public class Main {
         		
         		//get all method declarations
         		LibUtil m = new LibUtil(allFiles.get(i).toString()+"new");
-        		//LibUtil m = new LibUtil("C:\\Users\\kolid\\eclipse-workspace\\JavaTest");
-        		
                 List<MethodOfLibrary> methodsOfFile= new ArrayList<>();
                 methodsOfFile = m.getMethodsOfLibrary();
-                System.out.println(methodsOfFile);
+                System.out.println("Methods of file" +allFiles.get(i).toString()+"new" + methodsOfFile);
                 
 
                 // check if it exists in our list of methods
                  for(MethodOfLibrary j: methodsOfFile) {
-                	for (String k : allMethodsCalled){
+                	for (String k : allMethodsCalledNew){
 	                	if( j.toString().contains(k)) {
 	                		//CALLGRAPH
 	                		InvestigatorFacade facade = new InvestigatorFacade(allFiles.get(i).toString()+"new",
@@ -106,9 +114,10 @@ public class Main {
 			e.printStackTrace();
 		}
        
-
-        System.out.println("Libraries with errors: ");
-        librariesWithProblem.forEach(System.out::println);
+        if (librariesWithProblem.size()!=0) {
+        	System.out.println("Libraries with errors: ");
+        	librariesWithProblem.forEach(System.out::println);
+        }
     }
 
     private static void getMethodsCalled() {

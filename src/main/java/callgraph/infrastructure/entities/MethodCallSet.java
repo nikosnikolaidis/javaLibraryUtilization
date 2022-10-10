@@ -27,7 +27,7 @@ public class MethodCallSet {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MethodCallSet that = (MethodCallSet) o;
+         MethodCallSet that = (MethodCallSet) o;
         return Objects.equals(methodDeclaration, that.methodDeclaration);
     }
     		 			

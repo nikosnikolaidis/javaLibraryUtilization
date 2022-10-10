@@ -41,7 +41,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
         this.filePath = filePath;
         this.startingMethod = method;
     }
-       
+         
     @Override
     public void visit(ClassOrInterfaceDeclaration javaClass, Void arg) {
         if (this.project.getJavaFiles().stream().anyMatch(javaFile -> javaFile.getPath().equals(this.filePath))) {

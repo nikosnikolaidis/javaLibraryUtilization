@@ -20,7 +20,6 @@ public final class CodeRange {
         this.endLine = endLine;
     }
     
-
     public Integer getStartLine() {
         return startLine;
     }

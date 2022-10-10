@@ -46,8 +46,6 @@ public final class InvestigatorFacade {
         this.startingMethod = startingMethod;
     }
     
-    
-
     public InvestigatorFacade(String projectDir, String startingFile) {
         project = new Project(projectDir);
         this.startingFile = startingFile;

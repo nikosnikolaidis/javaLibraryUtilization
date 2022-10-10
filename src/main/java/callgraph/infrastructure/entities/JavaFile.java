@@ -27,8 +27,7 @@ public class JavaFile {
         this.path = path;
         this.absolutePath = absolutePath;
         this.classes = classes;
-    }
-        				
+    }			
 
     public String getPath() {
         return path;

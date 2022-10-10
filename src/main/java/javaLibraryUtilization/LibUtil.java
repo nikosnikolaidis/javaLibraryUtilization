@@ -25,11 +25,9 @@ public class LibUtil {
  
     public LibUtil(String project) {
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project));
-        //System.out.println("hello" + projectRoot);
-        
+      
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        //System.out.print("Sour" + sourceRoots);
-   
+       
         try {
             createSymbolSolver(project);
         } catch (IllegalStateException e) {

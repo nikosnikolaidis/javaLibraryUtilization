@@ -26,7 +26,6 @@ public class MethodDecl {
         this.codeRange = codeRange;
     } 
     
-    	
     public String getSimpleName() {
         return simpleName;
     }
