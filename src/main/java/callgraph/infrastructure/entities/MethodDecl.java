@@ -12,7 +12,7 @@ package callgraph.infrastructure.entities;
 import java.util.Objects;			
 
 public class MethodDecl {
-	
+	 
     private final String filePath;
     private final String packageName;
     private final String simpleName;

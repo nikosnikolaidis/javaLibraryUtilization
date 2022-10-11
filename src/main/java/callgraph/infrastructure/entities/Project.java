@@ -12,7 +12,7 @@ package callgraph.infrastructure.entities;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+ 
 public class Project {
     private String clonePath;
     private Set<JavaFile> javaFiles;

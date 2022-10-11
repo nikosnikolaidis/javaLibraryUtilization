@@ -21,7 +21,7 @@ public class Project {
     public String getUrl() {
         return url;
     }
-
+ 
     public String getClonePath() {
         return clonePath;
     }		 

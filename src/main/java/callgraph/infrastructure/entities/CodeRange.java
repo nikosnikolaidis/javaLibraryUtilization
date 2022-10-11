@@ -11,7 +11,7 @@ package callgraph.infrastructure.entities;
 
 import java.util.Objects;  
 public final class CodeRange {
-
+ 
     private final Integer startLine;
     private final Integer endLine;
 

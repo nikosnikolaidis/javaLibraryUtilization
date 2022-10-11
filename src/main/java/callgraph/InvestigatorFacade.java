@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 public final class InvestigatorFacade {
 
     private final Project project;

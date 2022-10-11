@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 
 public class ClassVisitor extends VoidVisitorAdapter<Void> {
 
-
 	private final Set<MethodCallSet> methodCallSets;
     private final String filePath;
     private final MethodDeclaration startingMethod;
@@ -41,7 +40,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
         this.filePath = filePath;
         this.startingMethod = method;
     }
-         
+          
     @Override
     public void visit(ClassOrInterfaceDeclaration javaClass, Void arg) {
         if (this.project.getJavaFiles().stream().anyMatch(javaFile -> javaFile.getPath().equals(this.filePath))) {

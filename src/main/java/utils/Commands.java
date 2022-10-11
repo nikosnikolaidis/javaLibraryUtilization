@@ -27,7 +27,7 @@ public class Commands {
             while ((line2 = reader3.readLine()) != null) {
                System.out.println(line2);
             }
-        }
+        } 
   
         //For Windows
         else {

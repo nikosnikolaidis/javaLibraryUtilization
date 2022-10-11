@@ -19,7 +19,7 @@ public class Class {
         if (o == null || getClass() != o.getClass()) return false;
         Class aClass = (Class) o;
         return Objects.equals(qualifiedName, aClass.qualifiedName);
-    } 
+    }  
 
     @Override
     public int hashCode() {
@@ -32,3 +32,4 @@ public class Class {
         return qualifiedName;
     }
 }
+ 

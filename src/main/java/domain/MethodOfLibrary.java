@@ -10,7 +10,7 @@ public class MethodOfLibrary {
     public MethodOfLibrary(MethodDeclaration methodDeclaration, String qualifiedSignature) {
         this.methodDeclaration = methodDeclaration;
         this.qualifiedSignature = qualifiedSignature;
-    }
+    } 
 
     public MethodDeclaration getMethodDeclaration() {
         return methodDeclaration;

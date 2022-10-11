@@ -8,7 +8,6 @@
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
 package callgraph.infrastructure.entities;
-
 import java.util.Objects;
 
 public class Class {	

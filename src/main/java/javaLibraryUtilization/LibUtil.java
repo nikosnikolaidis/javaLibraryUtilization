@@ -52,7 +52,7 @@ public class LibUtil {
                 });
        System.out.println();
 
-       methodsOfLibrary.forEach(System.out::println);
+       //methodsOfLibrary.forEach(System.out::println);
     }
 
     private void analyzeUnit(CompilationUnit compilationUnit, String filePath) {

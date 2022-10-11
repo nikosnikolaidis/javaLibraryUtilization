@@ -22,7 +22,7 @@ public class MethodCallSet {
         this.methodDeclaration = method;
         this.methodCalls = new HashSet<>();
     }   
-
+ 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

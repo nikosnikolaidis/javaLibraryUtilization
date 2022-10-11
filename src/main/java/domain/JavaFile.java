@@ -24,7 +24,7 @@ public class JavaFile {
 
     public String getPath() {
         return path;
-    } 
+    }  
 
     public Set<Class> getClasses() {
         return this.classes;

@@ -18,7 +18,7 @@ public final class InterfaceImplementations {
     public static void addImplementations(String implementedType, String implementationAbsolutePath) {
         implementationMap.put(implementedType, implementationAbsolutePath);
     }
-    
+     
     public static String getImplementedTypesByInterface(String implementedType) {
         return implementationMap.get(implementedType);
     } 
