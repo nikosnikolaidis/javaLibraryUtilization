@@ -28,7 +28,7 @@ public class LibUtil {
       
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
        
-        try {
+        try { 
             createSymbolSolver(project);
         } catch (IllegalStateException e) {
             return;

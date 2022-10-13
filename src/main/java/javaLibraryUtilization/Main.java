@@ -11,12 +11,15 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -29,7 +32,6 @@ import com.github.javaparser.utils.SourceRoot;
 
 import callgraph.InvestigatorFacade;
 import callgraph.infrastructure.entities.MethodCallSet;
-import callgraph.infrastructure.entities.MethodDecl;
 import domain.Class;
 import domain.JavaFile;
 import domain.MethodOfLibrary;
@@ -37,16 +39,21 @@ import domain.Project;
 import utils.Commands;
 
 
+@SpringBootApplication
+
 public class Main {
+	
 	
 	public static Project project=new Project("C:\\Users\\kolid\\eclipse-workspace\\JavaTest"); 
 	
     public static List<String> allMethodsCalled = new ArrayList<>();
     public static List<String> allMethodsCalledNew = new ArrayList<>();
     public static List<String> librariesWithProblem = new ArrayList<>();
-    public static List<MethodDeclaration> declarationList = new ArrayList<>();
+   // public static List<MethodDeclaration> declarationList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
+    	
+    	SpringApplication.run(Main.class, args);
     	
     	Commands.method2(project.getClonePath());
     	Commands.getJarDependenciesForInitParsing(project.getClonePath());  
@@ -101,12 +108,12 @@ public class Main {
                 
                 //ONLY THE METHOD DECLARATIONS
                 //List declaration List contains method declarations
-                 for (int v=0;v<methodsOfFile.size();v++) {
+                // for (int v=0;v<methodsOfFile.size();v++) {
                 	//System.out.println(methodsOfFile.get(v).getMethodDeclaration());
-                	 declarationList.add(methodsOfFile.get(v).getMethodDeclaration());
-                }
+                	// declarationList.add(methodsOfFile.get(v).getMethodDeclaration());
+               // }
             	
-                System.out.println("The declarations: "+declarationList);
+                //System.out.println("The declarations: "+declarationList);
                 
 
                 // check if it exists in our list of methods
@@ -114,15 +121,14 @@ public class Main {
                  for(MethodOfLibrary j: methodsOfFile) {
                 	for (String k : allMethodsCalledNew){
 	                	if( j.toString().contains(k)) {
-	                		//CALLGRAPH
+	                 		//CALLGRAPH
 	                		//InvestigatorFacade facade = new InvestigatorFacade(dirOfProject, fileOfMethod, methodDeclaration);
 	                		InvestigatorFacade facade = new InvestigatorFacade(allFiles.get(i).toString()+"new",
-	                					allFiles.get(i)+"new".toString(),j.getMethodDeclaration());
-	                		System.out.println("Hello");
+	                					j.getFilePath(),j.getMethodDeclaration());
+	                		//System.out.println("Hello");
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 	                        for(MethodCallSet meth: methodCallSets) {
 	                        	System.out.println(meth);
-	                        	System.out.println("Maria");
 	                        	}
                         }
                 	}

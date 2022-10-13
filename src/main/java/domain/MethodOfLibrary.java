@@ -2,10 +2,13 @@ package domain;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 
+import callgraph.infrastructure.entities.MethodCallSet;
+
 public class MethodOfLibrary {
     private MethodDeclaration methodDeclaration;
     private String qualifiedSignature;
     private String filePath;
+    private MethodCallSet setSaved;
 
     public MethodOfLibrary(MethodDeclaration methodDeclaration, String qualifiedSignature) {
         this.methodDeclaration = methodDeclaration;

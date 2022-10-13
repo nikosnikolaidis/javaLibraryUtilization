@@ -41,7 +41,7 @@ public final class InvestigatorFacade {
 
     public InvestigatorFacade(String projectDir, String startingFile, MethodDeclaration startingMethod) {
         this.project = new Project(projectDir);
-        this.startingFile = startingFile;
+        this.startingFile = startingFile.replace("\\","/");;
         this.startingMethod = startingMethod;
     }
     
