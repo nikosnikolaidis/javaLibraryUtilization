@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -29,7 +30,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.utils.SymbolSolverCollectionStrategy;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
-
 import callgraph.InvestigatorFacade;
 import callgraph.infrastructure.entities.MethodCallSet;
 import domain.Class;
@@ -38,18 +38,15 @@ import domain.MethodOfLibrary;
 import domain.Project;
 import utils.Commands;
 
-
 @SpringBootApplication
 
 public class Main {
 	
-	
 	public static Project project=new Project("C:\\Users\\kolid\\eclipse-workspace\\JavaTest"); 
-	
     public static List<String> allMethodsCalled = new ArrayList<>();
     public static List<String> allMethodsCalledNew = new ArrayList<>();
-    public static List<String> librariesWithProblem = new ArrayList<>();
-   // public static List<MethodDeclaration> declarationList = new ArrayList<>();
+    public static List<String> librariesWithProblem = new ArrayList<>();   
+    public static Set<MethodCallSet> methodCallSetList =new HashSet<>();
 
     public static void main(String[] args) throws IOException {
     	
@@ -58,8 +55,6 @@ public class Main {
     	Commands.method2(project.getClonePath());
     	Commands.getJarDependenciesForInitParsing(project.getClonePath());  
         getMethodsCalled();
-        //allMethodsCalled.forEach(System.out::println);
-        
         
         //to check for duplicate values
         for(String k:allMethodsCalled) {
@@ -71,8 +66,8 @@ public class Main {
 
         /*
          * 
-        DONE run "mvn clean" in cmd
-        DONE run "mvn dependency:copy-dependencies -Dclassifier=sources  -DexcludeTransitive" in cmd
+        run "mvn clean" in cmd
+        run "mvn dependency:copy-dependencies -Dclassifier=sources  -DexcludeTransitive" in cmd
         foreach library in ./target/dependency
         jar xf nameofjar.jar
             parse
@@ -84,7 +79,6 @@ public class Main {
                     InvestigatorFacade facade = new InvestigatorFacade(dirOfProject, fileOfMethod, methodDeclaration);
                     Set<MethodCallSet> methodCallSets = facade.start();
          */
-         
                 
        // List all files of Target 
         Path path = Paths.get("C:\\Users\\kolid\\eclipse-workspace\\JavaTest\\target\\dependency");
@@ -93,31 +87,17 @@ public class Main {
         			 .map(Objects::toString)
         			 .collect(Collectors.toList());
         	 allFiles.remove(0);
-       // System.out.println(allFiles);
-        
+       //System.out.println(allFiles);
         
         	for (int i =0; i<allFiles.size();i++) {
-        		Commands.makeFolder("C:\\Users\\kolid\\eclipse-workspace\\JavaTest\\target\\dependency", allFiles.get(i).toString());
-        		
+        		Commands.makeFolder("C:\\Users\\kolid\\eclipse-workspace\\JavaTest\\target\\dependency", allFiles.get(i).toString());		
         		//get all methods of the file
         		LibUtil m = new LibUtil(allFiles.get(i).toString()+"new");
                 List<MethodOfLibrary> methodsOfFile= new ArrayList<>();
                 methodsOfFile = m.getMethodsOfLibrary();
-                System.out.println("Methods of file " +allFiles.get(i).toString()+"new" + methodsOfFile);
+                System.out.println("Methods of file " + allFiles.get(i).toString()+"new" + methodsOfFile);
                 
-                
-                //ONLY THE METHOD DECLARATIONS
-                //List declaration List contains method declarations
-                // for (int v=0;v<methodsOfFile.size();v++) {
-                	//System.out.println(methodsOfFile.get(v).getMethodDeclaration());
-                	// declarationList.add(methodsOfFile.get(v).getMethodDeclaration());
-               // }
-            	
-                //System.out.println("The declarations: "+declarationList);
-                
-
                 // check if it exists in our list of methods
-            
                  for(MethodOfLibrary j: methodsOfFile) {
                 	for (String k : allMethodsCalledNew){
 	                	if( j.toString().contains(k)) {
@@ -125,14 +105,14 @@ public class Main {
 	                		//InvestigatorFacade facade = new InvestigatorFacade(dirOfProject, fileOfMethod, methodDeclaration);
 	                		InvestigatorFacade facade = new InvestigatorFacade(allFiles.get(i).toString()+"new",
 	                					j.getFilePath(),j.getMethodDeclaration());
-	                		//System.out.println("Hello");
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 	                        for(MethodCallSet meth: methodCallSets) {
-	                        	System.out.println(meth);
+	                        	methodCallSetList.add(meth);
 	                        	}
                         }
                 	}
                  }
+                 //System.out.print("Maria" + methodCallSetList);
         	} 
         	
 		} catch (IOException e) {
@@ -241,5 +221,4 @@ public class Main {
         }
         return project.getJavaFiles().size();
     }
-
 }

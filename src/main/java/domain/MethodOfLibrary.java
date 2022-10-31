@@ -47,4 +47,14 @@ public class MethodOfLibrary {
                 ", filePath='" + filePath + '\'' +
                 '}';
     }
+
+	public MethodCallSet getSetSaved() {
+		return setSaved;
+	}
+
+	public void setSetSaved(MethodCallSet setSaved) {
+		this.setSaved = setSaved;
+	}
+    
+    
 }
