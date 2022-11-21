@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class controllerUser {
+public class Controller {
 	
 	@Autowired
 	private HelloService HelloService;

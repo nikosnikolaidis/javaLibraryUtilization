@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 
 import com.github.javaparser.ParseResult;
@@ -93,7 +92,7 @@ public class HelloService {
                 methodsOfFile = m.getMethodsOfLibrary();
                 System.out.println("Methods of file " + allFiles.get(i).toString()+"new" + methodsOfFile);
                 
-                // check if it exists in our list of methods
+               /* // check if it exists in our list of methods
                  for(MethodOfLibrary j: methodsOfFile) {
                 	for (String k : allMethodsCalledNew){
 	                	if( j.toString().contains(k)) {
@@ -108,6 +107,7 @@ public class HelloService {
                         }
                 	}
                  }
+                 */
                  //System.out.print("Maria" + methodCallSetList);
         	} 
         	
@@ -121,6 +121,7 @@ public class HelloService {
         }
     	//System.out.println("Hello again" + projName);
     	
+        Commands.deleteProject(name);
     }
 
 
