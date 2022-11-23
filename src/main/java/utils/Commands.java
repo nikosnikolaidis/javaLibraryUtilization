@@ -125,25 +125,11 @@ public class Commands {
             System.out.println(line2);	
         }	
     }
-    public static void getTheProjectName(String projectPath,String gitUrl) throws IOException {
-    	//for windows
-    	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + "\\project" + " && "+
-                "git rev-parse --show-toplevel");
-        BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
-        String line1;
-        while ((line1 = reader1.readLine()) != null) {
-            System.out.println(line1);
-        }
-        BufferedReader reader2 = new BufferedReader(new InputStreamReader(proc1.getErrorStream()));
-        String line2;
-        while ((line2 = reader2.readLine()) != null) {
-            System.out.println(line2);	
-        }	
-    }
+   
     public static void deleteProject(String projectPath) throws IOException {
     	//for windows
-    	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + "\\project" + " && "+
-                "rm project");
+    	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath  + " && "+
+                "rmdir /s /q " + projectPath+"\\project");
         BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
         String line1;
         while ((line1 = reader1.readLine()) != null) {

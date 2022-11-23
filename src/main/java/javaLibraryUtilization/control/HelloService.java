@@ -66,7 +66,6 @@ public class HelloService {
     	Commands.getJarDependenciesForInitParsing(name);  
         getMethodsCalled();
         
-       // System.out.println(getTheRoot);
         //to check for duplicate values
         for(String k:allMethodsCalled) {
         	if (!allMethodsCalledNew.contains(k)) {
@@ -75,6 +74,8 @@ public class HelloService {
         }
         allMethodsCalledNew.forEach(System.out::println);
         
+      
+        
        // List all files of Target 
         Path path = Paths.get(name + "\\target\\dependency");
         try (Stream <Path> subPaths = Files.walk(path,1)) {
@@ -82,8 +83,7 @@ public class HelloService {
         			 .map(Objects::toString)
         			 .collect(Collectors.toList());
         	 allFiles.remove(0);
-       //System.out.println(allFiles);
-        
+       
         	for (int i =0; i<allFiles.size();i++) {
         		Commands.makeFolder(name+ "\\target\\dependency", allFiles.get(i).toString());		
         		//get all methods of the file
@@ -92,7 +92,7 @@ public class HelloService {
                 methodsOfFile = m.getMethodsOfLibrary();
                 System.out.println("Methods of file " + allFiles.get(i).toString()+"new" + methodsOfFile);
                 
-               /* // check if it exists in our list of methods
+                // check if it exists in our list of methods
                  for(MethodOfLibrary j: methodsOfFile) {
                 	for (String k : allMethodsCalledNew){
 	                	if( j.toString().contains(k)) {
@@ -107,8 +107,8 @@ public class HelloService {
                         }
                 	}
                  }
-                 */
-                 //System.out.print("Maria" + methodCallSetList);
+                 
+                 System.out.print("The callgraph" + methodCallSetList);
         	} 
         	
 		} catch (IOException e) {
@@ -121,7 +121,7 @@ public class HelloService {
         }
     	//System.out.println("Hello again" + projName);
     	
-        Commands.deleteProject(name);
+        Commands.deleteProject("C:\\Users\\kolid\\eclipse-workspace");
     }
 
 
