@@ -13,7 +13,6 @@ public class Controller {
 	@Autowired
 	private HelloService HelloService;
 	
-	
 	@GetMapping(path="/startAnalysis")
 	public String user(@RequestParam("url")String url){
 		try {
@@ -27,7 +26,6 @@ public class Controller {
 	
 	@GetMapping(path="/test/maria")
 	public String user(){
-		return "Welcome Maria";
-	}
-	
+		return "Welcome";
+	}	
 }

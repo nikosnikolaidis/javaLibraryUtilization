@@ -20,14 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibUtil {
-    
+     
     public List<MethodOfLibrary> methodsOfLibrary= new ArrayList<>();
  
     public LibUtil(String project) {
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project));
       
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-       
+          
         try { 
             createSymbolSolver(project);
         } catch (IllegalStateException e) {

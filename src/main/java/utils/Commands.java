@@ -18,7 +18,7 @@ public class Commands {
             pbuilder2.redirectError(err2);
             Process p2 = pbuilder2.start();
             BufferedReader reader2 = new BufferedReader(new InputStreamReader(p2.getInputStream()));
-            String line2;
+            String line2; 
             while ((line2 = reader2.readLine()) != null) {
                System.out.println(line2);
             }
@@ -27,11 +27,11 @@ public class Commands {
                System.out.println(line2);
             }
         } 
-  
+    
         //For Windows
         else {
             Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
-                    "mvn dependency:copy-dependencies -Dclassifier=sources " + "\"");
+                    "mvn dependency:copy-dependencies -Dclassifier=sources -Dverbose" + "\"");
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
             String line1;
             while ((line1 = reader1.readLine()) != null) {
@@ -125,7 +125,7 @@ public class Commands {
             System.out.println(line2);	
         }	
     }
-   
+    
     public static void deleteProject(String projectPath) throws IOException {
     	//for windows
     	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath  + " && "+
