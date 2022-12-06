@@ -14,7 +14,7 @@ public final class CodeRange {
  
     private final Integer startLine;
     private final Integer endLine;
-
+ 
     public CodeRange (Integer startLine, Integer endLine) {
         this.startLine = startLine;
         this.endLine = endLine;

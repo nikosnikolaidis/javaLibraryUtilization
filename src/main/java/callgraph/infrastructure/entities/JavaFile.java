@@ -21,7 +21,7 @@ public class JavaFile {
     private final String absolutePath;
     private final Set<Class> classes;
     private final CompilationUnit compilationUnit;
-
+ 
     public JavaFile(CompilationUnit cu, String path, String absolutePath, Set<Class> classes) {
         this.compilationUnit = cu;
         this.path = path;

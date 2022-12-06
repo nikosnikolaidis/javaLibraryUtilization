@@ -20,7 +20,7 @@ public class Class {
     		 
     public String getQualifiedName() {
         return qualifiedName;
-    }
+    } 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

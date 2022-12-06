@@ -48,27 +48,24 @@ public class HelloService {
     public static String name;
 
     public  void testing(String projectURLfromEndpoint) throws IOException{
+    	
     	String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
-    	
-    	System.out.print("THe name is " + projectName);
-    	
     	project=new Project("C:\\Users\\kolid\\eclipse-workspace"); 
     	Commands.FolderForCloneProject(project.getClonePath(),projectURLfromEndpoint);
-      
-    	String projectPath=project.getClonePath()+"\\project\\"+projectName;
+    	String projectPath="C:\\Users\\kolid\\eclipse-workspace\\project\\"+projectName;
+    	project.setClonePath("\\project\\" + projectName);
+        Commands.method2(projectPath);
+    	Commands.getJarDependenciesForInitParsing(projectPath); 
     	
-    	System.out.println ("project q13j32k1jck" + projectPath);
-        //Commands.method2(projectPath);
-    	//Commands.getJarDependenciesForInitParsing(projectPath);  
-       // getMethodsCalled();
+        getMethodsCalled();
+        System.out.println("The methods called" + allMethodsCalled);
         
         //to check for duplicate values
-      /*  for(String k:allMethodsCalled) {
+        for(String k:allMethodsCalled) {
         	if (!allMethodsCalledNew.contains(k)) {
         		allMethodsCalledNew.add(k.toString());}
         }
-        allMethodsCalledNew.forEach(System.out::println);
-        
+
        // List all files of Target 
         Path path = Paths.get(projectPath + "\\target\\dependency");
         try (Stream <Path> subPaths = Files.walk(path,1)) {
@@ -88,23 +85,25 @@ public class HelloService {
                 // check if it exists in our list of methods
                 for(MethodOfLibrary j: methodsOfFile) {
                 	for (String k : allMethodsCalledNew){
-	                	if( j.toString().contains(k)) {
+	                	if( j.toString().contains (k)) {
 	                 		//CALLGRAPH
 	                		//InvestigatorFacade facade = new InvestigatorFacade(dirOfProject, fileOfMethod, methodDeclaration);
 	                		InvestigatorFacade facade = new InvestigatorFacade(allFiles.get(i).toString()+"new",
 	                					j.getFilePath(),j.getMethodDeclaration());
+	                		System.out.println("hello!");
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 	                        
 	                        for(MethodCallSet meth: methodCallSets) {
 	                        	methodCallSetList.add(meth);
 	                        }
+	                        System.out.println("");
 	                        printResults(methodCallSets);
 	                        break;
                         }
+	                	else System.out.print("Mary");
                 	}
+                
                  }
-                 
-                 System.out.print("The callgraph" + methodCallSetList);
         	} 
         	
 		} catch (IOException e) {
@@ -116,7 +115,7 @@ public class HelloService {
         	librariesWithProblem.forEach(System.out::println);
         }
         Commands.deleteProject("C:\\Users\\kolid\\eclipse-workspace");
-        */
+        
     }
 
     private static void getMethodsCalled() {
@@ -214,8 +213,7 @@ public class HelloService {
         }
         return project.getJavaFiles().size();
     }
-
-    
+ 
     public static void printResults(Set<MethodCallSet> results) {
         for (MethodCallSet methodCallSet : results) {
             System.out.printf("Methods involved with %s method: %s", methodCallSet.getMethod().getQualifiedName(), System.lineSeparator());

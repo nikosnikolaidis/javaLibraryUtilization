@@ -39,7 +39,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
         this.methodCallSets = methodCallSets;
         this.filePath = filePath;
         this.startingMethod = method;
-    }
+    } 
           
     @Override
     public void visit(ClassOrInterfaceDeclaration javaClass, Void arg) {

@@ -25,7 +25,7 @@ public class LibUtil {
  
     public LibUtil(String project) {
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project));
-      
+       
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
           
         try { 
@@ -51,8 +51,6 @@ public class LibUtil {
                     }
                 });
        System.out.println();
-
-       //methodsOfLibrary.forEach(System.out::println);
     }
 
     private void analyzeUnit(CompilationUnit compilationUnit, String filePath) {

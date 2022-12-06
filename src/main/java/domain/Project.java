@@ -17,16 +17,20 @@ public class Project {
     public Project(String clonePath){
         this.clonePath=clonePath;
         this.javaFiles= ConcurrentHashMap.newKeySet();
-    }	
+    }	 
     public String getUrl() {
         return url;
     }
  
     public String getClonePath() {
         return clonePath;
-    }		 
+    }	
+    
     	 
-    public Set<JavaFile> getJavaFiles() {
+    public void setClonePath(String clonePath) {
+		this.clonePath = clonePath;
+	}
+	public Set<JavaFile> getJavaFiles() {
         return javaFiles;
     }
 }

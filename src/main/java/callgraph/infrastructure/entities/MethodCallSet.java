@@ -21,7 +21,7 @@ public class MethodCallSet {
     public MethodCallSet(MethodDecl method) {
         this.methodDeclaration = method;
         this.methodCalls = new HashSet<>();
-    }   
+    }    
  
     @Override
     public boolean equals(Object o) {

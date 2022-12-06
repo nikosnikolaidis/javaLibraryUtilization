@@ -20,7 +20,7 @@ public class Project {
     public Project(String clonePath, Set<JavaFile> javaFiles) {
         this.clonePath = clonePath;
         this.javaFiles = javaFiles;
-    } 
+    }  
       	
     	 public Project(String clonePath) {
         this.clonePath = clonePath;

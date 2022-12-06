@@ -23,7 +23,7 @@ public class Controller {
 		}
 		return "Welcome " + url;
 	}
-	
+	 
 	@GetMapping(path="/test/maria")
 	public String user(){
 		return "Welcome";

@@ -18,7 +18,7 @@ public class GitMain {
 
     public static void main(String[] args) throws IOException {
         Project project = new Project("https://github.com/eclipse-researchlabs/smartclide-service-creation-theia",
-                 "C:\\Users\\kolid\\eclipse-workspace\\JavaTest");
+                 "C:\\Users\\kolid\\eclipse-workspace\\");
 
         Git git = cloneRepository(project, "");
 

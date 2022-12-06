@@ -22,7 +22,7 @@ public class MethodOfLibrary {
     public void setMethodDeclaration(MethodDeclaration methodDeclaration) {
         this.methodDeclaration = methodDeclaration;
     }
-
+ 
     public String getQualifiedSignature() {
         return qualifiedSignature;
     }		    	
