@@ -67,7 +67,8 @@ public class LibUtil {
         @Override
         public void visit(MethodDeclaration n, List<MethodOfLibrary> collector) {
             super.visit(n, collector);
-            collector.add(new MethodOfLibrary(n,n.resolve().getQualifiedSignature()));
+            if(n.isPublic())
+            	collector.add(new MethodOfLibrary(n,n.resolve().getQualifiedSignature()));
         }
     }
 

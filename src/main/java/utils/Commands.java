@@ -112,7 +112,7 @@ public class Commands {
     }
     public static void cloneProject(String projectPath,String gitUrl) throws IOException {
     	//for windows
-    	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + "\\project" + " && "+
+    	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
                 "git clone " + gitUrl);
         BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
         String line1;
@@ -126,10 +126,10 @@ public class Commands {
         }	
     }
     
-    public static void deleteProject(String projectPath) throws IOException {
+    public static void deleteProject(String projectPath,String projectName) throws IOException {
     	//for windows
     	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath  + " && "+
-                "rmdir /s /q " + projectPath+"\\project");
+                "rmdir /s /q " + projectPath+"\\"+projectName);
         BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
         String line1;
         while ((line1 = reader1.readLine()) != null) {

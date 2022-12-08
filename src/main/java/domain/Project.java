@@ -5,30 +5,30 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Project {
     private String url;
-    private String clonePath;
+    private String projectPath;
     private Set<JavaFile> javaFiles;
 
     public Project(String url, String clonePath) {
         this.url = url;
-        this.clonePath = clonePath;
+        this.projectPath = clonePath;
     }
     	
 
     public Project(String clonePath){
-        this.clonePath=clonePath;
+        this.projectPath=clonePath;
         this.javaFiles= ConcurrentHashMap.newKeySet();
     }	 
     public String getUrl() {
         return url;
     }
  
-    public String getClonePath() {
-        return clonePath;
+    public String getProjectPath() {
+        return projectPath;
     }	
     
     	 
-    public void setClonePath(String clonePath) {
-		this.clonePath = clonePath;
+    public void setProjectPath(String clonePath) {
+		this.projectPath = clonePath;
 	}
 	public Set<JavaFile> getJavaFiles() {
         return javaFiles;

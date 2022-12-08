@@ -50,24 +50,26 @@ public class HelloService {
     public  void testing(String projectURLfromEndpoint) throws IOException{
     	
     	String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
-    	project=new Project("C:\\Users\\kolid\\eclipse-workspace"); 
-    	Commands.FolderForCloneProject(project.getClonePath(),projectURLfromEndpoint);
-    	String projectPath="C:\\Users\\kolid\\eclipse-workspace\\project\\"+projectName;
-    	project.setClonePath("\\project\\" + projectName);
-        Commands.method2(projectPath);
-    	Commands.getJarDependenciesForInitParsing(projectPath); 
+    	project=new Project("C:\\Users\\kolid\\eclipse-workspace\\project\\" +projectName); 
+    	
+    	Commands.cloneProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectURLfromEndpoint);
+    	
+    	
+    
+        Commands.method2(project.getProjectPath());
+    	Commands.getJarDependenciesForInitParsing(project.getProjectPath()); 
     	
         getMethodsCalled();
-        System.out.println("The methods called" + allMethodsCalled);
         
         //to check for duplicate values
         for(String k:allMethodsCalled) {
         	if (!allMethodsCalledNew.contains(k)) {
         		allMethodsCalledNew.add(k.toString());}
         }
+        System.out.println("The methods called" + allMethodsCalledNew);
 
        // List all files of Target 
-        Path path = Paths.get(projectPath + "\\target\\dependency");
+        Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
         try (Stream <Path> subPaths = Files.walk(path,1)) {
         	 List<String> allFiles = subPaths
         			 .map(Objects::toString)
@@ -75,32 +77,32 @@ public class HelloService {
         	 allFiles.remove(0);
        
         	for (int i =0; i<allFiles.size();i++) {
-        		Commands.makeFolder(projectPath+ "\\target\\dependency", allFiles.get(i).toString());		
+        		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", allFiles.get(i).toString());		
         		//get all methods of the file
         		LibUtil m = new LibUtil(allFiles.get(i).toString()+"new");
                 List<MethodOfLibrary> methodsOfFile= new ArrayList<>();
                 methodsOfFile = m.getMethodsOfLibrary();
-                System.out.println("Methods of file " + allFiles.get(i).toString()+"new" + methodsOfFile);
+                System.out.println();
+                System.out.println("Methods of file " + allFiles.get(i).toString()+"new " + methodsOfFile.size());
                 
                 // check if it exists in our list of methods
-                for(MethodOfLibrary j: methodsOfFile) {
-                	for (String k : allMethodsCalledNew){
+
+            	for (String k : allMethodsCalledNew){
+            		for(MethodOfLibrary j: methodsOfFile) {
 	                	if( j.toString().contains (k)) {
+	                		System.out.println("all Methods called: "+k);
 	                 		//CALLGRAPH
 	                		//InvestigatorFacade facade = new InvestigatorFacade(dirOfProject, fileOfMethod, methodDeclaration);
 	                		InvestigatorFacade facade = new InvestigatorFacade(allFiles.get(i).toString()+"new",
 	                					j.getFilePath(),j.getMethodDeclaration());
-	                		System.out.println("hello!");
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 	                        
 	                        for(MethodCallSet meth: methodCallSets) {
 	                        	methodCallSetList.add(meth);
 	                        }
-	                        System.out.println("");
 	                        printResults(methodCallSets);
 	                        break;
                         }
-	                	else System.out.print("Mary");
                 	}
                 
                  }
@@ -114,17 +116,17 @@ public class HelloService {
         	System.out.println("Libraries with errors: ");
         	librariesWithProblem.forEach(System.out::println);
         }
-        Commands.deleteProject("C:\\Users\\kolid\\eclipse-workspace");
-        
+        Commands.deleteProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectName);
     }
 
     private static void getMethodsCalled() {
         //Setup Parser and SymbolSolver
-        ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project.getClonePath()));
+        ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project.getProjectPath()));
+        System.out.println("The clone path: is" + Paths.get(project.getProjectPath()));
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-        System.out.print(projectRoot.getSourceRoots());
+        System.out.print("The sourceRoots"+projectRoot.getSourceRoots());
         try {
-            createSymbolSolver(project.getClonePath());
+            createSymbolSolver(project.getProjectPath());
         } catch (IllegalStateException e) {
             return;
         }
@@ -195,7 +197,7 @@ public class HelloService {
                                     .forEach(cu -> {
                                         try {
                                             project.getJavaFiles().add(
-                                                    new JavaFile(cu.getResult().get(), cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getClonePath(), "").substring(1),
+                                                    new JavaFile(cu.getResult().get(), cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getProjectPath(), "").substring(1),
                                                             cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/"),
                                                             cu.getResult().get().findAll(ClassOrInterfaceDeclaration.class)
                                                                     .stream()

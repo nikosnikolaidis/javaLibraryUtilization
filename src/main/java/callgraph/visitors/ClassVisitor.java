@@ -72,7 +72,15 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
         try {
             ResolvedMethodDeclaration resolvedMethodDeclaration = methodDeclaration.resolve();
             Optional<Range> methodRangeOptional = methodDeclaration.getRange();
-            methodRangeOptional.ifPresent(range -> createMethodCallSets(methodDeclaration, new MethodCallSet(new MethodDecl(methodDeclaration.findCompilationUnit().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getClonePath(), "").substring(1), resolvedMethodDeclaration.getPackageName(), methodDeclaration.getName().asString(), resolvedMethodDeclaration.getQualifiedName(), new CodeRange(range.begin.line, range.end.line)))));
+            methodRangeOptional.ifPresent(range -> {
+                createMethodCallSets(methodDeclaration, new MethodCallSet(
+                        new MethodDecl(methodDeclaration.findCompilationUnit().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getClonePath(), "").substring(1),
+                                resolvedMethodDeclaration.getPackageName(),
+                                methodDeclaration.getName().asString(),
+                                resolvedMethodDeclaration.getQualifiedName(),
+                                new CodeRange(range.begin.line, range.end.line),
+                                null)));
+            });
         } catch (UnsolvedSymbolException ignored) {
         }
     }
@@ -157,8 +165,19 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
                         if (invokedMethodDeclaration.equals(method.asMethodDeclaration()))
                             continue;
                         Optional<Range> invokedMethodRangeOptional = invokedMethodDeclaration.getRange();
-                        invokedMethodRangeOptional.ifPresent(range -> methodCallSet.addMethodCall(new MethodDecl(invokedMethodDeclaration.findCompilationUnit().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getClonePath(), "").substring(1), resolvedMethodCallExpression.getPackageName(), methodCallExpr.getNameAsString(), resolvedMethodCallExpression.getQualifiedName(), new CodeRange(range.begin.line, range.end.line))));
-                        createMethodCallSets(invokedMethodDeclaration, methodCallSet);
+                        invokedMethodRangeOptional.ifPresent(range -> {
+                            MethodDecl methodDecl = new MethodDecl(invokedMethodDeclaration.findCompilationUnit().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getClonePath(), "").substring(1),
+                                    resolvedMethodCallExpression.getPackageName(),
+                                    methodCallExpr.getNameAsString(),
+                                    resolvedMethodCallExpression.getQualifiedName(),
+                                    new CodeRange(range.begin.line, range.end.line),
+                                    method.asMethodDeclaration());
+
+                            if (!methodCallSets.contains(methodDecl) && !methodCallSet.getMethodCalls().contains(methodDecl)) {
+                                methodCallSet.addMethodCall(methodDecl);
+                                createMethodCallSets(invokedMethodDeclaration, methodCallSet);
+                            }
+                        });
                     } catch (UnsolvedSymbolException ignored) {
                         return;
                     }

@@ -37,7 +37,7 @@ public class GitMain {
       git.getRepository().getTags().forEach((s, ref) -> System.out.println(s));
 
         git.close();
-        FileUtils.deleteDirectory(new File(project.getClonePath()));
+        FileUtils.deleteDirectory(new File(project.getProjectPath()));
     }
 
     public static String getHeadName(Repository repo) {
@@ -56,12 +56,12 @@ public class GitMain {
             if (Objects.isNull(accessToken))
                 return Git.cloneRepository()
                         .setURI(project.getUrl())
-                        .setDirectory(new File(project.getClonePath()))
+                        .setDirectory(new File(project.getProjectPath()))
                         .call();
             else {
                 return Git.cloneRepository()
                         .setURI(project.getUrl())
-                        .setDirectory(new File(project.getClonePath()))
+                        .setDirectory(new File(project.getProjectPath()))
                         .setCredentialsProvider(new UsernamePasswordCredentialsProvider(accessToken, ""))
                         .call();
             }

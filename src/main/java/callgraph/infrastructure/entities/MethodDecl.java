@@ -9,7 +9,9 @@
  ******************************************************************************/
 package callgraph.infrastructure.entities;
 
-import java.util.Objects;			
+import com.github.javaparser.ast.body.MethodDeclaration;
+
+import java.util.Objects;
 
 public class MethodDecl {
 	 
@@ -17,14 +19,21 @@ public class MethodDecl {
     private final String packageName;
     private final String simpleName;
     private final String qualifiedName;
-    private final CodeRange codeRange; 
-    public MethodDecl(String filePath, String packageName, String simpleName, String qualifiedName, CodeRange codeRange) {
+    private final CodeRange codeRange;
+
+    public MethodDeclaration getPreviousMethod() {
+        return previousMethod;
+    }
+
+    private final MethodDeclaration previousMethod;
+    public MethodDecl(String filePath, String packageName, String simpleName, String qualifiedName, CodeRange codeRange, MethodDeclaration previousMethod) {
         this.filePath = filePath;
         this.packageName = packageName;
         this.simpleName = simpleName;
         this.qualifiedName = qualifiedName;
         this.codeRange = codeRange;
-    } 
+        this.previousMethod = previousMethod;
+    }
      
     public String getSimpleName() {
         return simpleName;
