@@ -75,7 +75,7 @@ public class HelloService {
         			 .map(Objects::toString)
         			 .collect(Collectors.toList());
         	 allFiles.remove(0);
-       
+         
         	for (int i =0; i<allFiles.size();i++) {
         		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", allFiles.get(i).toString());		
         		//get all methods of the file
