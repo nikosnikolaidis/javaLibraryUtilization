@@ -92,16 +92,8 @@ public class HelloService {
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 
-                            methodsDetailsList.add(new methodsDetails(1,k.toString(),allFiles.get(i).toString()+"new",1,"maraoua"));
-
-                            for(int g=0;g<methodsDetailsList.size();g++){
-                                System.out.println("The name of method " + methodsDetailsList.get(g).getMethodName());
-                                System.out.println("The id of the method " + methodsDetailsList.get(g).getMethodId());
-                                System.out.println("The name of the library " + methodsDetailsList.get(g).getLibOfMethod());
-                                System.out.println("The id of the callset " + methodsDetailsList.get(g).getMethodCallSetId());
-                                System.out.println("The callset " + methodsDetailsList.get(g).getMethodCallSet());
-                            }
-
+                           methodsDetailsList.add(new methodsDetails(1,k,
+                                   allFiles.get(i).toString()+"new", 1,methodCallSets));
                             printResults(methodCallSets);
 	                        break;
                         }
@@ -118,11 +110,6 @@ public class HelloService {
         	librariesWithProblem.forEach(System.out::println);
         }
         Commands.deleteProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectName);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getName() + "@" + Integer.toHexString(hashCode());
     }
 
     private static void getMethodsCalled() {

@@ -3,13 +3,22 @@ package javaLibraryUtilization.control;
 import callgraph.infrastructure.entities.MethodCallSet;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class methodsDetails {
     public int methodId;
     public String methodName;
     public String libOfMethod;
     public int methodCallSetId;
-    public String methodCallSet;
+    public Set<MethodCallSet> methodCallSet;
+
+    public methodsDetails(int methodId, String methodName, String libOfMethod, int methodCallSetId, Set<MethodCallSet> methodCallSet) {
+        this.methodId = methodId;
+        this.methodName = methodName;
+        this.libOfMethod = libOfMethod;
+        this.methodCallSetId = methodCallSetId;
+        this.methodCallSet = methodCallSet;
+    }
 
     public int getMethodId() {
         return methodId;
@@ -33,22 +42,6 @@ public class methodsDetails {
 
     public void setLibOfMethod(String libOfMethod) {
         this.libOfMethod = libOfMethod;
-    }
-
-    public String getMethodCallSet() {
-        return methodCallSet;
-    }
-
-    public void setMethodCallSet(String methodCallSet) {
-        this.methodCallSet = methodCallSet;
-    }
-
-    public methodsDetails(int methodId, String methodName, String libOfMethod, int methodCallSetId, String methodCallSet) {
-        this.methodId = methodId;
-        this.methodName = methodName;
-        this.libOfMethod = libOfMethod;
-        this.methodCallSetId = methodCallSetId;
-        this.methodCallSet = methodCallSet;
     }
 
     public int getMethodCallSetId() {
