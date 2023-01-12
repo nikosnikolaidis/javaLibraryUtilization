@@ -6,26 +6,18 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class methodsDetails {
-    public int methodId;
-    public String methodName;
-    public String libOfMethod;
-    public int methodCallSetId;
+    private Long methodId;
+    private String methodName;
+    private String libOfMethod;
+    public Long methodCallSetId;
     public Set<MethodCallSet> methodCallSet;
 
-    public methodsDetails(int methodId, String methodName, String libOfMethod, int methodCallSetId, Set<MethodCallSet> methodCallSet) {
+    public methodsDetails(long methodId, String methodName, String libOfMethod, long methodCallSetId, Set<MethodCallSet> methodCallSet) {
         this.methodId = methodId;
         this.methodName = methodName;
         this.libOfMethod = libOfMethod;
         this.methodCallSetId = methodCallSetId;
         this.methodCallSet = methodCallSet;
-    }
-
-    public int getMethodId() {
-        return methodId;
-    }
-
-    public void setMethodId(int methodId) {
-        this.methodId = methodId;
     }
 
     public String getMethodName() {
@@ -43,14 +35,5 @@ public class methodsDetails {
     public void setLibOfMethod(String libOfMethod) {
         this.libOfMethod = libOfMethod;
     }
-
-    public int getMethodCallSetId() {
-        return methodCallSetId;
-    }
-
-    public void setMethodCallSetId(int methodCallSetId) {
-        this.methodCallSetId = methodCallSetId;
-    }
+    
 }
-
-

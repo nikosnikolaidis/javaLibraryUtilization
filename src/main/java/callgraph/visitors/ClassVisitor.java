@@ -80,6 +80,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
                                 resolvedMethodDeclaration.getQualifiedName(),
                                 new CodeRange(range.begin.line, range.end.line),
                                 null)));
+
             });
         } catch (UnsolvedSymbolException ignored) {
         }
@@ -172,6 +173,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
                                     resolvedMethodCallExpression.getQualifiedName(),
                                     new CodeRange(range.begin.line, range.end.line),
                                     method.asMethodDeclaration());
+                            methodDecl.setPreviousMethodString(method.resolve().getQualifiedName());
 
                             if (!methodCallSets.contains(methodDecl) && !methodCallSet.getMethodCalls().contains(methodDecl)) {
                                 methodCallSet.addMethodCall(methodDecl);

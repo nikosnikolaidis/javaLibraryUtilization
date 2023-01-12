@@ -51,9 +51,10 @@ public class HelloService {
     public  void testing(String projectURLfromEndpoint) throws IOException{
     	
     	String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
-    	project=new Project("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
+    	//file project insert the project you want to startAnalysis
+        project=new Project("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
     	Commands.cloneProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectURLfromEndpoint);
-
+        //mvn clean command
         Commands.method2(project.getProjectPath());
     	Commands.getJarDependenciesForInitParsing(project.getProjectPath()); 
     	
@@ -75,6 +76,7 @@ public class HelloService {
         	 allFiles.remove(0);
 
         	for (int i =0; i<allFiles.size();i++) {
+                int arithmitisLUF=0;
         		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", allFiles.get(i).toString());
         		//get all methods of the file
         		LibUtil m = new LibUtil(allFiles.get(i).toString()+"new");
@@ -87,10 +89,17 @@ public class HelloService {
             	for (String k : allMethodsCalledNew){
             		for(MethodOfLibrary j: methodsOfFile) {
 	                	if( j.toString().contains (k)) {
+
+                            System.out.println("------------------------");
+                            System.out.println(j.getFilePath());
+                            System.out.println("------------------------");
 	                 		//CALLGRAPH
 	                		InvestigatorFacade facade = new InvestigatorFacade(allFiles.get(i).toString()+"new",
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
+
+                            int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
+                            arithmitisLUF+=methodsCalledFromThiaCallTreeUsed;
 
                            methodsDetailsList.add(new methodsDetails(1,k,
                                    allFiles.get(i).toString()+"new", 1,methodCallSets));
@@ -99,6 +108,8 @@ public class HelloService {
                         }
                 	}
                  }
+
+                //arithmitisLUF;
         	} 
         	
 		} catch (IOException e) {
