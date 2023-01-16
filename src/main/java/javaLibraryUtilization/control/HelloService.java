@@ -42,12 +42,11 @@ import utils.Commands;
 public class HelloService {
 		
 	public static Project project;
-    public static List<String> allMethodsCalled = new ArrayList<>();
-    public static List<String> allMethodsCalledNew = new ArrayList<>();
+    public static List<String> allMethodsCalledByProject = new ArrayList<>();
+    public static List<String> allMethodsCalledByProjectNew = new ArrayList<>();
     public static List<String> librariesWithProblem = new ArrayList<>();   
     public static Set<MethodCallSet> methodCallSetList =new HashSet<>();
     public static List<methodsDetails> methodsDetailsList = new ArrayList<methodsDetails>();
-
     public  void testing(String projectURLfromEndpoint) throws IOException{
     	
     	String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
@@ -55,17 +54,17 @@ public class HelloService {
         project=new Project("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
     	Commands.cloneProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectURLfromEndpoint);
         //mvn clean command
-        Commands.method2(project.getProjectPath());
+        Commands.methodForMvnCleanCommand(project.getProjectPath());
     	Commands.getJarDependenciesForInitParsing(project.getProjectPath()); 
     	
         getMethodsCalled();
         
         //to check for duplicate values
-        for(String k:allMethodsCalled) {
-        	if (!allMethodsCalledNew.contains(k)) {
-        		allMethodsCalledNew.add(k.toString());}
+        for(String k: allMethodsCalledByProject) {
+        	if (!allMethodsCalledByProjectNew.contains(k)) {
+        		allMethodsCalledByProjectNew.add(k.toString());}
         }
-        System.out.println("The methods called" + allMethodsCalledNew);
+        System.out.println("The methods called" + allMethodsCalledByProjectNew);
 
        // List all files of Target 
         Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
@@ -76,18 +75,21 @@ public class HelloService {
         	 allFiles.remove(0);
 
         	for (int i =0; i<allFiles.size();i++) {
+
                 int arithmitisLUF=0;
         		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", allFiles.get(i).toString());
+
         		//get all methods of the file
         		LibUtil m = new LibUtil(allFiles.get(i).toString()+"new");
-                List<MethodOfLibrary> methodsOfFile= new ArrayList<>();
-                methodsOfFile = m.getMethodsOfLibrary();
+                List<MethodOfLibrary> allMethodsOfLibrary= new ArrayList<>();
+                allMethodsOfLibrary = m.getMethodsOfLibrary();
+
                 System.out.println();
-                System.out.println("Methods of file " + allFiles.get(i).toString()+"new " + methodsOfFile.size());
+                System.out.println("Methods of file " + allFiles.get(i).toString()+"new " + allMethodsOfLibrary.size());
                 
                 // check if it exists in our list of methods
-            	for (String k : allMethodsCalledNew){
-            		for(MethodOfLibrary j: methodsOfFile) {
+            	for (String k : allMethodsCalledByProjectNew){
+            		for(MethodOfLibrary j: allMethodsOfLibrary) {
 	                	if( j.toString().contains (k)) {
 
                             System.out.println("------------------------");
@@ -158,7 +160,7 @@ public class HelloService {
 
     private static void analyzeCompilationUnit(CompilationUnit compilationUnit) {
         VoidVisitor<List<String>> methodCall = new MethodCall();
-        methodCall.visit(compilationUnit, allMethodsCalled);
+        methodCall.visit(compilationUnit, allMethodsCalledByProject);
     }
     private static class MethodCall extends VoidVisitorAdapter<List<String>> {
         @Override

@@ -45,7 +45,7 @@ public class Commands {
         }
         System.out.println();
     }
-    public static void method2(String projectPath) throws IOException {
+    public static void methodForMvnCleanCommand(String projectPath) throws IOException {
     	//for windows
     	 Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
                  "mvn clean" + "\"");
