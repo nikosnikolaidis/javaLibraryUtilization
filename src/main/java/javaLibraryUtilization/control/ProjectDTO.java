@@ -3,23 +3,15 @@ package javaLibraryUtilization.control;
 import java.util.List;
 
 public class ProjectDTO {
-    private Long id;
+    private int id;
     private String projectName;
     private methodsDetails methodsDetails;
     private int NUL;
     private List<Library> libraries;
 
-    public ProjectDTO(Long id, String projectName) {
+    public ProjectDTO(int id, String projectName) {
         this.id = id;
         this.projectName = projectName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getProjectName() {

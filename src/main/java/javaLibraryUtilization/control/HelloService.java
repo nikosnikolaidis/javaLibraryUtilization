@@ -47,6 +47,8 @@ public class HelloService {
     public static List<String> librariesWithProblem = new ArrayList<>();   
     public static Set<MethodCallSet> methodCallSetList =new HashSet<>();
     public static List<methodsDetails> methodsDetailsList = new ArrayList<methodsDetails>();
+    private ProjectDTO ProjectDTO;
+
     public  void testing(String projectURLfromEndpoint) throws IOException{
     	
     	String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
@@ -69,50 +71,45 @@ public class HelloService {
        // List all files of Target 
         Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
         try (Stream <Path> subPaths = Files.walk(path,1)) {
-        	 List<String> allFiles = subPaths
+        	 List<String> librariesInProject = subPaths
         			 .map(Objects::toString)
         			 .collect(Collectors.toList());
-        	 allFiles.remove(0);
+        	 librariesInProject.remove(0);
 
-        	for (int i =0; i<allFiles.size();i++) {
-
+            int countForNUL=0;
+        	for (int i =0; i<librariesInProject.size();i++) {
                 int arithmitisLUF=0;
-        		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", allFiles.get(i).toString());
-
+                int count=0;
+        		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", librariesInProject.get(i).toString());
         		//get all methods of the file
-        		LibUtil m = new LibUtil(allFiles.get(i).toString()+"new");
+        		LibUtil m = new LibUtil(librariesInProject.get(i).toString()+"new");
                 List<MethodOfLibrary> allMethodsOfLibrary= new ArrayList<>();
                 allMethodsOfLibrary = m.getMethodsOfLibrary();
-
-                System.out.println();
-                System.out.println("Methods of file " + allFiles.get(i).toString()+"new " + allMethodsOfLibrary.size());
-                
                 // check if it exists in our list of methods
             	for (String k : allMethodsCalledByProjectNew){
             		for(MethodOfLibrary j: allMethodsOfLibrary) {
 	                	if( j.toString().contains (k)) {
-
-                            System.out.println("------------------------");
-                            System.out.println(j.getFilePath());
-                            System.out.println("------------------------");
+                            count=1;
 	                 		//CALLGRAPH
-	                		InvestigatorFacade facade = new InvestigatorFacade(allFiles.get(i).toString()+"new",
+	                		InvestigatorFacade facade = new InvestigatorFacade(librariesInProject.get(i).toString()+"new",
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 
-                            int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
-                            arithmitisLUF+=methodsCalledFromThiaCallTreeUsed;
+                            //int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
+                            //arithmitisLUF+=methodsCalledFromThiaCallTreeUsed;
 
                            methodsDetailsList.add(new methodsDetails(1,k,
-                                   allFiles.get(i).toString()+"new", 1,methodCallSets));
-                            printResults(methodCallSets);
-	                        break;
-                        }
+                                   librariesInProject.get(i).toString()+"new", 1,methodCallSets));
+                            printResults(methodCallSets);}
                 	}
                  }
+                if (count == 1){
+                    countForNUL++;}
+        	}
+            ProjectDTO = new ProjectDTO(1,"C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
+            //arithmitisLUF;
 
-                //arithmitisLUF;
-        	} 
+            System.out.println("THE COUNT FOR NUL" + countForNUL);
         	
 		} catch (IOException e) {
 			e.printStackTrace();
