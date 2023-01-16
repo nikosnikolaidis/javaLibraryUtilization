@@ -5,6 +5,11 @@ public class Library {
     private Double PLMI;
     private Double LUF;
 
+    public Library(String name, Double PLMI) {
+        this.name = name;
+        this.PLMI = PLMI;
+    }
+
     public Library(String name) {
         this.name = name;
     }

@@ -17,6 +17,7 @@ public class MethodCallSet {
 
     private final MethodDecl methodDeclaration;
     private final Set<MethodDecl> methodCalls;
+    private Long methodCallSetId;
 
     public MethodCallSet(MethodDecl method) {
         this.methodDeclaration = method;

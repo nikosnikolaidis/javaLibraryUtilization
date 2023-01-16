@@ -48,25 +48,26 @@ public class HelloService {
     public static Set<MethodCallSet> methodCallSetList =new HashSet<>();
     public static List<methodsDetails> methodsDetailsList = new ArrayList<methodsDetails>();
     private ProjectDTO ProjectDTO;
+    private Library Library;
 
     public  void testing(String projectURLfromEndpoint) throws IOException{
-    	
-    	String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
+
+        String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
+
     	//file project insert the project you want to startAnalysis
         project=new Project("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
     	Commands.cloneProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectURLfromEndpoint);
+
         //mvn clean command
         Commands.methodForMvnCleanCommand(project.getProjectPath());
-    	Commands.getJarDependenciesForInitParsing(project.getProjectPath()); 
-    	
+    	Commands.getJarDependenciesForInitParsing(project.getProjectPath());
         getMethodsCalled();
         
         //to check for duplicate values
         for(String k: allMethodsCalledByProject) {
         	if (!allMethodsCalledByProjectNew.contains(k)) {
-        		allMethodsCalledByProjectNew.add(k.toString());}
-        }
-        System.out.println("The methods called" + allMethodsCalledByProjectNew);
+        		allMethodsCalledByProjectNew.add(k.toString());}}
+        System.out.println("The methods called by the Project" + allMethodsCalledByProjectNew);
 
        // List all files of Target 
         Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
@@ -76,10 +77,13 @@ public class HelloService {
         			 .collect(Collectors.toList());
         	 librariesInProject.remove(0);
 
+            int countForPLMI;
             int countForNUL=0;
-        	for (int i =0; i<librariesInProject.size();i++) {
+
+        	for (int i =0; i<librariesInProject.size();i++){
                 int arithmitisLUF=0;
                 int count=0;
+                countForPLMI=0;
         		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", librariesInProject.get(i).toString());
         		//get all methods of the file
         		LibUtil m = new LibUtil(librariesInProject.get(i).toString()+"new");
@@ -89,6 +93,7 @@ public class HelloService {
             	for (String k : allMethodsCalledByProjectNew){
             		for(MethodOfLibrary j: allMethodsOfLibrary) {
 	                	if( j.toString().contains (k)) {
+                            countForPLMI=countForPLMI+1;
                             count=1;
 	                 		//CALLGRAPH
 	                		InvestigatorFacade facade = new InvestigatorFacade(librariesInProject.get(i).toString()+"new",
@@ -99,17 +104,17 @@ public class HelloService {
                             //arithmitisLUF+=methodsCalledFromThiaCallTreeUsed;
 
                            methodsDetailsList.add(new methodsDetails(1,k,
-                                   librariesInProject.get(i).toString()+"new", 1,methodCallSets));
+                                   librariesInProject.get(i).toString()+"new", methodCallSets));
                             printResults(methodCallSets);}
                 	}
                  }
+                Library = new Library(librariesInProject.get(i), (double) (countForPLMI/allMethodsOfLibrary.size()));
+                System.out.println("maria" +(double) (countForPLMI)/allMethodsOfLibrary.size());
                 if (count == 1){
                     countForNUL++;}
         	}
             ProjectDTO = new ProjectDTO(1,"C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
             //arithmitisLUF;
-
-            System.out.println("THE COUNT FOR NUL" + countForNUL);
         	
 		} catch (IOException e) {
 			e.printStackTrace();
