@@ -108,13 +108,13 @@ public class HelloService {
                             printResults(methodCallSets);}
                 	}
                  }
-                Library = new Library(librariesInProject.get(i), (double) (countForPLMI/allMethodsOfLibrary.size()));
-                System.out.println("maria" +(double) (countForPLMI)/allMethodsOfLibrary.size());
+                Library = new Library(librariesInProject.get(i), 1.0 * (countForPLMI/allMethodsOfLibrary.size()));
+
                 if (count == 1){
                     countForNUL++;}
+               // System.out.println("Arithmitis LUF"+arithmitisLUF);
         	}
             ProjectDTO = new ProjectDTO(1,"C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
-            //arithmitisLUF;
         	
 		} catch (IOException e) {
 			e.printStackTrace();

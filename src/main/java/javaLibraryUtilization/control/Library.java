@@ -9,6 +9,10 @@ public class Library {
         this.name = name;
         this.PLMI = PLMI;
     }
+    public void printLibrary(){
+        System.out.println(name);
+        System.out.println(PLMI);
+    }
 
     public Library(String name) {
         this.name = name;
