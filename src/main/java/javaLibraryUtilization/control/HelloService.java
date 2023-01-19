@@ -49,6 +49,7 @@ public class HelloService {
     private Library Library;
 
     public static List<Library> listOfLibrariesPDO = new ArrayList<Library>();
+    public static ProjectDTO ProjectDTO;
 
     public void projectAnalysis(String projectURLfromEndpoint) throws IOException{
 
@@ -85,6 +86,7 @@ public class HelloService {
                 InvestigatorForNOM investigatorForNOM= new InvestigatorForNOM(project);
                 investigatorForNOM.getHashMap().forEach((k,e)-> System.out.println("key: "+k+"    v: "+e));
                 //count for LUF
+                int paronomastisLUF=0;
                 int arithmitisLUF=0;
                 //count
                 int count=0;
@@ -111,9 +113,10 @@ public class HelloService {
                             String help = j.getQualifiedSignature().replace(j.getQualifiedSignature().substring
                                     (j.getQualifiedSignature().lastIndexOf(".")),"");
                             if(methodCallSets.stream().findFirst().isPresent()){
-                                System.out.println("Hello from inside but first");
-                                if (InvestigatorForNOM.getHashMap().containsKey("")){
-                                    System.out.println("Hello from inside");}
+                                if (InvestigatorForNOM.getHashMap().containsKey(help)){
+                                    System.out.println("Hello from inside");
+                                    paronomastisLUF = investigatorForNOM.getHashMap().get(help) + paronomastisLUF;
+                                    }
                                 int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
                                 arithmitisLUF += methodsCalledFromThiaCallTreeUsed;}
 
@@ -124,7 +127,7 @@ public class HelloService {
                 	}
                  }
                 listOfLibrariesPDO.add(Library = new Library(librariesInProject.get(i),
-                        1.0 * (countForPLMI/allMethodsOfLibrary.size()),arithmitisLUF * 1.0));
+                         (countForPLMI/allMethodsOfLibrary.size() * 100.00),arithmitisLUF/paronomastisLUF * 100.00));
 
                 if (count == 1){
                     countForNUL++;}
@@ -133,8 +136,10 @@ public class HelloService {
         	}
             //projectDTOlist.add(new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
               //      countForNUL));
-            projectDTOlist.add(new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
-                    countForNUL,listOfLibrariesPDO));
+            //projectDTOlist.add(new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
+           //         countForNUL,listOfLibrariesPDO));
+           ProjectDTO=  new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
+                    countForNUL,listOfLibrariesPDO);
         	
 		} catch (IOException e) {
 			e.printStackTrace();
