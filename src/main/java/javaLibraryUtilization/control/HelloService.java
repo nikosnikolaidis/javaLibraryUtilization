@@ -99,35 +99,38 @@ public class HelloService {
                 List<MethodOfLibrary> allMethodsOfLibrary= new ArrayList<>();
                 allMethodsOfLibrary = m.getMethodsOfLibrary();
                 // check if it exists in our list of methods
-            	for (String k : allMethodsCalledByProjectNew){
+            	for (String meth : allMethodsCalledByProjectNew){
             		for(MethodOfLibrary j: allMethodsOfLibrary) {
-	                	if( j.toString().contains (k)) {
-
+	                	if( j.toString().contains (meth)) {
                             countForPLMI=countForPLMI+1;
                             count=1;
-
 	                 		//CALLGRAPH
 	                		InvestigatorFacade facade = new InvestigatorFacade(librariesInProject.get(i).toString()+"new",
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 
-                            //Metric LUF
+                            //string help takes the qualified name expept the name of method in the end
+                            //not working perfect yet
                             String help = j.getQualifiedSignature().replace(j.getQualifiedSignature().substring
                                     (j.getQualifiedSignature().lastIndexOf(".")),"");
-                            if(methodCallSets.stream().findFirst().isPresent()){
-                                if (InvestigatorForNOM.getHashMap().containsValue(help)){
-                                    System.out.println("Hello from inside");
-                                    paronomastisLUF = investigatorForNOM.getHashMap().get(help) + paronomastisLUF;
-                                    }
-                                int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
-                                arithmitisLUF += methodsCalledFromThiaCallTreeUsed;}
+                            InvestigatorForNOM.getHashMap().forEach((o,e)-> {
+                                System.out.println("The key " + o);
+                                System.out.println("The qualified " + help);
+                            });
 
-                           methodsDetailsList.add(new methodsDetails(1,k,
+                            if(methodCallSets.stream().findFirst().isPresent()){
+                               // paronomastisLUF = investigatorForNOM.getHashMap().get(help) + paronomastisLUF;
+                                int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
+                                arithmitisLUF += methodsCalledFromThiaCallTreeUsed;
+                            }
+
+                           methodsDetailsList.add(new methodsDetails(1,meth,
                                    librariesInProject.get(i).toString()+"new", methodCallSets));
                             printResults(methodCallSets);
                             }
                 	}
                  }
+
                 listOfLibrariesPDO.add(Library = new Library(librariesInProject.get(i),
                          (countForPLMI/allMethodsOfLibrary.size() * 100.00),arithmitisLUF/paronomastisLUF * 100.00));
 
@@ -136,10 +139,6 @@ public class HelloService {
                // System.out.println("Arithmitis LUF"+arithmitisLUF);
 
         	}
-            //projectDTOlist.add(new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
-              //      countForNUL));
-            //projectDTOlist.add(new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
-           //         countForNUL,listOfLibrariesPDO));
            ProjectDTO=  new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
                     countForNUL,listOfLibrariesPDO);
         	
@@ -151,7 +150,7 @@ public class HelloService {
         	System.out.println("Libraries with errors: ");
         	librariesWithProblem.forEach(System.out::println);
         }
-        Commands.deleteProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectName);
+       Commands.deleteProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectName);
     }
 
     private static void getMethodsCalled() {
