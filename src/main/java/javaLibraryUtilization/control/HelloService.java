@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -44,13 +43,14 @@ public class HelloService {
 	public static Project project;
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
     public static List<String> allMethodsCalledByProjectNew = new ArrayList<>();
-    public static List<String> librariesWithProblem = new ArrayList<>();   
-    public static Set<MethodCallSet> methodCallSetList =new HashSet<>();
+    public static List<String> librariesWithProblem = new ArrayList<>();
     public static List<methodsDetails> methodsDetailsList = new ArrayList<methodsDetails>();
-    private ProjectDTO ProjectDTO;
+    public static List<ProjectDTO> projectDTOlist=new ArrayList<ProjectDTO>();
     private Library Library;
 
-    public  void testing(String projectURLfromEndpoint) throws IOException{
+    public static List<Library> listOfLibrariesPDO = new ArrayList<Library>();
+
+    public void projectAnalysis(String projectURLfromEndpoint) throws IOException{
 
         String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
 
@@ -84,8 +84,9 @@ public class HelloService {
                 //Get NOM per class
                 InvestigatorForNOM investigatorForNOM= new InvestigatorForNOM(project);
                 investigatorForNOM.getHashMap().forEach((k,e)-> System.out.println("key: "+k+"    v: "+e));
-
+                //count for LUF
                 int arithmitisLUF=0;
+                //count
                 int count=0;
                 countForPLMI=0;
         		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", librariesInProject.get(i).toString());
@@ -97,30 +98,43 @@ public class HelloService {
             	for (String k : allMethodsCalledByProjectNew){
             		for(MethodOfLibrary j: allMethodsOfLibrary) {
 	                	if( j.toString().contains (k)) {
+
                             countForPLMI=countForPLMI+1;
                             count=1;
+
 	                 		//CALLGRAPH
 	                		InvestigatorFacade facade = new InvestigatorFacade(librariesInProject.get(i).toString()+"new",
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 
-                            if(methodCallSets.stream().findFirst().isPresent()) {
+                            //Metric LUF
+                            String help = j.getQualifiedSignature().replace(j.getQualifiedSignature().substring
+                                    (j.getQualifiedSignature().lastIndexOf(".")),"");
+                            if(methodCallSets.stream().findFirst().isPresent()){
+                                System.out.println("Hello from inside but first");
+                                if (InvestigatorForNOM.getHashMap().containsKey("")){
+                                    System.out.println("Hello from inside");}
                                 int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
-                                arithmitisLUF += methodsCalledFromThiaCallTreeUsed;
-                            }
+                                arithmitisLUF += methodsCalledFromThiaCallTreeUsed;}
 
                            methodsDetailsList.add(new methodsDetails(1,k,
                                    librariesInProject.get(i).toString()+"new", methodCallSets));
-                            printResults(methodCallSets);}
+                            printResults(methodCallSets);
+                            }
                 	}
                  }
-                Library = new Library(librariesInProject.get(i), 1.0 * (countForPLMI/allMethodsOfLibrary.size()));
+                listOfLibrariesPDO.add(Library = new Library(librariesInProject.get(i),
+                        1.0 * (countForPLMI/allMethodsOfLibrary.size()),arithmitisLUF * 1.0));
 
                 if (count == 1){
                     countForNUL++;}
                // System.out.println("Arithmitis LUF"+arithmitisLUF);
+
         	}
-            ProjectDTO = new ProjectDTO(1,"C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
+            //projectDTOlist.add(new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
+              //      countForNUL));
+            projectDTOlist.add(new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
+                    countForNUL,listOfLibrariesPDO));
         	
 		} catch (IOException e) {
 			e.printStackTrace();

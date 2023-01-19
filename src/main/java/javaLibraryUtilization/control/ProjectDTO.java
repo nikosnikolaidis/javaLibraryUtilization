@@ -3,15 +3,22 @@ package javaLibraryUtilization.control;
 import java.util.List;
 
 public class ProjectDTO {
-    private int id;
-    private String projectName;
-    private methodsDetails methodsDetails;
+    public String projectName;
+    public List<methodsDetails> methodsDetails;
     private int NUL;
-    private List<Library> libraries;
+    public List<Library> libraries;
 
-    public ProjectDTO(int id, String projectName) {
-        this.id = id;
+    public ProjectDTO(String projectName, List<javaLibraryUtilization.control.methodsDetails> methodsDetails, int NUL) {
         this.projectName = projectName;
+        this.methodsDetails = methodsDetails;
+        this.NUL = NUL;
+    }
+
+    public ProjectDTO(String projectName, List<javaLibraryUtilization.control.methodsDetails> methodsDetails, int NUL, List<Library> libraries) {
+        this.projectName = projectName;
+        this.methodsDetails = methodsDetails;
+        this.NUL = NUL;
+        this.libraries = libraries;
     }
 
     public String getProjectName() {
@@ -20,14 +27,6 @@ public class ProjectDTO {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
-    }
-
-    public javaLibraryUtilization.control.methodsDetails getMethodsDetails() {
-        return methodsDetails;
-    }
-
-    public void setMethodsDetails(javaLibraryUtilization.control.methodsDetails methodsDetails) {
-        this.methodsDetails = methodsDetails;
     }
 
     public int getNUL() {
