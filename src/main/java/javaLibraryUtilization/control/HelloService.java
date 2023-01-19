@@ -81,6 +81,10 @@ public class HelloService {
             int countForNUL=0;
 
         	for (int i =0; i<librariesInProject.size();i++){
+                //Get NOM per class
+                InvestigatorForNOM investigatorForNOM= new InvestigatorForNOM(project);
+                investigatorForNOM.getHashMap().forEach((k,e)-> System.out.println("key: "+k+"    v: "+e));
+
                 int arithmitisLUF=0;
                 int count=0;
                 countForPLMI=0;
@@ -100,8 +104,10 @@ public class HelloService {
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 
-                            //int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
-                            //arithmitisLUF+=methodsCalledFromThiaCallTreeUsed;
+                            if(methodCallSets.stream().findFirst().isPresent()) {
+                                int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
+                                arithmitisLUF += methodsCalledFromThiaCallTreeUsed;
+                            }
 
                            methodsDetailsList.add(new methodsDetails(1,k,
                                    librariesInProject.get(i).toString()+"new", methodCallSets));
