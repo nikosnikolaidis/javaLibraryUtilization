@@ -49,7 +49,6 @@ public class HelloService {
     public static List<methodsDetails> methodsDetailsList = new ArrayList<methodsDetails>();
     public static List<ProjectDTO> projectDTOlist=new ArrayList<ProjectDTO>();
     private Library Library;
-
     public static List<Library> listOfLibrariesPDO = new ArrayList<Library>();
     public static ProjectDTO ProjectDTO;
 
@@ -109,13 +108,20 @@ public class HelloService {
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 
-                            //string help takes the qualified name expept the name of method in the end
+                            //string help takes the qualified name except the name of method in the end
                             //not working perfect yet
-                            String help = j.getQualifiedSignature().replace(j.getQualifiedSignature().substring
-                                    (j.getQualifiedSignature().lastIndexOf(".")),"");
-                            InvestigatorForNOM.getHashMap().forEach((o,e)-> {
+                            String temp="";
+                            if (j.getQualifiedSignature().contains("(")){
+                                temp = j.getQualifiedSignature().replaceAll("\\(.*\\)", "");
+                                temp = temp.replace(temp.substring
+                                        (temp.lastIndexOf(".")),"");}
+                            String finalTemp = temp;
+                            InvestigatorForNOM.getHashMap().forEach((o, e)-> {
                                 System.out.println("The key " + o);
-                                System.out.println("The qualified " + help);
+                                System.out.println("The qualified " + finalTemp);
+                               if (investigatorForNOM.getHashMap().containsKey(finalTemp)){
+                                   System.out.println("Eventually");
+                               }
                             });
 
                             if(methodCallSets.stream().findFirst().isPresent()){
