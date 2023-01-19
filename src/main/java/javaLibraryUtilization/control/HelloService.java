@@ -37,6 +37,8 @@ import domain.Project;
 import javaLibraryUtilization.LibUtil;
 import utils.Commands;
 
+import static org.apache.logging.log4j.ThreadContext.containsKey;
+
 @Service
 public class HelloService {
 		
@@ -86,7 +88,7 @@ public class HelloService {
                 InvestigatorForNOM investigatorForNOM= new InvestigatorForNOM(project);
                 investigatorForNOM.getHashMap().forEach((k,e)-> System.out.println("key: "+k+"    v: "+e));
                 //count for LUF
-                int paronomastisLUF=0;
+                int paronomastisLUF=1;
                 int arithmitisLUF=0;
                 //count
                 int count=0;
@@ -113,7 +115,7 @@ public class HelloService {
                             String help = j.getQualifiedSignature().replace(j.getQualifiedSignature().substring
                                     (j.getQualifiedSignature().lastIndexOf(".")),"");
                             if(methodCallSets.stream().findFirst().isPresent()){
-                                if (InvestigatorForNOM.getHashMap().containsKey(help)){
+                                if (InvestigatorForNOM.getHashMap().containsValue(help)){
                                     System.out.println("Hello from inside");
                                     paronomastisLUF = investigatorForNOM.getHashMap().get(help) + paronomastisLUF;
                                     }
