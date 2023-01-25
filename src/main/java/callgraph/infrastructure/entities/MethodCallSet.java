@@ -41,6 +41,10 @@ public class MethodCallSet {
         return methodDeclaration;
     }
 
+    public MethodDecl getMethodDeclaration() {
+        return methodDeclaration;
+    }
+
     public Set<MethodDecl> getMethodCalls() {
         return methodCalls;
     }

@@ -5,7 +5,6 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -28,35 +27,34 @@ public class InvestigatorForNOM {
 
     private static HashMap<String,Integer> hashMap=new HashMap<>();
 
-    public InvestigatorForNOM(Project project){
+    public InvestigatorForNOM(String project){
+        hashMap.clear();
 
         //Setup Parser and SymbolSolver
-        ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project.getProjectPath()));
+        ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project));
+
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
+
         try {
-            createSymbolSolver(project.getProjectPath());
+            createSymbolSolver(project);
         } catch (IllegalStateException e) {
             return;
         }
-        if (createFileSet(sourceRoots, project) == 0) {
-            System.err.println("No classes could be identified! Exiting...");
-            return;
-        }
 
-        //For all files parse with visitor
         sourceRoots
                 .forEach(sourceRoot -> {
                     System.out.println("Analysing Source Root: " + sourceRoot.getRoot().toString() );
                     try {
+
                         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
                         parseResults
                                 .stream()
                                 .filter(res -> res.getResult().isPresent())
                                 .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn\\wrapper"))
-                                .forEach(res -> {
-                                    analyzeCompilationUnit(res.getResult().get());
+                                .forEach(res -> { analyzeCompilationUnit(res.getResult().get());
                                 });
                     } catch (Exception ignored) {
+
                     }
                 });
         System.out.println();

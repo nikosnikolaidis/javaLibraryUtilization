@@ -2,19 +2,23 @@ package javaLibraryUtilization.control;
 
 public class Library {
     private String name;
-    private Double PLMI;
     private Double LUF;
 
-    public Library(String name, Double PLMI) {
+    //Percentage of Used Classes
+    private Double PUC;
+    //Percentage of Used Methods Of Classes
+    private Double PUMC;
+
+    public Library(String name, Double LUF, Double PUC, Double PUMC) {
         this.name = name;
-        this.PLMI = PLMI;
+        this.LUF = LUF;
+        this.PUC = PUC;
+        this.PUMC = PUMC;
     }
 
-    public Library(String name, Double PLMI, Double LUF) {
+    public Library(String name, Double LUF) {
         this.name = name;
-        this.PLMI = PLMI;
-        this.LUF = LUF;
-    }
+        this.LUF = LUF;}
 
     public Library(String name) {
         this.name = name;
@@ -26,14 +30,6 @@ public class Library {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Double getPLMI() {
-        return PLMI;
-    }
-
-    public void setPLMI(Double PLMI) {
-        this.PLMI = PLMI;
     }
 
     public Double getLUF() {
