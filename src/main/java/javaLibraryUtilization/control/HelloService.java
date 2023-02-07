@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.springframework.stereotype.Service;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -47,7 +46,8 @@ public class HelloService {
     public static List<Library> listOfLibrariesPDO = new ArrayList<Library>();
     public static ProjectDTO ProjectDTO;
     public static InvestigatorForNOM investigatorForNOM;
-    public static List<String> classList=new ArrayList<>();
+    public static List<String> classList = new ArrayList<>();
+    public static List<String> classListNew = new ArrayList<>();
     public void projectAnalysis(String projectURLfromEndpoint) throws IOException{
 
         String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
@@ -69,8 +69,6 @@ public class HelloService {
 
         methodsDetailsList.clear();
         listOfLibrariesPDO.clear();
-        // for (int w=0;w<listOfLibrariesPDO.size();w++){
-        // listOfLibrariesPDO.remove(w);
 
        // List all files of Target 
         Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
@@ -81,16 +79,21 @@ public class HelloService {
         	 librariesInProject.remove(0);
 
             int countForNUL=0;
-            int allTheClassesOfALibrary;
 
-            //need all the classes of a library
-            //need all the used classes of a library
+            //need all the used classes of a library (size of a table)
+            //need all the classes of a library (size of ?)
+
         	for (int i =0; i<librariesInProject.size();i++){
 
-                int paronomastisPUMC=0;
+                //paronomastisPUC number of all Classes of this Library
+                int paronomastisPUC=1;
+
                 int paronomastisLUF=0;
+
+                int numberOfUsedMethods=0;
                 int arithmitisLUF=0;
                 int paronomastis=0;
+                //count used for NUL - Number of Used Libraries
                 int count=0;
 
         		Commands.makeFolder(project.getProjectPath()+ "\\target\\dependency", librariesInProject.get(i).toString());
@@ -101,71 +104,78 @@ public class HelloService {
 
                 investigatorForNOM = new InvestigatorForNOM(librariesInProject.get(i).toString()+"new");
                 investigatorForNOM.getHashMap().forEach((k, e) -> System.out.println("key: " + k + "    v: " + e));
-                paronomastisPUMC=investigatorForNOM.getHashMap().size();
+                paronomastisPUC=investigatorForNOM.getHashMap().size();
 
                 // check if it exists in our list of methods
-            	for (String meth : allMethodsCalledByProjectNew){
-            		for(MethodOfLibrary j: allMethodsOfLibrary) {
-	                	if(j.toString().contains(meth)) {
-
+            	for (String meth : allMethodsCalledByProjectNew) {
+            		for (MethodOfLibrary j: allMethodsOfLibrary) {
+	                	if (j.toString().contains(meth)) {
+                            //count used for NUL - Number of Used Libraries
                             count=1;
+                            numberOfUsedMethods++;
+
 	                 		//CALLGRAPH
 	                		InvestigatorFacade facade = new InvestigatorFacade(librariesInProject.get(i).toString()+"new",
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 
-                            getClassName(j.getQualifiedSignature());
                             if (investigatorForNOM.getHashMap().containsKey(getClassName(j.getQualifiedSignature()))){
-                                paronomastis = investigatorForNOM.getHashMap().get( getClassName(j.getQualifiedSignature()));
-                                System.out.println ("The paronomastis " + paronomastisLUF);
-                                paronomastisLUF=paronomastisLUF+paronomastis;
-                            }
+                                paronomastis = investigatorForNOM.getHashMap().get(getClassName(j.getQualifiedSignature()));
+                                paronomastisLUF = paronomastisLUF + paronomastis;}
 
-                            for (MethodCallSet element: methodCallSets){
-                                element.getMethodDeclaration().getQualifiedName();
-                                 String temp = getClassName(element.getMethodDeclaration().getQualifiedName());
-                                 System.out.println("Hello"+temp);
+                            //Not working properly
+                            if (!(methodCallSets.size() == 0)) {
+                                System.out.println("Inside");
+                                for (MethodCallSet element : methodCallSets) {
+                                    element.getMethodDeclaration().getQualifiedName();
+                                    String temp = getClassName(element.getMethodDeclaration().getQualifiedName());
 
-                                if (investigatorForNOM.getHashMap().containsKey(temp)){
-                                    paronomastis = investigatorForNOM.getHashMap().get(temp);
-                                    System.out.println ("The paronomastis " + paronomastisLUF);
-                                    paronomastisLUF=paronomastisLUF+paronomastis;
+
+                                    if (!classListNew.contains(temp)){
+                                        classListNew.add(temp);}
+                                    else
+                                        System.out.println("Already exists in classListNew");
+                                    for (int q=0;q<classListNew.size();q++){
+                                        if (investigatorForNOM.getHashMap().containsKey(q)) {
+                                            paronomastis = investigatorForNOM.getHashMap().get(q);
+                                            paronomastisLUF = paronomastisLUF + paronomastis;}
+                                    }
                                 }
                             }
-                            //string help takes the qualified signature except the name of method in the end
 
-                              //if (investigatorForNOM.getHashMap().containsKey(finalTemp)){
-                                //  paronomastis = investigatorForNOM.getHashMap().get(finalTemp);
-                                  //System.out.println ("The paronomastis " + paronomastisLUF);
-                                  //paronomastisLUF=paronomastisLUF+paronomastis;
-                               //}
 
-                            if(methodCallSets.stream().findFirst().isPresent()){
+                            if (methodCallSets.stream().findFirst().isPresent()){
                                 int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
-                                arithmitisLUF += methodsCalledFromThiaCallTreeUsed;
-                            }
+                                arithmitisLUF += methodsCalledFromThiaCallTreeUsed;}
 
                            methodsDetailsList.add(new methodsDetails(1,meth,
                                    librariesInProject.get(i) +"new", methodCallSets));
-                            printResults(methodCallSets);
-                            }
+                            printResults(methodCallSets);}
                 	}
                  }
+
                 if (paronomastisLUF == 0) {
                     paronomastisLUF = 1;}
 
-                listOfLibrariesPDO.add(Library = new Library(librariesInProject.get(i),
-                        paronomastisLUF * 1.0));
+                //PUMC
+                //ο αριθμητής να είναι ο αριθμός των μεθόδων που χρησιμοποιήθηκαν από τις κλάσεις
+                //προς τον αριθμό των public μεθόδων των συγκεκριμένων κλάσεων - getMethodsCalled?
 
+                System.out.println("Arithmitis LUF " + arithmitisLUF);
+                System.out.println("paronomastis LUF " + paronomastisLUF);
+                listOfLibrariesPDO.add(Library = new Library(librariesInProject.get(i),
+                        arithmitisLUF / paronomastisLUF * 1.0,
+                        classList.size() * 1.0 / paronomastisPUC,
+                        1.0 * numberOfUsedMethods ));
+
+                //count used for NUL - Number of Used Libraries
                 if (count == 1){
                     countForNUL++;}
-               // System.out.println("Arithmitis LUF"+arithmitisLUF);
 
         	}
-            System.out.println("The classes" +classList);
-           ProjectDTO=  new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
+           ProjectDTO = new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
                     countForNUL,listOfLibrariesPDO);
-        	
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

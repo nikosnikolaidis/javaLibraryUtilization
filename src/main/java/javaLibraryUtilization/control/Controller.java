@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import static javaLibraryUtilization.control.HelloService.methodsDetailsList;
-import static javaLibraryUtilization.control.HelloService.projectDTOlist;
 
 @RestController
 public class Controller {
@@ -32,11 +31,6 @@ public class Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return javaLibraryUtilization.control.HelloService.ProjectDTO;
-	}
-	@GetMapping(path="/tests")
-	public ProjectDTO tests(@RequestParam("url")String url) throws IOException {
-		HelloService.projectAnalysis(url);
 		return javaLibraryUtilization.control.HelloService.ProjectDTO;
 	}
 }

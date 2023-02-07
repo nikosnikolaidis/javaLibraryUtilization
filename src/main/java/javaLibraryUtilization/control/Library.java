@@ -3,7 +3,6 @@ package javaLibraryUtilization.control;
 public class Library {
     private String name;
     private Double LUF;
-
     //Percentage of Used Classes
     private Double PUC;
     //Percentage of Used Methods Of Classes
@@ -16,9 +15,21 @@ public class Library {
         this.PUMC = PUMC;
     }
 
-    public Library(String name, Double LUF) {
-        this.name = name;
-        this.LUF = LUF;}
+    public Double getPUC() {
+        return PUC;
+    }
+
+    public void setPUC(Double PUC) {
+        this.PUC = PUC;
+    }
+
+    public Double getPUMC() {
+        return PUMC;
+    }
+
+    public void setPUMC(Double PUMC) {
+        this.PUMC = PUMC;
+    }
 
     public Library(String name) {
         this.name = name;
