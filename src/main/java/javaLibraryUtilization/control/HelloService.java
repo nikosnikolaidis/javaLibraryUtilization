@@ -86,10 +86,10 @@ public class HelloService {
         	for (int i =0; i<librariesInProject.size();i++){
 
                 //paronomastisPUC number of all Classes of this Library
+
+                classList.clear();
                 int paronomastisPUC=1;
-
                 int paronomastisLUF=0;
-
                 int numberOfUsedMethods=0;
                 int arithmitisLUF=0;
                 int paronomastis=0;
@@ -119,30 +119,27 @@ public class HelloService {
 	                					j.getFilePath(),j.getMethodDeclaration());
 	                        Set<MethodCallSet> methodCallSets = facade.start();
 
-                            if (investigatorForNOM.getHashMap().containsKey(getClassName(j.getQualifiedSignature()))){
+                            if (investigatorForNOM.getHashMap().containsKey(getClassName(j.getQualifiedSignature()))) {
                                 paronomastis = investigatorForNOM.getHashMap().get(getClassName(j.getQualifiedSignature()));
-                                paronomastisLUF = paronomastisLUF + paronomastis;}
+                                paronomastisLUF = paronomastisLUF + paronomastis;
+                            }
+
+                            System.err.println("Pronomstis: "+paronomastisLUF);
 
                             //Not working properly
                             if (!(methodCallSets.size() == 0)) {
-                                System.out.println("Inside");
-                                for (MethodCallSet element : methodCallSets) {
-                                    element.getMethodDeclaration().getQualifiedName();
-                                    String temp = getClassName(element.getMethodDeclaration().getQualifiedName());
+                                for (MethodDecl element : methodCallSets.stream().findFirst().get().getMethodCalls()) {
+                                    String temp = getClassName(element.getQualifiedName());
 
-
-                                    if (!classListNew.contains(temp)){
-                                        classListNew.add(temp);}
-                                    else
-                                        System.out.println("Already exists in classListNew");
-                                    for (int q=0;q<classListNew.size();q++){
-                                        if (investigatorForNOM.getHashMap().containsKey(q)) {
-                                            paronomastis = investigatorForNOM.getHashMap().get(q);
-                                            paronomastisLUF = paronomastisLUF + paronomastis;}
+                                    System.out.println(classList);
+                                }
+                                for (String str: classList){
+                                    if (investigatorForNOM.getHashMap().containsKey(str)) {
+                                        paronomastis = investigatorForNOM.getHashMap().get(str);
+                                        paronomastisLUF = paronomastisLUF + paronomastis;
                                     }
                                 }
                             }
-
 
                             if (methodCallSets.stream().findFirst().isPresent()){
                                 int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
@@ -150,7 +147,10 @@ public class HelloService {
 
                            methodsDetailsList.add(new methodsDetails(1,meth,
                                    librariesInProject.get(i) +"new", methodCallSets));
-                            printResults(methodCallSets);}
+                            printResults(methodCallSets);
+
+                            System.err.println("Pronomstis: "+paronomastisLUF);
+                        }
                 	}
                  }
 
@@ -164,8 +164,8 @@ public class HelloService {
                 System.out.println("Arithmitis LUF " + arithmitisLUF);
                 System.out.println("paronomastis LUF " + paronomastisLUF);
                 listOfLibrariesPDO.add(Library = new Library(librariesInProject.get(i),
-                        arithmitisLUF / paronomastisLUF * 1.0,
-                        classList.size() * 1.0 / paronomastisPUC,
+                        (arithmitisLUF * 1.0) / paronomastisLUF,
+                        (classList.size() * 1.0) / paronomastisPUC,
                         1.0 * numberOfUsedMethods ));
 
                 //count used for NUL - Number of Used Libraries
@@ -293,14 +293,14 @@ public class HelloService {
     public static String getClassName(String methodNameForGetClass){
         //takes the qualified signature except the name of method in the end
         String temp="";
-        if (methodNameForGetClass.contains("(")){
-            //methodNameForGetClass.getQualifiedSignature()
-            temp = methodNameForGetClass.replaceAll("\\(.*\\)", "");
-            temp = temp.replace(temp.substring
-                    (temp.lastIndexOf(".")),"");}
-        if (!classList.contains(temp)) {
+
+        //methodNameForGetClass.getQualifiedSignature()
+        temp = methodNameForGetClass.replaceAll("\\(.*\\)", "");
+        temp = temp.replace(temp.substring
+                    (temp.lastIndexOf(".")),"");
+       if (!classList.contains(temp)) {
             classList.add(temp);
-        }
+       }
         return  temp;
     }
 }
