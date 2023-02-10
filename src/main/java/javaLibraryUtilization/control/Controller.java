@@ -13,16 +13,6 @@ public class Controller {
 	@Autowired
 	private HelloService HelloService;
 
-	@GetMapping(path="/startAnalysis")
-	public List<methodsDetails> user(@RequestParam("url")String url){
-		try {
-			HelloService.projectAnalysis(url);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return methodsDetailsList;
-	}
 	@GetMapping(path="/startAnalysisWithMetrics")
 	public ProjectDTO metricsAnalysis1(@RequestParam("url")String url){
 		try {

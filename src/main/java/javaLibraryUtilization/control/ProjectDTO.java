@@ -4,17 +4,17 @@ import java.util.List;
 
 public class ProjectDTO {
     public String projectName;
-    public List<methodsDetails> methodsDetails;
+    public List<MethodsDetails> methodsDetails;
     private int NUL;
     public List<Library> libraries;
 
-    public ProjectDTO(String projectName, List<javaLibraryUtilization.control.methodsDetails> methodsDetails, int NUL) {
+    public ProjectDTO(String projectName, List<MethodsDetails> methodsDetails, int NUL) {
         this.projectName = projectName;
         this.methodsDetails = methodsDetails;
         this.NUL = NUL;
     }
 
-    public ProjectDTO(String projectName, List<javaLibraryUtilization.control.methodsDetails> methodsDetails, int NUL, List<Library> libraries) {
+    public ProjectDTO(String projectName, List<MethodsDetails> methodsDetails, int NUL, List<Library> libraries) {
         this.projectName = projectName;
         this.methodsDetails = methodsDetails;
         this.NUL = NUL;
