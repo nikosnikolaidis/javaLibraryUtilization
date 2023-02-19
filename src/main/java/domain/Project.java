@@ -12,7 +12,6 @@ public class Project {
         this.url = url;
         this.projectPath = clonePath;
     }
-    	
 
     public Project(String clonePath){
         this.projectPath=clonePath;
@@ -24,8 +23,7 @@ public class Project {
  
     public String getProjectPath() {
         return projectPath;
-    }	
-    
+    }
     	 
     public void setProjectPath(String clonePath) {
 		this.projectPath = clonePath;

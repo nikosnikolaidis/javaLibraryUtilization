@@ -16,14 +16,12 @@ import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
 import domain.Class;
 import domain.JavaFile;
-import domain.Project;
-
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static javaLibraryUtilization.control.HelloService.allMethodsCalledByProject;
+import static javaLibraryUtilization.control.startAnalysis.allMethodsCalledByProject;
 import static javaLibraryUtilization.control.HelloService.project;
 
 public class MethodsGetter {

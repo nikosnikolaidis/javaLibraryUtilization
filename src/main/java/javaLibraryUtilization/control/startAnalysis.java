@@ -18,14 +18,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static javaLibraryUtilization.control.MethodsGetter.getMethodsCalled;
 
 public class startAnalysis {
+
     public static Project project;
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
     public static List<String> allMethodsCalledByProjectNew = new ArrayList<>();
-    public static List<String> librariesWithProblem = new ArrayList<>();
     public static List<MethodsDetails> methodsDetailsList = new ArrayList<MethodsDetails>();
-    public static List<ProjectDTO> projectDTOlist = new ArrayList<ProjectDTO>();
     private Library Library;
     public static List<Library> listOfLibrariesPDO = new ArrayList<Library>();
     public static ProjectDTO ProjectDTO;
@@ -35,11 +35,13 @@ public class startAnalysis {
     public static List<String> testArray = new ArrayList<>();
     public static List<String> testArrayNew = new ArrayList<>();
 
-    public void startAnalysisOfEach(String analysisPath,String projectName) {
+    public void startAnalysisOfEach(Project project,String projectName) throws IOException {
 
-        //getMethodsCalled(project);
+        Commands.methodForMvnCleanCommand(project.getProjectPath());
+        Commands.getJarDependenciesForInitParsing(project.getProjectPath());
+
         methodsGetter = new MethodsGetter(project.getProjectPath());
-        methodsGetter.getMethodsCalled();
+        getMethodsCalled();
         System.out.println(allMethodsCalledByProject);
 
         //to check for duplicate values
@@ -48,7 +50,6 @@ public class startAnalysis {
                 allMethodsCalledByProjectNew.add(k.toString());
             }
         }
-        System.out.println("The methods called by the Project" + allMethodsCalledByProjectNew);
 
         methodsDetailsList.clear();
         listOfLibrariesPDO.clear();
@@ -65,6 +66,7 @@ public class startAnalysis {
             int countForNUL = 0;
             for (int i = 0; i < librariesInProject.size(); i++) {
 
+                System.out.println("Maria");
                 //paronomastisPUC number of all Classes of this Library
                 classList.clear();
                 int paronomastisPUC = 1;
@@ -126,8 +128,6 @@ public class startAnalysis {
                                         testArray.add(md.getQualifiedName());
                                     }
                                 }
-                                //int methodsCalledFromThiaCallTreeUsed = methodCallSets.stream().findFirst().get().getMethodCalls().size();
-                                // arithmitisLUF += methodsCalledFromThiaCallTreeUsed;
                             }
 
                             methodsDetailsList.add(new MethodsDetails(1, meth,
@@ -194,4 +194,3 @@ public class startAnalysis {
         }
     }
 }
-
