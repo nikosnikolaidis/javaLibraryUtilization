@@ -28,7 +28,6 @@ public class Class {
         Class aClass = (Class) o;
         return Objects.equals(qualifiedName, aClass.qualifiedName);
     } 
-    
 
     @Override
     public int hashCode() {

@@ -16,7 +16,7 @@ import java.util.Set;
 public class MethodCallSet {
 
     private final MethodDecl methodDeclaration;
-    private final Set<MethodDecl> methodCalls;
+    public final Set<MethodDecl> methodCalls;
     private Long methodCallSetId;
 
     public MethodCallSet(MethodDecl method) {
@@ -46,6 +46,7 @@ public class MethodCallSet {
     }
 
     public Set<MethodDecl> getMethodCalls() {
+
         return methodCalls;
     }
 

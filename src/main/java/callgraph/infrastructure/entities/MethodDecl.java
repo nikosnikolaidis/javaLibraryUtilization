@@ -11,7 +11,6 @@ package callgraph.infrastructure.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.javaparser.ast.body.MethodDeclaration;
-
 import java.util.Objects;
 
 public class MethodDecl {
@@ -19,7 +18,7 @@ public class MethodDecl {
     private final String filePath;
     private final String packageName;
     private final String simpleName;
-    private final String qualifiedName;
+    public final String qualifiedName;
     @JsonIgnore
     private final CodeRange codeRange;
 
