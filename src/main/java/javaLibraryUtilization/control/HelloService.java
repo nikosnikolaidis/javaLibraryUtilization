@@ -11,14 +11,17 @@ public class HelloService {
 		
 	public static Project project;
     public static List<String> librariesWithProblem = new ArrayList<>();
-    public static startAnalysis startAnalysis = new startAnalysis();
-
+    public static StartAnalysis startAnalysis = new StartAnalysis();
+    public static String home;
     public void projectAnalysis(String projectURLfromEndpoint) throws IOException {
+
+        home = System.getProperty("user.home");
+        System.out.println("current" + home);
 
         String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
 
-        project=new Project("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName);
-    	Commands.cloneProject("C:\\Users\\kolid\\eclipse-workspace\\project", projectURLfromEndpoint);
+        project = new Project(home + "\\eclipse-workspace\\project\\" + projectName);
+    	Commands.cloneProject(home +"\\eclipse-workspace\\project", projectURLfromEndpoint);
 
         startAnalysis.startAnalysisOfEach(project,projectName);
 
@@ -26,6 +29,6 @@ public class HelloService {
         	System.out.println("Libraries with errors: ");
         	librariesWithProblem.forEach(System.out::println);
         }
-       Commands.deleteProject("C:\\Users\\kolid\\eclipse-workspace\\project",projectName);
+       Commands.deleteProject(home +"\\eclipse-workspace\\project",projectName);
     }
 }

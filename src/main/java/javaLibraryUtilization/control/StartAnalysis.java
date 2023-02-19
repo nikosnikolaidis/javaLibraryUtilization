@@ -18,9 +18,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static javaLibraryUtilization.control.HelloService.home;
 import static javaLibraryUtilization.control.MethodsGetter.getMethodsCalled;
 
-public class startAnalysis {
+public class StartAnalysis {
 
     public static Project project;
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
@@ -35,7 +36,9 @@ public class startAnalysis {
     public static List<String> testArray = new ArrayList<>();
     public static List<String> testArrayNew = new ArrayList<>();
 
+
     public void startAnalysisOfEach(Project project,String projectName) throws IOException {
+
 
         Commands.methodForMvnCleanCommand(project.getProjectPath());
         Commands.getJarDependenciesForInitParsing(project.getProjectPath());
@@ -66,7 +69,6 @@ public class startAnalysis {
             int countForNUL = 0;
             for (int i = 0; i < librariesInProject.size(); i++) {
 
-                System.out.println("Maria");
                 //paronomastisPUC number of all Classes of this Library
                 classList.clear();
                 int paronomastisPUC = 1;
@@ -138,7 +140,6 @@ public class startAnalysis {
                 }
 
                 arithmitisLUF = testArray.size();
-                System.out.println("ArithmitisLuf" + arithmitisLUF);
 
                 if (paronomastisLUF == 0) {
                     paronomastisLUF = 1;
@@ -160,10 +161,9 @@ public class startAnalysis {
                 if (count == 1) {
                     countForNUL++;
                 }
-
             }
             //System.gitProperty("user.dir")
-            ProjectDTO = new ProjectDTO("C:\\Users\\kolid\\eclipse-workspace\\project\\" + projectName, methodsDetailsList,
+            ProjectDTO = new ProjectDTO( home + "\\project\\" + projectName, methodsDetailsList,
                     countForNUL, listOfLibrariesPDO);
 
         } catch (

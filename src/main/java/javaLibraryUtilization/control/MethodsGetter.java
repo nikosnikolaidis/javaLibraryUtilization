@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static javaLibraryUtilization.control.startAnalysis.allMethodsCalledByProject;
+import static javaLibraryUtilization.control.StartAnalysis.allMethodsCalledByProject;
 import static javaLibraryUtilization.control.HelloService.project;
 
 public class MethodsGetter {

@@ -20,6 +20,6 @@ public class Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return startAnalysis.ProjectDTO;
+		return StartAnalysis.ProjectDTO;
 	}
 }
