@@ -94,22 +94,6 @@ public class Commands {
         projectPath =  fileName +"new\\src\\main";
         Commands.unJar(projectPath, fileName);
     }
-    public static void FolderForCloneProject(String projectPath,String gitUrl) throws IOException {
-    	//for windows
-    	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
-                "mkdir " + "project");
-        BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
-        String line1;
-        while ((line1 = reader1.readLine()) != null) {
-            System.out.println(line1);
-        }
-        BufferedReader reader2 = new BufferedReader(new InputStreamReader(proc1.getErrorStream()));
-        String line2;
-        while ((line2 = reader2.readLine()) != null) {
-            System.out.println(line2);	
-        }
-        Commands.cloneProject(projectPath,gitUrl);
-    }
     public static void cloneProject(String projectPath,String gitUrl) throws IOException {
     	//for windows
     	Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
@@ -141,6 +125,4 @@ public class Commands {
             System.out.println(line2);	
         }	
     }
-    
-
 }

@@ -36,10 +36,9 @@ public class StartAnalysis {
     public static List<String> testArray = new ArrayList<>();
     public static List<String> testArrayNew = new ArrayList<>();
 
+    public void startAnalysisOfEach(String s,String projectName) throws IOException {
 
-    public void startAnalysisOfEach(Project project,String projectName) throws IOException {
-
-
+        project = new Project(s);
         Commands.methodForMvnCleanCommand(project.getProjectPath());
         Commands.getJarDependenciesForInitParsing(project.getProjectPath());
 
@@ -61,7 +60,7 @@ public class StartAnalysis {
         Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
         try (
                 Stream<Path> subPaths = Files.walk(path, 1)) {
-            List<String> librariesInProject = subPaths
+                List<String> librariesInProject = subPaths
                     .map(Objects::toString)
                     .collect(Collectors.toList());
             librariesInProject.remove(0);

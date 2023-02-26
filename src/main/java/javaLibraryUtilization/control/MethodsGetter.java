@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static javaLibraryUtilization.control.StartAnalysis.allMethodsCalledByProject;
-import static javaLibraryUtilization.control.HelloService.project;
+import static javaLibraryUtilization.control.StartAnalysis.project;
+
 
 public class MethodsGetter {
     public MethodsGetter(String path) {
