@@ -9,19 +9,21 @@ import utils.Commands;
 @Service
 public class HelloService {
     public static List<String> librariesWithProblem = new ArrayList<>();
-    public static StartAnalysis startAnalysis = new StartAnalysis();
     public static String home;
     public void projectAnalysis(String projectURLfromEndpoint) throws IOException {
 
-        home = System.getProperty("user.home");
+        home = System.getProperty("user.dir");
+
         String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
         List<String>  allTheFilesForAnalysis = new ArrayList<>();
 
-        Commands.cloneProject(home +"\\eclipse-workspace\\project", projectURLfromEndpoint);
-        checkerForMultiplePoms(home +"\\eclipse-workspace\\project\\" + projectName,allTheFilesForAnalysis);
+        Commands.makeFolderForProject(home,projectURLfromEndpoint);
+        home=home+"\\project";
 
-        System.out.println("Hello " +allTheFilesForAnalysis);
+        checkerForMultiplePoms(home +"\\" + projectName,allTheFilesForAnalysis);
+
          for ( String s : allTheFilesForAnalysis) {
+             StartAnalysis startAnalysis = new StartAnalysis();
            startAnalysis.startAnalysisOfEach(s,projectName);
         }
 
@@ -30,7 +32,7 @@ public class HelloService {
         	librariesWithProblem.forEach(System.out::println);
         }
         allTheFilesForAnalysis.clear();
-        Commands.deleteProject(home+"\\eclipse-workspace\\project",projectName);
+        Commands.deleteProject(home, projectName);
     }
     public void checkerForMultiplePoms(String path,List<String> allTheFilesForAnalysis) {
 

@@ -2,49 +2,56 @@ package javaLibraryUtilization.control;
 
 public class Library {
     private String name;
-    private Double LUF;
-    //Percentage of Used Classes
     private Double PUC;
+    //Percentage of Used Classes Tracing
+    private Double PUCT;
     //Percentage of Used Methods Of Classes
     private Double PUMC;
+    private Double LUF;
+    //Percentage of Used Methods Of Classes
 
-    public Library(String name, Double LUF, Double PUC, Double PUMC) {
+    public Library(String name, Double PUC, Double PUCT, Double PUMC, Double LUF) {
         this.name = name;
+        this.PUC = PUC;
+        this.PUCT = PUCT;
+        this.PUMC = PUMC;
         this.LUF = LUF;
-        this.PUC = PUC;
-        this.PUMC = PUMC;
-    }
-
-    public Double getPUC() {
-        return PUC;
-    }
-
-    public void setPUC(Double PUC) {
-        this.PUC = PUC;
-    }
-
-    public Double getPUMC() {
-        return PUMC;
-    }
-
-    public void setPUMC(Double PUMC) {
-        this.PUMC = PUMC;
-    }
-
-    public Library(String name) {
-        this.name = name;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Double getPUC() {
+        return PUC;
+    }
+
+    public Double getPUCT() {
+        return PUCT;
+    }
+
+    public Double getPUMC() {
+        return PUMC;
     }
 
     public Double getLUF() {
         return LUF;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPUC(Double PUC) {
+        this.PUC = PUC;
+    }
+
+    public void setPUCT(Double PUCT) {
+        this.PUCT = PUCT;
+    }
+
+    public void setPUMC(Double PUMC) {
+        this.PUMC = PUMC;
     }
 
     public void setLUF(Double LUF) {

@@ -11,13 +11,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import static javaLibraryUtilization.control.HelloService.home;
 import static javaLibraryUtilization.control.MethodsGetter.getMethodsCalled;
 
@@ -27,7 +23,6 @@ public class StartAnalysis {
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
     public static List<String> allMethodsCalledByProjectNew = new ArrayList<>();
     public static List<MethodsDetails> methodsDetailsList = new ArrayList<MethodsDetails>();
-    private Library Library;
     public static List<Library> listOfLibrariesPDO = new ArrayList<Library>();
     public static ProjectDTO ProjectDTO;
     public static InvestigatorForNOM investigatorForNOM;
@@ -35,8 +30,12 @@ public class StartAnalysis {
     public static MethodsGetter methodsGetter;
     public static List<String> testArray = new ArrayList<>();
     public static List<String> testArrayNew = new ArrayList<>();
+    public static List<String> listForAllTheDirectClasses = new ArrayList<>();
 
     public void startAnalysisOfEach(String s,String projectName) throws IOException {
+
+        allMethodsCalledByProjectNew.clear();
+        allMethodsCalledByProject.clear();
 
         project = new Project(s);
         Commands.methodForMvnCleanCommand(project.getProjectPath());
@@ -66,10 +65,12 @@ public class StartAnalysis {
             librariesInProject.remove(0);
 
             int countForNUL = 0;
-            for (int i = 0; i < librariesInProject.size(); i++) {
+            for (String value : librariesInProject) {
+
+                classList.clear();
+                listForAllTheDirectClasses.clear();
 
                 //paronomastisPUC number of all Classes of this Library
-                classList.clear();
                 int paronomastisPUC = 1;
                 int paronomastisLUF = 0;
                 int numberOfUsedMethods = 0;
@@ -78,13 +79,14 @@ public class StartAnalysis {
                 int count = 0;
                 int paronomastisPUMC = 0;
 
-                Commands.makeFolder(project.getProjectPath() + "\\target\\dependency", librariesInProject.get(i).toString());
+                Commands.makeFolder(project.getProjectPath() + "\\target\\dependency", value.toString());
+
                 //get all methods of the file
-                LibUtil m = new LibUtil(librariesInProject.get(i).toString() + "new");
+                LibUtil m = new LibUtil(value.toString() + "new");
                 List<MethodOfLibrary> allMethodsOfLibrary = new ArrayList<>();
                 allMethodsOfLibrary = m.getMethodsOfLibrary();
 
-                investigatorForNOM = new InvestigatorForNOM(librariesInProject.get(i).toString() + "new");
+                investigatorForNOM = new InvestigatorForNOM(value.toString() + "new");
                 investigatorForNOM.getHashMap().forEach((k, e) -> System.out.println("key: " + k + "    v: " + e));
                 paronomastisPUC = investigatorForNOM.getHashMap().size();
 
@@ -94,14 +96,23 @@ public class StartAnalysis {
                 // check if it exists in our list of methods
                 for (String meth : allMethodsCalledByProjectNew) {
                     for (MethodOfLibrary j : allMethodsOfLibrary) {
+
                         if (j.toString().contains(meth)) {
+
+                            //calculate arithmiti PUC (WITHOUT tracing)
+                            String temp1 = j.getQualifiedSignature().toString().replaceAll("\\(.*\\)", "");
+                            temp1 = temp1.replace(temp1.substring
+                                    (temp1.lastIndexOf(".")),"");
+                            if (!listForAllTheDirectClasses.contains(temp1)) {
+                                listForAllTheDirectClasses.add(temp1);
+                            }
 
                             //count used for NUL - Number of Used Libraries
                             count = 1;
                             numberOfUsedMethods++;
 
                             //CALLGRAPH
-                            InvestigatorFacade facade = new InvestigatorFacade(librariesInProject.get(i).toString() + "new",
+                            InvestigatorFacade facade = new InvestigatorFacade(value.toString() + "new",
                                     j.getFilePath(), j.getMethodDeclaration());
                             Set<MethodCallSet> methodCallSets = facade.start();
 
@@ -122,7 +133,6 @@ public class StartAnalysis {
                                 }
                             }
 
-                            //not perfect
                             if (methodCallSets.stream().findFirst().isPresent()) {
                                 for (MethodDecl md : methodCallSets.stream().findFirst().get().getMethodCalls()) {
                                     if (!testArray.contains(md.qualifiedName)) {
@@ -132,7 +142,7 @@ public class StartAnalysis {
                             }
 
                             methodsDetailsList.add(new MethodsDetails(1, meth,
-                                    librariesInProject.get(i) + "new", methodCallSets));
+                                    value + "new", methodCallSets));
                             printResults(methodCallSets);
                         }
                     }
@@ -151,18 +161,18 @@ public class StartAnalysis {
                 //ο αριθμητής να είναι ο αριθμός των μεθόδων που χρησιμοποιήθηκαν από τις κλάσεις
                 //προς τον αριθμό των public μεθόδων των συγκεκριμένων κλάσεων - getMethodsCalled?
 
-                listOfLibrariesPDO.add(Library = new Library(librariesInProject.get(i),
-                        ((arithmitisLUF * 1.0) / paronomastisLUF) * 100,
+                listOfLibrariesPDO.add(new Library(value,
+                        ((listForAllTheDirectClasses.size() * 1.0 )/ paronomastisPUC) * 100,
                         ((classList.size() * 1.0) / paronomastisPUC) * 100,
-                        ((numberOfUsedMethods * 1.0) / paronomastisPUMC) * 100));
+                        ((numberOfUsedMethods * 1.0) / paronomastisPUMC) * 100,
+                        ((arithmitisLUF * 1.0) / paronomastisLUF) * 100));
 
                 //count used for NUL - Number of Used Libraries
                 if (count == 1) {
                     countForNUL++;
                 }
             }
-            //System.gitProperty("user.dir")
-            ProjectDTO = new ProjectDTO( home + "\\project\\" + projectName, methodsDetailsList,
+            ProjectDTO = new ProjectDTO( home +"\\" + projectName, methodsDetailsList,
                     countForNUL, listOfLibrariesPDO);
 
         } catch (
@@ -181,6 +191,17 @@ public class StartAnalysis {
             classList.add(temp);
         }
         return  temp;
+    }
+
+    //not getting the dependency of dependency ...
+    public static String getOnlyDependenciesOfAnalysedProject(String nameOfDependency) {
+
+        nameOfDependency = nameOfDependency.replace(nameOfDependency.substring(0,nameOfDependency.lastIndexOf(('\\'))),"");
+        String[] parts = nameOfDependency.substring(1).split("-");
+        String temp = String.join(",",parts);
+        temp = temp.replace(",","");
+
+        return "maria test";
     }
     public static void printResults(Set<MethodCallSet> results) {
         for (MethodCallSet methodCallSet : results) {
