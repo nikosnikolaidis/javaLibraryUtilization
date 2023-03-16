@@ -1,6 +1,13 @@
 package javaLibraryUtilization.control;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table
 public class Library {
+@Id
+@ManyToOne
     private String name;
     private Double PUC;
     //Percentage of Used Classes Tracing

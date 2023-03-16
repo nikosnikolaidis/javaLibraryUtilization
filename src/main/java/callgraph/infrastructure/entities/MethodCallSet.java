@@ -9,11 +9,13 @@
  ******************************************************************************/
 package callgraph.infrastructure.entities;
  
+import javax.persistence.Id;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public class MethodCallSet {
+    @Id
 
     private final MethodDecl methodDeclaration;
     public final Set<MethodDecl> methodCalls;

@@ -1,10 +1,14 @@
 package javaLibraryUtilization.control;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table
 public class ProjectDTO {
+    @Id
     public String projectName;
-    public List<MethodsDetails> methodsDetails;
+    public List <MethodsDetails> methodsDetails;
     private int NUL;
     public List<Library> libraries;
 

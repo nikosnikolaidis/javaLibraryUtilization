@@ -2,9 +2,13 @@ package javaLibraryUtilization.control;
 
 import callgraph.infrastructure.entities.MethodCallSet;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Set;
 
+
 public class MethodsDetails {
+    @Id
     private Long methodId;
     private String classOfMethod;
     private String methodName;
