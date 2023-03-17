@@ -11,17 +11,22 @@ package callgraph.infrastructure.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Objects;
-
+@Entity
 public class MethodDecl {
-	 
+    @Id
+    @GeneratedValue
+    private long id;
+
     private final String filePath;
     private final String packageName;
     private final String simpleName;
     public final String qualifiedName;
     @JsonIgnore
     private final CodeRange codeRange;
-
     public MethodDeclaration getPreviousMethod() {
         return previousMethod;
     }

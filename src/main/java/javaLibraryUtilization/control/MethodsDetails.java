@@ -1,19 +1,19 @@
 package javaLibraryUtilization.control;
 
 import callgraph.infrastructure.entities.MethodCallSet;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Set;
 
-
+@Entity
 public class MethodsDetails {
-    @Id
-    private Long methodId;
-    private String classOfMethod;
-    private String methodName;
-    private String libOfMethod;
-    public Set<MethodCallSet> methodCallSet;
+   @Id
+   @GeneratedValue
+    public Long methodId;
+    public String classOfMethod;
+    public String methodName;
+    public String libOfMethod;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public Set<callgraph.infrastructure.entities.MethodCallSet> methodCallSet;
 
     public MethodsDetails(long methodId, String methodName, String libOfMethod, Set<MethodCallSet> methodCallSet) {
         this.methodId = methodId;

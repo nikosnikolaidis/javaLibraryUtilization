@@ -141,7 +141,7 @@ public class StartAnalysis {
                                 }
                             }
 
-                            methodsDetailsList.add(new MethodsDetails(1, meth,
+                          methodsDetailsList.add(new MethodsDetails( 1 ,meth,
                                     value + "new", methodCallSets));
                             printResults(methodCallSets);
                         }

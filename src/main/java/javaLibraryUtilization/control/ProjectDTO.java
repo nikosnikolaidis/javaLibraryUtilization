@@ -2,21 +2,17 @@ package javaLibraryUtilization.control;
 
 import javax.persistence.*;
 import java.util.List;
-
 @Entity
-@Table
 public class ProjectDTO {
-    @Id
     public String projectName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+    @OneToMany
     public List <MethodsDetails> methodsDetails;
     private int NUL;
+    @OneToMany
     public List<Library> libraries;
-
-    public ProjectDTO(String projectName, List<MethodsDetails> methodsDetails, int NUL) {
-        this.projectName = projectName;
-        this.methodsDetails = methodsDetails;
-        this.NUL = NUL;
-    }
 
     public ProjectDTO(String projectName, List<MethodsDetails> methodsDetails, int NUL, List<Library> libraries) {
         this.projectName = projectName;

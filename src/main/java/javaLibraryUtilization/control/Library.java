@@ -1,13 +1,14 @@
 package javaLibraryUtilization.control;
 
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
-@Table
 public class Library {
-@Id
-@ManyToOne
+    @Id
+    @GeneratedValue
+    private long id;
     private String name;
     private Double PUC;
     //Percentage of Used Classes Tracing
