@@ -1,11 +1,10 @@
-package javaLibraryUtilization.control;
+package callgraph.infrastructure.entities;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
@@ -16,69 +15,74 @@ import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
 import domain.Class;
 import domain.JavaFile;
+import domain.Project;
+
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static javaLibraryUtilization.control.StartAnalysis.allMethodsCalledByProject;
-import static javaLibraryUtilization.control.StartAnalysis.project;
+public class InvestigatorForNOM {
 
+    private static HashMap<String,Integer> hashMap=new HashMap<>();
 
-public class MethodsGetter {
-    public MethodsGetter(String path) {
-    }
-    public static void getMethodsCalled() {
+    public InvestigatorForNOM(String project){
+        hashMap.clear();
+
         //Setup Parser and SymbolSolver
-        ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project.getProjectPath()));
+        ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project));
+
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
+
         try {
-            createSymbolSolver(project.getProjectPath());
+            createSymbolSolver(project);
         } catch (IllegalStateException e) {
             return;
         }
-        if (createFileSet(sourceRoots) == 0) {
-            System.err.println("No classes could be identified! Exiting...");
-            return;
-        }
 
-        //For all files parse with visitor
         sourceRoots
                 .forEach(sourceRoot -> {
                     System.out.println("Analysing Source Root: " + sourceRoot.getRoot().toString() );
                     try {
+
                         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
                         parseResults
                                 .stream()
                                 .filter(res -> res.getResult().isPresent())
                                 .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn\\wrapper"))
-                                .forEach(res -> {
-                                    analyzeCompilationUnit(res.getResult().get());
+                                .forEach(res -> { analyzeCompilationUnit(res.getResult().get());
                                 });
                     } catch (Exception ignored) {
+
                     }
                 });
         System.out.println();
     }
 
-    public static void analyzeCompilationUnit(CompilationUnit compilationUnit) {
-        VoidVisitor<List<String>> methodCall = new MethodCall();
-        methodCall.visit(compilationUnit, allMethodsCalledByProject);
+    public static HashMap<String, Integer> getHashMap() {
+        return hashMap;
     }
-    private static class MethodCall extends VoidVisitorAdapter<List<String>> {
+
+    private static void analyzeCompilationUnit(CompilationUnit compilationUnit) {
+        VoidVisitor<HashMap<String, Integer>> methodCall = new InvestigatorForNOM.MethodCall();
+        methodCall.visit(compilationUnit, hashMap);
+    }
+    private static class MethodCall extends VoidVisitorAdapter<HashMap<String,Integer>> {
         @Override
-        public void visit(MethodCallExpr n, List<String> collector) {
-            super.visit(n, collector);
+        public void visit(ClassOrInterfaceDeclaration javaClass, HashMap<String,Integer> collector) {
+            super.visit(javaClass, collector);
             try {
-                collector.add(n.resolve().getQualifiedSignature());
+                if (javaClass.getFullyQualifiedName().isPresent()) {
+                    collector.put(javaClass.getFullyQualifiedName().get(), javaClass.getMethods().size());
+                }
             } catch (Throwable t) {
-                System.out.println("Problem with: "+n.getName() +"  ---"+n.resolve().getQualifiedSignature());
+                System.out.println("Problem with: "+javaClass.getName() );
             }
         }
     }
 
-    //Create Symbol Solver
-    public static void createSymbolSolver(String projectDir) {
+    private static void createSymbolSolver(String projectDir) {
         TypeSolver javaParserTypeSolver = new JavaParserTypeSolver(new File(projectDir));
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(javaParserTypeSolver);
         ParserConfiguration parserConfiguration = new ParserConfiguration();
@@ -89,8 +93,7 @@ public class MethodsGetter {
                 .setConfiguration(parserConfiguration);
     }
 
-    //Find all Java files and add to List
-    public static int createFileSet(List<SourceRoot> sourceRoots) {
+    private static int createFileSet(List<SourceRoot> sourceRoots, Project project) {
         try {
             sourceRoots
                     .forEach(sourceRoot -> {
@@ -121,5 +124,4 @@ public class MethodsGetter {
         }
         return project.getJavaFiles().size();
     }
-
 }

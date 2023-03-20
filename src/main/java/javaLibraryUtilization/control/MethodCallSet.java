@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package callgraph.infrastructure.entities;
+package javaLibraryUtilization.control;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -19,20 +19,14 @@ public class MethodCallSet {
     @Id
     @GeneratedValue
     private Long methodCallSetId;
-
+    @OneToOne
     private final MethodDecl methodDeclaration;
-
-    public final Set<MethodDecl> methodCalls;
+    @OneToMany
+    private final Set<MethodDecl> methodCalls;
 
     public MethodCallSet(MethodDecl method) {
         this.methodDeclaration = method;
         this.methodCalls = new HashSet<>();
-    }
-
-    public MethodCallSet(Long methodCallSetId, MethodDecl methodDeclaration, Set<MethodDecl> methodCalls) {
-        this.methodCallSetId = methodCallSetId;
-        this.methodDeclaration = methodDeclaration;
-        this.methodCalls = methodCalls;
     }
 
     @Override

@@ -7,11 +7,18 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package callgraph.infrastructure.entities;
+package javaLibraryUtilization.control;
 
-import java.util.Objects;  
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.util.Objects;
+
+@Entity
 public final class CodeRange {
- 
+    @Id
+    @GeneratedValue
+    private long id;
     private final Integer startLine;
     private final Integer endLine;
  

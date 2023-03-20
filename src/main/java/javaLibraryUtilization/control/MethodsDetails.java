@@ -1,19 +1,20 @@
 package javaLibraryUtilization.control;
 
-import callgraph.infrastructure.entities.MethodCallSet;
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table
 public class MethodsDetails {
-   @Id
-   @GeneratedValue
-    public Long methodId;
-    public String classOfMethod;
-    public String methodName;
-    public String libOfMethod;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    public Set<callgraph.infrastructure.entities.MethodCallSet> methodCallSet;
+    @Id
+    @GeneratedValue
+    private Long methodId;
+    private String classOfMethod;
+    private String methodName;
+    private String libOfMethod;
+
+   @OneToMany
+   private Set<MethodCallSet> methodCallSet;
 
     public MethodsDetails(long methodId, String methodName, String libOfMethod, Set<MethodCallSet> methodCallSet) {
         this.methodId = methodId;
@@ -45,5 +46,5 @@ public class MethodsDetails {
     public void setLibOfMethod(String libOfMethod) {
         this.libOfMethod = libOfMethod;
     }
-    
+
 }

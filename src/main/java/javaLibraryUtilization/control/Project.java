@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package callgraph.infrastructure.entities;
+package javaLibraryUtilization.control;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

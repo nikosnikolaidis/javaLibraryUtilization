@@ -1,0 +1,10 @@
+<hibernate-configuration>
+    <session-factory>
+        <mapping class="javaLibraryUtilization.control.MethodsDetails"/>
+        <mapping class="javaLibraryUtilization.control.MethodCallSet"/>
+        <mapping class="javaLibraryUtilization.control.MethodDecl"/>
+        <mapping class="javaLibraryUtilization.control.CodeRange"/>
+        <mapping class="com.github.javaparser.ast.body.MethodDeclaration"/>
+        <mapping class="javaLibraryUtilization.control.MethodDecl.previousMethod"/>
+    </session-factory>
+</hibernate-configuration>

@@ -1,11 +1,14 @@
 package javaLibraryUtilization.control;
 
 import callgraph.InvestigatorFacade;
-import callgraph.infrastructure.entities.MethodCallSet;
-import callgraph.infrastructure.entities.MethodDecl;
+import callgraph.infrastructure.entities.InvestigatorForNOM;
+import callgraph.infrastructure.entities.MethodsGetter;
+import com.github.javaparser.ast.CompilationUnit;
 import domain.MethodOfLibrary;
 import domain.Project;
 import javaLibraryUtilization.LibUtil;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import utils.Commands;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,14 +18,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static javaLibraryUtilization.control.HelloService.home;
-import static javaLibraryUtilization.control.MethodsGetter.getMethodsCalled;
+import static callgraph.infrastructure.entities.MethodsGetter.getMethodsCalled;
 
 public class StartAnalysis {
 
     public static Project project;
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
     public static List<String> allMethodsCalledByProjectNew = new ArrayList<>();
-    public static List<MethodsDetails> methodsDetailsList = new ArrayList<MethodsDetails>();
+    public static List<MethodsDetails> methodsDetailsList = new ArrayList<>();
     public static List<Library> listOfLibrariesPDO = new ArrayList<Library>();
     public static ProjectDTO ProjectDTO;
     public static InvestigatorForNOM investigatorForNOM;
@@ -31,6 +34,7 @@ public class StartAnalysis {
     public static List<String> testArray = new ArrayList<>();
     public static List<String> testArrayNew = new ArrayList<>();
     public static List<String> listForAllTheDirectClasses = new ArrayList<>();
+    private  LibraryUtilizationRepository libraryUtilRepository;
 
     public void startAnalysisOfEach(String s,String projectName) throws IOException {
 
@@ -102,7 +106,7 @@ public class StartAnalysis {
                             //calculate arithmiti PUC (WITHOUT tracing)
                             String temp1 = j.getQualifiedSignature().toString().replaceAll("\\(.*\\)", "");
                             temp1 = temp1.replace(temp1.substring
-                                    (temp1.lastIndexOf(".")),"");
+                                    (temp1.lastIndexOf(".")), "");
                             if (!listForAllTheDirectClasses.contains(temp1)) {
                                 listForAllTheDirectClasses.add(temp1);
                             }
@@ -140,8 +144,7 @@ public class StartAnalysis {
                                     }
                                 }
                             }
-
-                          methodsDetailsList.add(new MethodsDetails( 1 ,meth,
+                            methodsDetailsList.add(new MethodsDetails(1, meth,
                                     value + "new", methodCallSets));
                             printResults(methodCallSets);
                         }
@@ -174,6 +177,16 @@ public class StartAnalysis {
             }
             ProjectDTO = new ProjectDTO( home +"\\" + projectName, methodsDetailsList,
                     countForNUL, listOfLibrariesPDO);
+
+
+            @Bean
+            CommandLineRunner commandLineRunner;
+            commandLineRunner (LibraryUtilizationRepository libraryUtilRepository){
+                return args -> {
+                libraryUtilRepository.save(new ProjectDTO( home +"\\" + projectName, methodsDetailsList,
+                        countForNUL, listOfLibrariesPDO));
+                };
+            };
 
         } catch (
                 IOException e) {
