@@ -1,25 +1,18 @@
 package javaLibraryUtilization.control;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Repository;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import java.util.List;
 
-@Entity
 public class ProjectDTO {
     public String projectName;
-    @Id
-    @GeneratedValue
-    private Long Id;
-    @OneToMany
-    public List <MethodsDetails> methodsDetails;
+    public List<MethodsDetails> methodsDetails;
     private int NUL;
-    @OneToMany
     public List<Library> libraries;
+
+    public ProjectDTO(String projectName, List<MethodsDetails> methodsDetails, int NUL) {
+        this.projectName = projectName;
+        this.methodsDetails = methodsDetails;
+        this.NUL = NUL;
+    }
 
     public ProjectDTO(String projectName, List<MethodsDetails> methodsDetails, int NUL, List<Library> libraries) {
         this.projectName = projectName;
@@ -27,7 +20,6 @@ public class ProjectDTO {
         this.NUL = NUL;
         this.libraries = libraries;
     }
-
 
     public String getProjectName() {
         return projectName;

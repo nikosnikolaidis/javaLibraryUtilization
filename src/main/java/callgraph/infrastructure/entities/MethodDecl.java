@@ -7,34 +7,26 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package javaLibraryUtilization.control;
+package callgraph.infrastructure.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.javaparser.ast.body.MethodDeclaration;
-
-
-import javax.persistence.*;
 import java.util.Objects;
-@Entity
+
 public class MethodDecl {
-    @Id
-    @GeneratedValue
-    private long id;
+	 
     private final String filePath;
     private final String packageName;
     private final String simpleName;
     public final String qualifiedName;
     @JsonIgnore
-    @OneToOne
     private final CodeRange codeRange;
+
     public MethodDeclaration getPreviousMethod() {
         return previousMethod;
     }
-
-    @Transient
     @JsonIgnore
-    @OneToOne
-    public final MethodDeclaration previousMethod;
+    private final MethodDeclaration previousMethod;
     private String previousMethodString="first";
     public MethodDecl(String filePath, String packageName, String simpleName, String qualifiedName, CodeRange codeRange, MethodDeclaration previousMethod) {
         this.filePath = filePath;

@@ -2,7 +2,7 @@ package domain;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-import javaLibraryUtilization.control.MethodCallSet;
+import callgraph.infrastructure.entities.MethodCallSet;
 
 public class MethodOfLibrary {
     private MethodDeclaration methodDeclaration;

@@ -1,18 +1,6 @@
 package javaLibraryUtilization.control;
 
-
-import org.springframework.stereotype.Repository;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
-@Repository
 public class Library {
-    @Id
-    @GeneratedValue
-    private long id;
     private String name;
     private Double PUC;
     //Percentage of Used Classes Tracing

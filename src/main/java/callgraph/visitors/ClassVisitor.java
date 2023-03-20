@@ -9,7 +9,8 @@
  ******************************************************************************/
 package callgraph.visitors;
 
-import javaLibraryUtilization.control.*;
+import callgraph.infrastructure.entities.MethodCallSet;
+import callgraph.infrastructure.entities.Project;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -18,7 +19,8 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import javaLibraryUtilization.control.Class;
+import callgraph.infrastructure.entities.*;
+import callgraph.infrastructure.entities.Class;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -146,7 +148,7 @@ public class ClassVisitor extends VoidVisitorAdapter<Void> {
         
 
         for (MethodCallExpr methodCallExpr : method.findAll(MethodCallExpr.class)) {
-            JavaFile jf;
+            JavaFile jf; 
             ResolvedMethodDeclaration resolvedMethodCallExpression;
             try {
                 resolvedMethodCallExpression = methodCallExpr.resolve();

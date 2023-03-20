@@ -9,7 +9,8 @@
  ******************************************************************************/
 package callgraph;
 
-import javaLibraryUtilization.control.*;
+import callgraph.infrastructure.entities.*;
+import callgraph.infrastructure.entities.Class;
 import callgraph.visitors.ClassVisitor;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
@@ -22,7 +23,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.utils.SymbolSolverCollectionStrategy;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
-import javaLibraryUtilization.control.Class;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -37,7 +37,7 @@ public final class InvestigatorFacade {
     private final String startingFile;
     private final MethodDeclaration startingMethod;
 
-    private final Set<MethodCallSet> methodCallSets = new HashSet<>();
+    private final Set<MethodCallSet> methodCallSets = new HashSet<>();	
 
     public InvestigatorFacade(String projectDir, String startingFile, MethodDeclaration startingMethod) {
         this.project = new Project(projectDir);

@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package javaLibraryUtilization.control;
+package callgraph.infrastructure.entities;
 
 import com.github.javaparser.ast.CompilationUnit;
 
