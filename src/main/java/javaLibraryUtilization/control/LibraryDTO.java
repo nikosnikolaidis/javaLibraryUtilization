@@ -1,6 +1,8 @@
 package javaLibraryUtilization.control;
 
-public class Library {
+import java.util.List;
+
+public class LibraryDTO {
     private String name;
     private Double PUC;
     //Percentage of Used Classes Tracing
@@ -9,13 +11,23 @@ public class Library {
     private Double PUMC;
     private Double LUF;
     //Percentage of Used Methods Of Classes
+    public List<MethodDetailsDTO> methodDetailsDTOList;
 
-    public Library(String name, Double PUC, Double PUCT, Double PUMC, Double LUF) {
+    public LibraryDTO(String name, Double PUC, Double PUCT, Double PUMC, Double LUF) {
         this.name = name;
         this.PUC = PUC;
         this.PUCT = PUCT;
         this.PUMC = PUMC;
         this.LUF = LUF;
+    }
+
+    public LibraryDTO(String name, Double PUC, Double PUCT, Double PUMC, Double LUF, List<MethodDetailsDTO> methodDetailsDTOList) {
+        this.name = name;
+        this.PUC = PUC;
+        this.PUCT = PUCT;
+        this.PUMC = PUMC;
+        this.LUF = LUF;
+        this.methodDetailsDTOList = methodDetailsDTOList;
     }
 
     public String getName() {

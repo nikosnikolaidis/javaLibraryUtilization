@@ -4,19 +4,12 @@ import java.util.List;
 
 public class ProjectDTO {
     public String projectName;
-    public List<MethodsDetails> methodsDetails;
     private int NUL;
-    public List<Library> libraries;
+    public List<LibraryDTO> libraries;
+    private String sha;
 
-    public ProjectDTO(String projectName, List<MethodsDetails> methodsDetails, int NUL) {
+    public ProjectDTO(String projectName, int NUL, List<LibraryDTO> libraries) {
         this.projectName = projectName;
-        this.methodsDetails = methodsDetails;
-        this.NUL = NUL;
-    }
-
-    public ProjectDTO(String projectName, List<MethodsDetails> methodsDetails, int NUL, List<Library> libraries) {
-        this.projectName = projectName;
-        this.methodsDetails = methodsDetails;
         this.NUL = NUL;
         this.libraries = libraries;
     }
@@ -37,11 +30,11 @@ public class ProjectDTO {
         this.NUL = NUL;
     }
 
-    public List<Library> getLibraries() {
+    public List<LibraryDTO> getLibraries() {
         return libraries;
     }
 
-    public void setLibraries(List<Library> libraries) {
+    public void setLibraries(List<LibraryDTO> libraries) {
         this.libraries = libraries;
     }
 }

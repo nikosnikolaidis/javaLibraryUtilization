@@ -10,7 +10,7 @@ import utils.Commands;
 public class HelloService {
     public static List<String> librariesWithProblem = new ArrayList<>();
     public static String home;
-    public void projectAnalysis(String projectURLfromEndpoint) throws IOException {
+    public ProjectDTO projectAnalysis(String projectURLfromEndpoint) throws IOException {
 
         home = System.getProperty("user.dir");
 
@@ -22,9 +22,10 @@ public class HelloService {
 
         checkerForMultiplePoms(home +"\\" + projectName,allTheFilesForAnalysis);
 
+        ProjectDTO projectDTO=null;
          for ( String s : allTheFilesForAnalysis) {
              StartAnalysis startAnalysis = new StartAnalysis();
-           startAnalysis.startAnalysisOfEach(s,projectName);
+             projectDTO= startAnalysis.startAnalysisOfEach(s,projectName);
         }
 
         if (librariesWithProblem.size()!=0) {
@@ -33,6 +34,8 @@ public class HelloService {
         }
         allTheFilesForAnalysis.clear();
         Commands.deleteProject(home, projectName);
+
+        return projectDTO;
     }
     public void checkerForMultiplePoms(String path,List<String> allTheFilesForAnalysis) {
 

@@ -22,17 +22,15 @@ public class StartAnalysis {
     public static Project project;
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
     public static List<String> allMethodsCalledByProjectNew = new ArrayList<>();
-    public static List<MethodsDetails> methodsDetailsList = new ArrayList<MethodsDetails>();
-    public static List<Library> listOfLibrariesPDO = new ArrayList<Library>();
-    public static ProjectDTO ProjectDTO;
     public static InvestigatorForNOM investigatorForNOM;
     public static List<String> classList = new ArrayList<>();
     public static MethodsGetter methodsGetter;
     public static List<String> testArray = new ArrayList<>();
     public static List<String> testArrayNew = new ArrayList<>();
     public static List<String> listForAllTheDirectClasses = new ArrayList<>();
+    public List<LibraryDTO> listOfLibrariesPDO = new ArrayList<>();
 
-    public void startAnalysisOfEach(String s,String projectName) throws IOException {
+    public ProjectDTO startAnalysisOfEach(String s,String projectName) throws IOException {
 
         allMethodsCalledByProjectNew.clear();
         allMethodsCalledByProject.clear();
@@ -51,9 +49,8 @@ public class StartAnalysis {
                 allMethodsCalledByProjectNew.add(k.toString());
             }
         }
-
-        methodsDetailsList.clear();
         listOfLibrariesPDO.clear();
+
 
         // List all files of Target
         Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
@@ -65,8 +62,10 @@ public class StartAnalysis {
             librariesInProject.remove(0);
 
             int countForNUL = 0;
+
             for (String value : librariesInProject) {
 
+                List<MethodDetailsDTO> methodDetailsDTOList =new ArrayList<>();
                 classList.clear();
                 listForAllTheDirectClasses.clear();
 
@@ -124,6 +123,7 @@ public class StartAnalysis {
                                 for (MethodDecl element : methodCallSets.stream().findFirst().get().getMethodCalls()) {
                                     String temp = getClassName(element.getQualifiedName());
                                 }
+
                                 for (String str : classList) {
                                     if (investigatorForNOM.getHashMap().containsKey(str)) {
                                         paronomastisLUF = paronomastisLUF + investigatorForNOM.getHashMap().get(str);
@@ -134,6 +134,22 @@ public class StartAnalysis {
                             }
 
                             if (methodCallSets.stream().findFirst().isPresent()) {
+
+                                List <CallDTO> callDTOList = new ArrayList<>();
+
+                                for ( MethodCallSet element : methodCallSets) {
+                                    for (MethodDecl el : element.getMethodCalls()) {
+                                        callDTOList.add(new CallDTO(
+                                                el.getFilePath().toString(),
+                                                el.getPackageName().toString(),
+                                                el.getQualifiedName().toString(),
+                                                el.getPreviousMethodString().toString()));
+                                    }
+                                }
+
+                                methodDetailsDTOList.add(new MethodDetailsDTO( methodCallSets.
+                                        stream().findFirst().get().getMethodDeclaration().qualifiedName, callDTOList));
+
                                 for (MethodDecl md : methodCallSets.stream().findFirst().get().getMethodCalls()) {
                                     if (!testArray.contains(md.qualifiedName)) {
                                         testArray.add(md.getQualifiedName());
@@ -141,8 +157,6 @@ public class StartAnalysis {
                                 }
                             }
 
-                            methodsDetailsList.add(new MethodsDetails(1, meth,
-                                    value + "new", methodCallSets));
                             printResults(methodCallSets);
                         }
                     }
@@ -161,24 +175,28 @@ public class StartAnalysis {
                 //ο αριθμητής να είναι ο αριθμός των μεθόδων που χρησιμοποιήθηκαν από τις κλάσεις
                 //προς τον αριθμό των public μεθόδων των συγκεκριμένων κλάσεων - getMethodsCalled?
 
-                listOfLibrariesPDO.add(new Library(value,
-                        ((listForAllTheDirectClasses.size() * 1.0 )/ paronomastisPUC) * 100,
-                        ((classList.size() * 1.0) / paronomastisPUC) * 100,
-                        ((numberOfUsedMethods * 1.0) / paronomastisPUMC) * 100,
-                        ((arithmitisLUF * 1.0) / paronomastisLUF) * 100));
+                    listOfLibrariesPDO.add(new LibraryDTO(value,
+                            ((listForAllTheDirectClasses.size() * 1.0) / paronomastisPUC) * 100,
+                            ((classList.size() * 1.0) / paronomastisPUC) * 100,
+                            ((numberOfUsedMethods * 1.0) / paronomastisPUMC) * 100,
+                            ((arithmitisLUF * 1.0) / paronomastisLUF) * 100,
+                            methodDetailsDTOList));
 
                 //count used for NUL - Number of Used Libraries
                 if (count == 1) {
                     countForNUL++;
                 }
             }
-            ProjectDTO = new ProjectDTO( home +"\\" + projectName, methodsDetailsList,
+
+            ProjectDTO projectDTO = new ProjectDTO(home +"\\" + projectName,
                     countForNUL, listOfLibrariesPDO);
 
+            return projectDTO;
         } catch (
                 IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
     public static String getClassName(String methodNameForGetClass) {
         //takes the qualified signature except the name of method in the end
