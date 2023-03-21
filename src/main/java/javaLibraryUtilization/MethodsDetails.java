@@ -1,4 +1,4 @@
-package javaLibraryUtilization.control;
+package javaLibraryUtilization;
 
 import callgraph.infrastructure.entities.MethodCallSet;
 

@@ -1,9 +1,17 @@
-package javaLibraryUtilization.control;
+package javaLibraryUtilization.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
-
+@Entity
 public class MethodDetailsDTO {
+    @Id
+    @GeneratedValue
+    private Long methodDetailsDTOid;
     private String methodName;
+    @OneToMany
     public List<CallDTO> callDTOList;
     public MethodDetailsDTO(String methodName, List<CallDTO> callDTOList) {
         this.methodName = methodName;
@@ -18,11 +26,4 @@ public class MethodDetailsDTO {
         this.methodName = methodName;
     }
 
-    public List<CallDTO> getCallPDOList() {
-        return callDTOList;
-    }
-
-    public void setCallPDOList(List<CallDTO> callDTOList) {
-        this.callDTOList = callDTOList;
-    }
 }

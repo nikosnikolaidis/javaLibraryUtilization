@@ -1,6 +1,14 @@
-package javaLibraryUtilization.control;
+package javaLibraryUtilization.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class CallDTO {
+    @Id
+    @GeneratedValue
+    private long callDTOid;
     public String filepath;
     public String packageName;
     public String qualifiedName;

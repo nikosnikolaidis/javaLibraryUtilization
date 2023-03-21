@@ -1,8 +1,16 @@
-package javaLibraryUtilization.control;
+package javaLibraryUtilization.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
+@Entity
 public class LibraryDTO {
+    @Id
+    @GeneratedValue
+    private long libraryDTOid;
     private String name;
     private Double PUC;
     //Percentage of Used Classes Tracing
@@ -11,6 +19,7 @@ public class LibraryDTO {
     private Double PUMC;
     private Double LUF;
     //Percentage of Used Methods Of Classes
+    @OneToMany
     public List<MethodDetailsDTO> methodDetailsDTOList;
 
     public LibraryDTO(String name, Double PUC, Double PUCT, Double PUMC, Double LUF) {

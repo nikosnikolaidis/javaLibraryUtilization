@@ -1,11 +1,13 @@
-package javaLibraryUtilization.control;
+package javaLibraryUtilization;
 
 import callgraph.InvestigatorFacade;
 import callgraph.infrastructure.entities.MethodCallSet;
 import callgraph.infrastructure.entities.MethodDecl;
 import domain.MethodOfLibrary;
 import domain.Project;
-import javaLibraryUtilization.LibUtil;
+import javaLibraryUtilization.models.*;
+import javaLibraryUtilization.repositories.ProjectRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import utils.Commands;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,10 +16,12 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static javaLibraryUtilization.control.HelloService.home;
-import static javaLibraryUtilization.control.MethodsGetter.getMethodsCalled;
+import static javaLibraryUtilization.services.HelloService.home;
+import static javaLibraryUtilization.MethodsGetter.getMethodsCalled;
 
 public class StartAnalysis {
+    @Autowired
+    private ProjectRepository projectRepository;
 
     public static Project project;
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
@@ -30,7 +34,7 @@ public class StartAnalysis {
     public static List<String> listForAllTheDirectClasses = new ArrayList<>();
     public List<LibraryDTO> listOfLibrariesPDO = new ArrayList<>();
 
-    public ProjectDTO startAnalysisOfEach(String s,String projectName) throws IOException {
+    public ProjectDTO startAnalysisOfEach(String s, String projectName) throws IOException {
 
         allMethodsCalledByProjectNew.clear();
         allMethodsCalledByProject.clear();
@@ -139,6 +143,7 @@ public class StartAnalysis {
 
                                 for ( MethodCallSet element : methodCallSets) {
                                     for (MethodDecl el : element.getMethodCalls()) {
+
                                         callDTOList.add(new CallDTO(
                                                 el.getFilePath().toString(),
                                                 el.getPackageName().toString(),
@@ -156,7 +161,6 @@ public class StartAnalysis {
                                     }
                                 }
                             }
-
                             printResults(methodCallSets);
                         }
                     }
@@ -190,6 +194,8 @@ public class StartAnalysis {
 
             ProjectDTO projectDTO = new ProjectDTO(home +"\\" + projectName,
                     countForNUL, listOfLibrariesPDO);
+
+            projectRepository.save(projectDTO);
 
             return projectDTO;
         } catch (

@@ -1,10 +1,18 @@
-package javaLibraryUtilization.control;
+package javaLibraryUtilization.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
-
+@Entity
 public class ProjectDTO {
+    @Id
+    @GeneratedValue
+    private long projectDTOid;
     public String projectName;
     private int NUL;
+    @OneToMany
     public List<LibraryDTO> libraries;
     private String sha;
 
