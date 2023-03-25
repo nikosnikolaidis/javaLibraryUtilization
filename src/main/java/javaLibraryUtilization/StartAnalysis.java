@@ -20,8 +20,7 @@ import static javaLibraryUtilization.services.HelloService.home;
 import static javaLibraryUtilization.MethodsGetter.getMethodsCalled;
 
 public class StartAnalysis {
-    @Autowired
-    private ProjectRepository projectRepository;
+
 
     public static Project project;
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
@@ -195,7 +194,6 @@ public class StartAnalysis {
             ProjectDTO projectDTO = new ProjectDTO(home +"\\" + projectName,
                     countForNUL, listOfLibrariesPDO);
 
-            projectRepository.save(projectDTO);
 
             return projectDTO;
         } catch (

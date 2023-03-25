@@ -1,20 +1,20 @@
 package javaLibraryUtilization.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 @Entity
 public class ProjectDTO {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long projectDTOid;
     public String projectName;
     private int NUL;
     @OneToMany
     public List<LibraryDTO> libraries;
     private String sha;
+
+    public ProjectDTO() {
+    }
 
     public ProjectDTO(String projectName, int NUL, List<LibraryDTO> libraries) {
         this.projectName = projectName;

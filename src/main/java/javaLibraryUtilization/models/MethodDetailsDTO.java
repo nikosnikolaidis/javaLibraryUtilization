@@ -18,6 +18,9 @@ public class MethodDetailsDTO {
         this.callDTOList = callDTOList;
     }
 
+    public MethodDetailsDTO() {
+    }
+
     public String getMethodName() {
         return methodName;
     }

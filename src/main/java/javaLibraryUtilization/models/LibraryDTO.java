@@ -22,6 +22,9 @@ public class LibraryDTO {
     @OneToMany
     public List<MethodDetailsDTO> methodDetailsDTOList;
 
+    public LibraryDTO() {
+    }
+
     public LibraryDTO(String name, Double PUC, Double PUCT, Double PUMC, Double LUF) {
         this.name = name;
         this.PUC = PUC;
