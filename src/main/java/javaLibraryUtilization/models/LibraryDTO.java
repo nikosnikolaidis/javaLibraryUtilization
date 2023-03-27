@@ -12,12 +12,12 @@ public class LibraryDTO {
     @GeneratedValue
     private long libraryDTOid;
     private String name;
-    private Double PUC;
+    private Double PUCD;
     //Percentage of Used Classes Tracing
-    private Double PUCT;
+    private Double PUCI;
     //Percentage of Used Methods Of Classes
-    private Double PUMC;
-    private Double LUF;
+    private Double LDUF;
+    private Double LIUF;
     //Percentage of Used Methods Of Classes
     @OneToMany
     public List<MethodDetailsDTO> methodDetailsDTOList;
@@ -25,20 +25,20 @@ public class LibraryDTO {
     public LibraryDTO() {
     }
 
-    public LibraryDTO(String name, Double PUC, Double PUCT, Double PUMC, Double LUF) {
+    public LibraryDTO(String name, Double PUCD, Double PUCI, Double LDUF, Double LIUF) {
         this.name = name;
-        this.PUC = PUC;
-        this.PUCT = PUCT;
-        this.PUMC = PUMC;
-        this.LUF = LUF;
+        this.PUCD = PUCD;
+        this.PUCI = PUCI;
+        this.LDUF = LDUF;
+        this.LIUF = LIUF;
     }
 
-    public LibraryDTO(String name, Double PUC, Double PUCT, Double PUMC, Double LUF, List<MethodDetailsDTO> methodDetailsDTOList) {
+    public LibraryDTO(String name, Double PUCD, Double PUCI, Double LDUF, Double LIUF, List<MethodDetailsDTO> methodDetailsDTOList) {
         this.name = name;
-        this.PUC = PUC;
-        this.PUCT = PUCT;
-        this.PUMC = PUMC;
-        this.LUF = LUF;
+        this.PUCD = PUCD;
+        this.PUCI = PUCI;
+        this.LDUF = LDUF;
+        this.LIUF = LIUF;
         this.methodDetailsDTOList = methodDetailsDTOList;
     }
 
@@ -46,39 +46,39 @@ public class LibraryDTO {
         return name;
     }
 
-    public Double getPUC() {
-        return PUC;
+    public Double getPUCD() {
+        return PUCD;
     }
 
-    public Double getPUCT() {
-        return PUCT;
+    public Double getPUCI() {
+        return PUCI;
     }
 
-    public Double getPUMC() {
-        return PUMC;
+    public Double getLDUF() {
+        return LDUF;
     }
 
-    public Double getLUF() {
-        return LUF;
+    public Double getLIUF() {
+        return LIUF;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setPUC(Double PUC) {
-        this.PUC = PUC;
+    public void setPUCD(Double PUCD) {
+        this.PUCD = PUCD;
     }
 
-    public void setPUCT(Double PUCT) {
-        this.PUCT = PUCT;
+    public void setPUCI(Double PUCI) {
+        this.PUCI = PUCI;
     }
 
-    public void setPUMC(Double PUMC) {
-        this.PUMC = PUMC;
+    public void setLDUF(Double LDUF) {
+        this.LDUF = LDUF;
     }
 
-    public void setLUF(Double LUF) {
-        this.LUF = LUF;
+    public void setLIUF(Double LIUF) {
+        this.LIUF = LIUF;
     }
 }

@@ -73,7 +73,6 @@ public class Commands {
         String line2;
         while ((line2 = reader2.readLine()) != null) {
             System.out.println(line2);
-            //Main.librariesWithProblem.add(projectPath);
         }
     }
     
@@ -107,7 +106,26 @@ public class Commands {
         String line2;
         while ((line2 = reader2.readLine()) != null) {
             System.out.println(line2);	
-        }	
+        }
+    }
+    public static String revParse(String projectPath,String sha) throws IOException {
+        //for windows
+        Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
+                "git rev-parse HEAD");
+        BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
+        String line1;
+        while ((line1 = reader1.readLine()) != null) {
+            System.out.println(line1);
+            sha=line1;
+        }
+
+        BufferedReader reader2 = new BufferedReader(new InputStreamReader(proc1.getErrorStream()));
+        String line2;
+        while ((line2 = reader2.readLine()) != null) {
+            System.out.println(line2);
+        }
+
+        return sha;
     }
     
     public static void deleteProject(String projectPath,String projectName) throws IOException {
@@ -123,7 +141,7 @@ public class Commands {
         String line2;
         while ((line2 = reader2.readLine()) != null) {
             System.out.println(line2);	
-        }	
+        }
     }
     public static void makeFolderForProject(String projectPath,String projectFromEndPoint) throws IOException {
         //for windows
@@ -141,5 +159,20 @@ public class Commands {
         }
         projectPath=projectPath+"//project";
         cloneProject(projectPath,projectFromEndPoint);
+    }
+    public static void checkoutSha(String projectPath,String sha) throws IOException {
+        //for windows
+        Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && "+
+                "git checkout " + sha);
+        BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
+        String line1;
+        while ((line1 = reader1.readLine()) != null) {
+            System.out.println(line1);
+        }
+        BufferedReader reader2 = new BufferedReader(new InputStreamReader(proc1.getErrorStream()));
+        String line2;
+        while ((line2 = reader2.readLine()) != null) {
+            System.out.println(line2);
+        }
     }
 }

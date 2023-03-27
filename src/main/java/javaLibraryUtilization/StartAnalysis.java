@@ -6,8 +6,6 @@ import callgraph.infrastructure.entities.MethodDecl;
 import domain.MethodOfLibrary;
 import domain.Project;
 import javaLibraryUtilization.models.*;
-import javaLibraryUtilization.repositories.ProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import utils.Commands;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,7 +19,6 @@ import static javaLibraryUtilization.MethodsGetter.getMethodsCalled;
 
 public class StartAnalysis {
 
-
     public static Project project;
     public static List<String> allMethodsCalledByProject = new ArrayList<>();
     public static List<String> allMethodsCalledByProjectNew = new ArrayList<>();
@@ -32,8 +29,9 @@ public class StartAnalysis {
     public static List<String> testArrayNew = new ArrayList<>();
     public static List<String> listForAllTheDirectClasses = new ArrayList<>();
     public List<LibraryDTO> listOfLibrariesPDO = new ArrayList<>();
+    public static ProjectDTO projectDTO = new ProjectDTO();
 
-    public ProjectDTO startAnalysisOfEach(String s, String projectName) throws IOException {
+    public ProjectVersionDTO startAnalysisOfEach(String s, String projectName, String sha) throws IOException {
 
         allMethodsCalledByProjectNew.clear();
         allMethodsCalledByProject.clear();
@@ -54,7 +52,6 @@ public class StartAnalysis {
         }
         listOfLibrariesPDO.clear();
 
-
         // List all files of Target
         Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
         try (
@@ -72,14 +69,14 @@ public class StartAnalysis {
                 classList.clear();
                 listForAllTheDirectClasses.clear();
 
-                //paronomastisPUC number of all Classes of this Library
-                int paronomastisPUC = 1;
-                int paronomastisLUF = 0;
+                //paronomastisPUCD number of all Classes of this Library
+                int paronomastisPUCD = 1;
+                int paronomastisLIUF = 0;
                 int numberOfUsedMethods = 0;
-                int arithmitisLUF = 0;
+                int arithmitisLIUF = 0;
                 //count used for NUL - Number of Used Libraries
                 int count = 0;
-                int paronomastisPUMC = 0;
+                int paronomastisLDUF = 0;
 
                 Commands.makeFolder(project.getProjectPath() + "\\target\\dependency", value.toString());
 
@@ -90,7 +87,7 @@ public class StartAnalysis {
 
                 investigatorForNOM = new InvestigatorForNOM(value.toString() + "new");
                 investigatorForNOM.getHashMap().forEach((k, e) -> System.out.println("key: " + k + "    v: " + e));
-                paronomastisPUC = investigatorForNOM.getHashMap().size();
+                paronomastisPUCD = investigatorForNOM.getHashMap().size();
 
                 testArray.clear();
                 testArrayNew.clear();
@@ -101,7 +98,7 @@ public class StartAnalysis {
 
                         if (j.toString().contains(meth)) {
 
-                            //calculate arithmiti PUC (WITHOUT tracing)
+                            //calculate arithmiti PUCD (WITHOUT tracing)
                             String temp1 = j.getQualifiedSignature().toString().replaceAll("\\(.*\\)", "");
                             temp1 = temp1.replace(temp1.substring
                                     (temp1.lastIndexOf(".")),"");
@@ -119,7 +116,7 @@ public class StartAnalysis {
                             Set<MethodCallSet> methodCallSets = facade.start();
 
                             if (investigatorForNOM.getHashMap().containsKey(getClassName(j.getQualifiedSignature()))) {
-                                paronomastisLUF = paronomastisLUF + investigatorForNOM.getHashMap().get(getClassName(j.getQualifiedSignature()));
+                                paronomastisLIUF = paronomastisLIUF + investigatorForNOM.getHashMap().get(getClassName(j.getQualifiedSignature()));
                             }
 
                             if (!(methodCallSets.size() == 0)) {
@@ -129,9 +126,9 @@ public class StartAnalysis {
 
                                 for (String str : classList) {
                                     if (investigatorForNOM.getHashMap().containsKey(str)) {
-                                        paronomastisLUF = paronomastisLUF + investigatorForNOM.getHashMap().get(str);
+                                        paronomastisLIUF = paronomastisLIUF + investigatorForNOM.getHashMap().get(str);
                                         methodsGetter = new MethodsGetter(str);
-                                        paronomastisPUMC += allMethodsCalledByProject.size();
+                                        paronomastisLDUF += allMethodsCalledByProject.size();
                                     }
                                 }
                             }
@@ -151,7 +148,7 @@ public class StartAnalysis {
                                     }
                                 }
 
-                                methodDetailsDTOList.add(new MethodDetailsDTO( methodCallSets.
+                                methodDetailsDTOList.add(new MethodDetailsDTO(methodCallSets.
                                         stream().findFirst().get().getMethodDeclaration().qualifiedName, callDTOList));
 
                                 for (MethodDecl md : methodCallSets.stream().findFirst().get().getMethodCalls()) {
@@ -165,24 +162,24 @@ public class StartAnalysis {
                     }
                 }
 
-                arithmitisLUF = testArray.size();
+                arithmitisLIUF = testArray.size();
 
-                if (paronomastisLUF == 0) {
-                    paronomastisLUF = 1;
+                if (paronomastisLIUF == 0) {
+                    paronomastisLIUF = 1;
                 }
-                if (paronomastisPUMC == 0) {
-                    paronomastisPUMC = 1;
+                if (paronomastisLDUF == 0) {
+                    paronomastisLDUF = 1;
                 }
 
-                //PUMC
+                //LDUF
                 //ο αριθμητής να είναι ο αριθμός των μεθόδων που χρησιμοποιήθηκαν από τις κλάσεις
                 //προς τον αριθμό των public μεθόδων των συγκεκριμένων κλάσεων - getMethodsCalled?
 
                     listOfLibrariesPDO.add(new LibraryDTO(value,
-                            ((listForAllTheDirectClasses.size() * 1.0) / paronomastisPUC) * 100,
-                            ((classList.size() * 1.0) / paronomastisPUC) * 100,
-                            ((numberOfUsedMethods * 1.0) / paronomastisPUMC) * 100,
-                            ((arithmitisLUF * 1.0) / paronomastisLUF) * 100,
+                            ((listForAllTheDirectClasses.size() * 1.0) / paronomastisPUCD) * 100,
+                            ((classList.size() * 1.0) / paronomastisPUCD) * 100,
+                            ((numberOfUsedMethods * 1.0) / paronomastisLDUF) * 100,
+                            ((arithmitisLIUF * 1.0) / paronomastisLIUF) * 100,
                             methodDetailsDTOList));
 
                 //count used for NUL - Number of Used Libraries
@@ -191,11 +188,10 @@ public class StartAnalysis {
                 }
             }
 
-            ProjectDTO projectDTO = new ProjectDTO(home +"\\" + projectName,
-                    countForNUL, listOfLibrariesPDO);
+            ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName,
+                    countForNUL, listOfLibrariesPDO,sha);
 
-
-            return projectDTO;
+            return projectVersionDTO;
         } catch (
                 IOException e) {
             e.printStackTrace();

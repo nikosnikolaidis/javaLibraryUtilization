@@ -1,48 +1,28 @@
 package javaLibraryUtilization.models;
 
-import javax.persistence.*;
 import java.util.List;
-@Entity
 public class ProjectDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long projectDTOid;
-    public String projectName;
-    private int NUL;
-    @OneToMany
-    public List<LibraryDTO> libraries;
-    private String sha;
-
+    private List<ProjectVersionDTO> projectVersionDTOList;
+    public ProjectVersionDTO ProjVersion;
     public ProjectDTO() {
     }
-
-    public ProjectDTO(String projectName, int NUL, List<LibraryDTO> libraries) {
-        this.projectName = projectName;
-        this.NUL = NUL;
-        this.libraries = libraries;
+    public ProjectDTO(ProjectVersionDTO projVersion) {
+        ProjVersion = projVersion;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public List<ProjectVersionDTO> getProjectVersionDTOList() {
+        return projectVersionDTOList;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setProjectVersionDTOList(List<ProjectVersionDTO> projectVersionDTOList) {
+        this.projectVersionDTOList = projectVersionDTOList;
     }
 
-    public int getNUL() {
-        return NUL;
+    public ProjectVersionDTO getProjVersion() {
+        return ProjVersion;
     }
 
-    public void setNUL(int NUL) {
-        this.NUL = NUL;
-    }
-
-    public List<LibraryDTO> getLibraries() {
-        return libraries;
-    }
-
-    public void setLibraries(List<LibraryDTO> libraries) {
-        this.libraries = libraries;
+    public void setProjVersion(ProjectVersionDTO projVersion) {
+        ProjVersion = projVersion;
     }
 }

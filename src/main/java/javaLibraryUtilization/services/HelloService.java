@@ -4,12 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import callgraph.infrastructure.entities.MethodCallSet;
 import javaLibraryUtilization.StartAnalysis;
-import javaLibraryUtilization.models.CallDTO;
-import javaLibraryUtilization.models.LibraryDTO;
-import javaLibraryUtilization.models.MethodDetailsDTO;
-import javaLibraryUtilization.models.ProjectDTO;
+import javaLibraryUtilization.models.*;
 import javaLibraryUtilization.repositories.CallRepository;
 import javaLibraryUtilization.repositories.LibraryRepository;
 import javaLibraryUtilization.repositories.MethodDetailsRepository;
@@ -17,6 +13,8 @@ import javaLibraryUtilization.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utils.Commands;
+
+import javax.sound.midi.SysexMessage;
 
 @Service
 public class HelloService {
@@ -28,46 +26,60 @@ public class HelloService {
     private MethodDetailsRepository methodDetailsRepository;
     @Autowired
     private CallRepository callRepository;
-    public static List<String> librariesWithProblem = new ArrayList<>();
     public static String home;
-    public ProjectDTO projectAnalysis(String projectURLfromEndpoint) throws IOException {
+    public static List<String> shaList = new ArrayList<>();
+    public static ProjectDTO projectDTO = new ProjectDTO();
+
+    public ProjectVersionDTO projectAnalysis(String projectURLfromEndpoint) throws IOException {
 
         home = System.getProperty("user.dir");
+
+        System.out.println(projectURLfromEndpoint);
 
         String projectName= projectURLfromEndpoint.split("/")[projectURLfromEndpoint.split("/").length-1].replace(".git", "");
         List<String>  allTheFilesForAnalysis = new ArrayList<>();
 
+        //make folder & clone
         Commands.makeFolderForProject(home,projectURLfromEndpoint);
-        home=home+"\\project";
+        //Get project's sha
+        String sha = Commands.revParse(home,projectURLfromEndpoint);
 
+        home=home+"\\project";
+        //check if project is multimaven
         checkerForMultiplePoms(home +"\\" + projectName,allTheFilesForAnalysis);
 
-        ProjectDTO projectDTO=null;
-         for ( String s : allTheFilesForAnalysis) {
-             StartAnalysis startAnalysis = new StartAnalysis();
-             projectDTO= startAnalysis.startAnalysisOfEach(s,projectName);
+        ProjectVersionDTO projectVersionDTO = null;
+
+        if (shaList.contains(sha)){
+            System.out.println("It contains the sha");
+            return projectDTO.getProjVersion();
         }
-
-        if (librariesWithProblem.size()!=0) {
-        	System.out.println("Libraries with errors: ");
-        	librariesWithProblem.forEach(System.out::println);
-        }
-        allTheFilesForAnalysis.clear();
-        Commands.deleteProject(home, projectName);
-
-
-        for (LibraryDTO libraryDTO: projectDTO.getLibraries()){
-            for (MethodDetailsDTO methodDetailsDTO : libraryDTO.methodDetailsDTOList) {
-                for (CallDTO callDTO: methodDetailsDTO.callDTOList) {
-                    callRepository.save(callDTO);
-                }
-                methodDetailsRepository.save(methodDetailsDTO);
+        else {
+            shaList.add(sha);
+            for ( String s : allTheFilesForAnalysis) {
+                StartAnalysis startAnalysis = new StartAnalysis();
+                System.out.println("The s is " + s);
+                projectVersionDTO = startAnalysis.startAnalysisOfEach(s,projectName,sha);
             }
-            libraryRepository.save(libraryDTO);
-        }
-        projectRepository.save(projectDTO);
+            allTheFilesForAnalysis.clear();
+            Commands.deleteProject(home, projectName);
 
-        return projectDTO;
+            for (LibraryDTO libraryDTO: projectVersionDTO.getLibraries()){
+                for (MethodDetailsDTO methodDetailsDTO : libraryDTO.methodDetailsDTOList) {
+                    for (CallDTO callDTO: methodDetailsDTO.callDTOList) {
+                        callRepository.save(callDTO);
+                    }
+                    methodDetailsRepository.save(methodDetailsDTO);
+                }
+                libraryRepository.save(libraryDTO);
+            }
+            projectRepository.save(projectVersionDTO);
+
+            projectDTO.setProjVersion(projectVersionDTO);
+
+            return projectVersionDTO;
+        }
+
     }
     public void checkerForMultiplePoms(String path,List<String> allTheFilesForAnalysis) {
 
