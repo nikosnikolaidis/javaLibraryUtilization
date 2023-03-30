@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends JpaRepository<ProjectVersionDTO,Long> {
 
     ProjectVersionDTO findByProjectName(String projectName);
-
+    ProjectVersionDTO findBySha(String sha);
 }

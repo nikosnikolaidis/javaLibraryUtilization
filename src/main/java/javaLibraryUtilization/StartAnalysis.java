@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static javaLibraryUtilization.services.HelloService.home;
 import static javaLibraryUtilization.MethodsGetter.getMethodsCalled;
 
 public class StartAnalysis {

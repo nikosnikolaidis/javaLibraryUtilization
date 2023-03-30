@@ -3,7 +3,6 @@ package javaLibraryUtilization.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
 import javaLibraryUtilization.StartAnalysis;
 import javaLibraryUtilization.models.*;
 import javaLibraryUtilization.repositories.CallRepository;
@@ -13,8 +12,6 @@ import javaLibraryUtilization.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utils.Commands;
-
-import javax.sound.midi.SysexMessage;
 
 @Service
 public class HelloService {
@@ -49,10 +46,9 @@ public class HelloService {
         checkerForMultiplePoms(home +"\\" + projectName,allTheFilesForAnalysis);
 
         ProjectVersionDTO projectVersionDTO = null;
-
-        if (shaList.contains(sha)){
-            System.out.println("It contains the sha");
-            return projectDTO.getProjVersion();
+        if (projectRepository.findBySha(sha)!=null) {
+            System.out.println("Exists");
+            return projectRepository.findBySha(sha);
         }
         else {
             shaList.add(sha);
