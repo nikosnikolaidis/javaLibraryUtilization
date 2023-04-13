@@ -27,7 +27,13 @@ public class HistoricService {
 
         String projectName = url.split("/")[url.split("/").length - 1].replace(".git", "");
 
-        Git gitRepo= Git.open(new File(home+"\\project\\"+projectName));
+        Git gitRepo;
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            gitRepo = Git.open(new File(home + "/project/" + projectName));
+        }
+        else {
+            gitRepo = Git.open(new File(home + "\\project\\" + projectName));
+        }
 
         List<Ref> branches = gitRepo.branchList().call();
 
@@ -53,23 +59,29 @@ public class HistoricService {
         List<String> updatedShaList = new ArrayList<>();
 
         for (int i=0; i<shaList.size(); i=i+numberOfCommits) {
-            System.out.println(i);
             updatedShaList.add(shaList.get(i));
         }
 
-        System.out.println("The sha List" +updatedShaList.size());
-
         for (String sha : updatedShaList) {
             try {
-                Commands.checkoutSha(home + "\\project\\" + projectName, sha);
+                String path;
+                if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+                    path= home + "/project/" + projectName;
+                }
+                else {
+                    path= home + "\\project\\" + projectName;
+                }
+                Commands.checkoutSha(path, sha);
                 StartAnalysis startAnalysis = new StartAnalysis();
-                projectVersionDTO = startAnalysis.startAnalysisOfEach(home + "\\project\\" + projectName, projectName, sha);
+                projectVersionDTO = startAnalysis.startAnalysisOfEach(path, projectName, sha);
                 projectVersionDTOList.add(projectVersionDTO);
 
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.err.println("This version couldnt be analyzed!");
+                e.printStackTrace();
             }
         }
+        Commands.deleteProject(home, projectName);
         return projectVersionDTOList;
     }
 }

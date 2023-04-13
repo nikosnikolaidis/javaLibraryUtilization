@@ -38,12 +38,20 @@ public class HelloService {
 
         //make folder & clone
         Commands.makeFolderForProject(home,projectURLfromEndpoint);
+
+        //get project path
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            home = home + "project/" +projectName;
+        }
+        else {
+            home = home + "\\project\\"+projectName;
+        }
+
         //Get project's sha
         String sha = Commands.revParse(home,projectURLfromEndpoint);
 
-        home=home+"\\project";
         //check if project is multimaven
-        checkerForMultiplePoms(home +"\\" + projectName,allTheFilesForAnalysis);
+        checkerForMultiplePoms(home , allTheFilesForAnalysis);
 
         ProjectVersionDTO projectVersionDTO = null;
         if (projectRepository.findBySha(sha)!=null) {
@@ -52,11 +60,14 @@ public class HelloService {
         }
         else {
             shaList.add(sha);
-            for ( String s : allTheFilesForAnalysis) {
-                StartAnalysis startAnalysis = new StartAnalysis();
-                System.out.println("The s is " + s);
-                projectVersionDTO = startAnalysis.startAnalysisOfEach(s,projectName,sha);
-            }
+                for (String s : allTheFilesForAnalysis) {
+                    if (allTheFilesForAnalysis.size() >= 1) {
+                        //Commands.mvnPackage(s);
+                    }
+                    StartAnalysis startAnalysis = new StartAnalysis();
+                    projectVersionDTO = startAnalysis.startAnalysisOfEach(s, projectName, sha);
+                }
+
             allTheFilesForAnalysis.clear();
             Commands.deleteProject(home, projectName);
 
@@ -75,7 +86,6 @@ public class HelloService {
 
             return projectVersionDTO;
         }
-
     }
     public void checkerForMultiplePoms(String path,List<String> allTheFilesForAnalysis) {
 
@@ -90,7 +100,7 @@ public class HelloService {
                     }
                 }
                 if (file.isFile()) {
-                    if  (file.toString().equals(path +"\\pom.xml")) {
+                    if  (file.getName().equals("pom.xml")) {
                         add++;
                     }
                 }

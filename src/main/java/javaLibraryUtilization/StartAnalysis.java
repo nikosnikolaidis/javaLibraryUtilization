@@ -32,6 +32,8 @@ public class StartAnalysis {
 
     public ProjectVersionDTO startAnalysisOfEach(String s, String projectName, String sha) throws IOException {
 
+        System.out.println("let it start");
+
         allMethodsCalledByProjectNew.clear();
         allMethodsCalledByProject.clear();
 
@@ -40,7 +42,14 @@ public class StartAnalysis {
         Commands.getJarDependenciesForInitParsing(project.getProjectPath());
 
         methodsGetter = new MethodsGetter(project.getProjectPath());
-        getMethodsCalled();
+        try{
+            getMethodsCalled();
+        }
+        catch (StackOverflowError e) {
+            System.err.println("This version couldnt be analyzed!");
+            e.printStackTrace();
+        }
+
         System.out.println(allMethodsCalledByProject);
 
         //to check for duplicate values
@@ -52,19 +61,25 @@ public class StartAnalysis {
         listOfLibrariesPDO.clear();
 
         // List all files of Target
-        Path path = Paths.get(project.getProjectPath() + "\\target\\dependency");
-        try (
-                Stream<Path> subPaths = Files.walk(path, 1)) {
+        Path path;
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            path= Paths.get(project.getProjectPath() + "/target/dependency");
+        }
+        else {
+            path= Paths.get(project.getProjectPath() + "\\target\\dependency");
+        }
+        try ( Stream<Path> subPaths = Files.walk(path, 1)) {
                 List<String> librariesInProject = subPaths
                     .map(Objects::toString)
                     .collect(Collectors.toList());
+                System.out.println(librariesInProject);
             librariesInProject.remove(0);
 
             int countForNUL = 0;
 
             for (String value : librariesInProject) {
 
-                List<MethodDetailsDTO> methodDetailsDTOList =new ArrayList<>();
+                List<MethodDetailsDTO> methodDetailsDTOList = new ArrayList<>();
                 classList.clear();
                 listForAllTheDirectClasses.clear();
 
@@ -77,12 +92,20 @@ public class StartAnalysis {
                 int count = 0;
                 int paronomastisLDUF = 0;
 
-                Commands.makeFolder(project.getProjectPath() + "\\target\\dependency", value.toString());
+                if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+                    Commands.makeFolder(project.getProjectPath() + "/target/dependency", value.toString());
+                }
+                else {
+                    Commands.makeFolder(project.getProjectPath() + "\\target\\dependency", value.toString());
+                }
 
                 //get all methods of the file
                 LibUtil m = new LibUtil(value.toString() + "new");
-                List<MethodOfLibrary> allMethodsOfLibrary = new ArrayList<>();
+                System.out.println("tHE M "+m);
+                List<MethodOfLibrary> allMethodsOfLibrary;
                 allMethodsOfLibrary = m.getMethodsOfLibrary();
+
+                System.out.println("allMethofsOfLibrary" +allMethodsOfLibrary);
 
                 investigatorForNOM = new InvestigatorForNOM(value.toString() + "new");
                 investigatorForNOM.getHashMap().forEach((k, e) -> System.out.println("key: " + k + "    v: " + e));
@@ -93,6 +116,7 @@ public class StartAnalysis {
 
                 // check if it exists in our list of methods
                 for (String meth : allMethodsCalledByProjectNew) {
+
                     for (MethodOfLibrary j : allMethodsOfLibrary) {
 
                         if (j.toString().contains(meth)) {
@@ -174,6 +198,7 @@ public class StartAnalysis {
                 //ο αριθμητής να είναι ο αριθμός των μεθόδων που χρησιμοποιήθηκαν από τις κλάσεις
                 //προς τον αριθμό των public μεθόδων των συγκεκριμένων κλάσεων - getMethodsCalled?
 
+
                     listOfLibrariesPDO.add(new LibraryDTO(value,
                             ((listForAllTheDirectClasses.size() * 1.0) / paronomastisPUCD) * 100,
                             ((classList.size() * 1.0) / paronomastisPUCD) * 100,
@@ -188,7 +213,7 @@ public class StartAnalysis {
             }
 
             ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName,
-                    countForNUL, listOfLibrariesPDO,sha);
+                    countForNUL,listOfLibrariesPDO,sha);
 
             return projectVersionDTO;
         } catch (
@@ -213,7 +238,12 @@ public class StartAnalysis {
     //not getting the dependency of dependency ...
     public static String getOnlyDependenciesOfAnalysedProject(String nameOfDependency) {
 
-        nameOfDependency = nameOfDependency.replace(nameOfDependency.substring(0,nameOfDependency.lastIndexOf(('\\'))),"");
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            nameOfDependency = nameOfDependency.replace(nameOfDependency.substring(0, nameOfDependency.lastIndexOf(('/'))), "");
+        }
+        else {
+            nameOfDependency = nameOfDependency.replace(nameOfDependency.substring(0, nameOfDependency.lastIndexOf(('\\'))), "");
+        }
         String[] parts = nameOfDependency.substring(1).split("-");
         String temp = String.join(",",parts);
         temp = temp.replace(",","");

@@ -38,14 +38,25 @@ public class LibUtil {
                 .forEach(sourceRoot -> {
                     System.out.println("Analysing Source Root: " + sourceRoot.getRoot().toString() );
                     try {
-                    	
                         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
-                        parseResults
-                                .stream()
-                                .filter(res -> res.getResult().isPresent())
-                                .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn\\wrapper"))
-                                .forEach(res -> { analyzeUnit(res.getResult().get(), res.getResult().get().getStorage().get().getPath().toString());
-                                });
+                        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+                            parseResults
+                                    .stream()
+                                    .filter(res -> res.getResult().isPresent())
+                                    .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn/wrapper"))
+                                    .forEach(res -> {
+                                        analyzeUnit(res.getResult().get(), res.getResult().get().getStorage().get().getPath().toString());
+                                    });
+                        }
+                        else {
+                            parseResults
+                                    .stream()
+                                    .filter(res -> res.getResult().isPresent())
+                                    .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn\\wrapper"))
+                                    .forEach(res -> {
+                                        analyzeUnit(res.getResult().get(), res.getResult().get().getStorage().get().getPath().toString());
+                                    });
+                        }
                     } catch (Exception ignored) {
                     	
                     }

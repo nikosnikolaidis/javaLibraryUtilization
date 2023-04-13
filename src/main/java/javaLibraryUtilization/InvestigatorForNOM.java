@@ -47,12 +47,24 @@ public class InvestigatorForNOM {
                     try {
 
                         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
-                        parseResults
-                                .stream()
-                                .filter(res -> res.getResult().isPresent())
-                                .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn\\wrapper"))
-                                .forEach(res -> { analyzeCompilationUnit(res.getResult().get());
-                                });
+                        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+                            parseResults
+                                    .stream()
+                                    .filter(res -> res.getResult().isPresent())
+                                    .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn/wrapper"))
+                                    .forEach(res -> {
+                                        analyzeCompilationUnit(res.getResult().get());
+                                    });
+                        }
+                        else {
+                            parseResults
+                                    .stream()
+                                    .filter(res -> res.getResult().isPresent())
+                                    .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn\\wrapper"))
+                                    .forEach(res -> {
+                                        analyzeCompilationUnit(res.getResult().get());
+                                    });
+                        }
                     } catch (Exception ignored) {
 
                     }
@@ -98,25 +110,48 @@ public class InvestigatorForNOM {
             sourceRoots
                     .forEach(sourceRoot -> {
                         try {
-                            sourceRoot.tryToParse()
-                                    .stream()
-                                    .filter(res -> res.getResult().isPresent())
-                                    .filter(cu -> cu.getResult().get().getStorage().isPresent())
-                                    .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn\\wrapper"))
-                                    .forEach(cu -> {
-                                        try {
-                                            project.getJavaFiles().add(
-                                                    new JavaFile(cu.getResult().get(), cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getProjectPath(), "").substring(1),
-                                                            cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/"),
-                                                            cu.getResult().get().findAll(ClassOrInterfaceDeclaration.class)
-                                                                    .stream()
-                                                                    .filter(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFullyQualifiedName().isPresent())
-                                                                    .map(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFullyQualifiedName().get())
-                                                                    .map(Class::new)
-                                                                    .collect(Collectors.toSet())));
-                                        } catch (Throwable ignored) {
-                                        }
-                                    });
+                            if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+                                sourceRoot.tryToParse()
+                                        .stream()
+                                        .filter(res -> res.getResult().isPresent())
+                                        .filter(cu -> cu.getResult().get().getStorage().isPresent())
+                                        .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn/wrapper"))
+                                        .forEach(cu -> {
+                                            try {
+                                                project.getJavaFiles().add(
+                                                        new JavaFile(cu.getResult().get(), cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getProjectPath(), "").substring(1),
+                                                                cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/"),
+                                                                cu.getResult().get().findAll(ClassOrInterfaceDeclaration.class)
+                                                                        .stream()
+                                                                        .filter(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFullyQualifiedName().isPresent())
+                                                                        .map(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFullyQualifiedName().get())
+                                                                        .map(Class::new)
+                                                                        .collect(Collectors.toSet())));
+                                            } catch (Throwable ignored) {
+                                            }
+                                        });
+                            }
+                            else {
+                                sourceRoot.tryToParse()
+                                        .stream()
+                                        .filter(res -> res.getResult().isPresent())
+                                        .filter(cu -> cu.getResult().get().getStorage().isPresent())
+                                        .filter(f -> !f.getResult().get().getStorage().get().getPath().toString().contains(".mvn\\wrapper"))
+                                        .forEach(cu -> {
+                                            try {
+                                                project.getJavaFiles().add(
+                                                        new JavaFile(cu.getResult().get(), cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/").replace(project.getProjectPath(), "").substring(1),
+                                                                cu.getResult().get().getStorage().get().getPath().toString().replace("\\", "/"),
+                                                                cu.getResult().get().findAll(ClassOrInterfaceDeclaration.class)
+                                                                        .stream()
+                                                                        .filter(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFullyQualifiedName().isPresent())
+                                                                        .map(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFullyQualifiedName().get())
+                                                                        .map(Class::new)
+                                                                        .collect(Collectors.toSet())));
+                                            } catch (Throwable ignored) {
+                                            }
+                                        });
+                            }
                         } catch (Exception ignored) {
                         }
                     });
