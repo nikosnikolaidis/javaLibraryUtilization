@@ -32,8 +32,6 @@ public class StartAnalysis {
 
     public ProjectVersionDTO startAnalysisOfEach(String s, String projectName, String sha) throws IOException {
 
-        System.out.println("let it start");
-
         allMethodsCalledByProjectNew.clear();
         allMethodsCalledByProject.clear();
 
@@ -68,7 +66,7 @@ public class StartAnalysis {
         else {
             path= Paths.get(project.getProjectPath() + "\\target\\dependency");
         }
-        try ( Stream<Path> subPaths = Files.walk(path, 1)) {
+        try (Stream<Path> subPaths = Files.walk(path, 1)) {
                 List<String> librariesInProject = subPaths
                     .map(Objects::toString)
                     .collect(Collectors.toList());
@@ -93,21 +91,18 @@ public class StartAnalysis {
                 int paronomastisLDUF = 0;
 
                 if (!System.getProperty("os.name").toLowerCase().contains("win")) {
-                    Commands.makeFolder(project.getProjectPath() + "/target/dependency", value.toString());
+                    Commands.makeFolder(project.getProjectPath() + "/target/dependency", value);
                 }
                 else {
-                    Commands.makeFolder(project.getProjectPath() + "\\target\\dependency", value.toString());
+                    Commands.makeFolder(project.getProjectPath() + "\\target\\dependency", value);
                 }
 
                 //get all methods of the file
-                LibUtil m = new LibUtil(value.toString() + "new");
-                System.out.println("tHE M "+m);
-                List<MethodOfLibrary> allMethodsOfLibrary;
+                LibUtil m = new LibUtil(value+"new");
+                List<MethodOfLibrary> allMethodsOfLibrary = new ArrayList<>();
                 allMethodsOfLibrary = m.getMethodsOfLibrary();
 
-                System.out.println("allMethofsOfLibrary" +allMethodsOfLibrary);
-
-                investigatorForNOM = new InvestigatorForNOM(value.toString() + "new");
+                investigatorForNOM = new InvestigatorForNOM(value + "new");
                 investigatorForNOM.getHashMap().forEach((k, e) -> System.out.println("key: " + k + "    v: " + e));
                 paronomastisPUCD = investigatorForNOM.getHashMap().size();
 
@@ -197,7 +192,6 @@ public class StartAnalysis {
                 //LDUF
                 //ο αριθμητής να είναι ο αριθμός των μεθόδων που χρησιμοποιήθηκαν από τις κλάσεις
                 //προς τον αριθμό των public μεθόδων των συγκεκριμένων κλάσεων - getMethodsCalled?
-
 
                     listOfLibrariesPDO.add(new LibraryDTO(value,
                             ((listForAllTheDirectClasses.size() * 1.0) / paronomastisPUCD) * 100,

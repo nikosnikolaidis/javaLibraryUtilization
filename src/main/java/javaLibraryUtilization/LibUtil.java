@@ -13,7 +13,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.utils.SymbolSolverCollectionStrategy;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
-import domain.MethodOfLibrary;	
+import domain.MethodOfLibrary;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -21,25 +21,33 @@ import java.util.List;
 
 public class LibUtil {
      
-    public List<MethodOfLibrary> methodsOfLibrary= new ArrayList<>();
+    public List<MethodOfLibrary> methodsOfLibrary = new ArrayList<>();
  
     public LibUtil(String project) {
+
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project));
-       
+
+        System.out.println("Paths.get(project): "+Paths.get(project));
+        System.out.println(project);
+        System.out.println("ProjectRoot:" +projectRoot);
+        System.out.println();
+
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
+
+        System.out.println("SourceRoots" +sourceRoots);
           
         try { 
             createSymbolSolver(project);
         } catch (IllegalStateException e) {
             return;
-        }		
-        
+        }
         sourceRoots
                 .forEach(sourceRoot -> {
                     System.out.println("Analysing Source Root: " + sourceRoot.getRoot().toString() );
                     try {
                         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
                         if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+                            System.out.println("Mjksanjdasknj");
                             parseResults
                                     .stream()
                                     .filter(res -> res.getResult().isPresent())
@@ -58,7 +66,6 @@ public class LibUtil {
                                     });
                         }
                     } catch (Exception ignored) {
-                    	
                     }
                 });
        System.out.println();

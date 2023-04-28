@@ -61,14 +61,16 @@ public class HelloService {
         else {
             shaList.add(sha);
                 for (String s : allTheFilesForAnalysis) {
+                    System.out.println("All files for analysis element" +s);
                     if (allTheFilesForAnalysis.size() >= 1) {
-                        //Commands.mvnPackage(s);
+                        Commands.mvnPackage(s);
                     }
                     StartAnalysis startAnalysis = new StartAnalysis();
                     projectVersionDTO = startAnalysis.startAnalysisOfEach(s, projectName, sha);
                 }
 
             allTheFilesForAnalysis.clear();
+                System.out.println("before the delete home"+home);
             Commands.deleteProject(home, projectName);
 
             for (LibraryDTO libraryDTO: projectVersionDTO.getLibraries()){

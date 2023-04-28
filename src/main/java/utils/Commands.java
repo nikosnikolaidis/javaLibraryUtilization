@@ -13,7 +13,7 @@ public class Commands {
         //For Linux
         if(!System.getProperty("os.name").toLowerCase().contains("win")) {
             ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +
-                    "; mvn dependency:copy-dependencies");
+                    "; mvn dependency:copy-dependencies -Dclassifier=sources -Dverbose");
             File err2 = new File("err2.txt");
             pbuilder2.redirectError(err2);
             Process p2 = pbuilder2.start();
@@ -79,7 +79,7 @@ public class Commands {
             }
         }
     }
-    public static void unJar(String projectPath,String fileName,String filepath) throws IOException {
+    public static void unJar(String projectPath,String fileName) throws IOException {
         //For Linux
         if(!System.getProperty("os.name").toLowerCase().contains("win")) {
             ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +
@@ -118,7 +118,7 @@ public class Commands {
         //For Linux
         if (!System.getProperty("os.name").toLowerCase().contains("win")) {
             ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +
-                    "; mkdir -p " +fileName+"new/src/main");
+                    "; mkdir -p "+fileName+"new/src/main");
             File err2 = new File("err2.txt");
             pbuilder2.redirectError(err2);
             Process p2 = pbuilder2.start();
@@ -131,9 +131,7 @@ public class Commands {
             while ((line2 = reader3.readLine()) != null) {
                 System.out.println(line2);
             }
-            String filePath =projectPath+"/"+fileName;
             projectPath = fileName + "new/src/main";
-            Commands.unJar(projectPath, fileName,filePath);
         } else {
             //for windows
             Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && " +
@@ -149,9 +147,8 @@ public class Commands {
                 System.out.println(line2);
             }
             projectPath = fileName + "new\\src\\main";
-            String filePath="";
-            Commands.unJar(projectPath, fileName,filePath);
         }
+        Commands.unJar(projectPath, fileName);
     }
     public static void cloneProject(String projectPath,String gitUrl) throws IOException {
         //For Linux
