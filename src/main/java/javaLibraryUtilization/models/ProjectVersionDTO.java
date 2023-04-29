@@ -6,32 +6,24 @@ import java.util.List;
 public class ProjectVersionDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long projectDTOid;
+    private long projectVersionDTOid;
     public String projectName;
-    private int NUL;
-    @OneToMany
-    public List<LibraryDTO> libraries;
     public String sha;
+    @OneToMany
+    public List<ProjectModuleDTO> projectModuleDTOS;
 
     public ProjectVersionDTO() {
     }
 
-    public ProjectVersionDTO(String projectName, int NUL, List<LibraryDTO> libraries) {
-        this.projectName = projectName;
-        this.NUL = NUL;
-        this.libraries = libraries;
-    }
-
-    public ProjectVersionDTO(String projectName, String sha) {
+    public ProjectVersionDTO( String projectName, String sha) {
         this.projectName = projectName;
         this.sha = sha;
     }
 
-    public ProjectVersionDTO( String projectName, int NUL, List<LibraryDTO> libraries, String sha) {
+    public ProjectVersionDTO( String projectName, String sha, List<ProjectModuleDTO> projectModuleDTOS) {
         this.projectName = projectName;
-        this.NUL = NUL;
-        this.libraries = libraries;
-        this.sha = sha;
+        this.sha=sha;
+        this.projectModuleDTOS = projectModuleDTOS;
     }
 
     public String getProjectName() {
@@ -42,19 +34,19 @@ public class ProjectVersionDTO {
         this.projectName = projectName;
     }
 
-    public int getNUL() {
-        return NUL;
+    public List<ProjectModuleDTO> getProjectModuleDTOS() {
+        return projectModuleDTOS;
     }
 
-    public void setNUL(int NUL) {
-        this.NUL = NUL;
+    public void setProjectModuleDTOS(List<ProjectModuleDTO> projectModuleDTOS) {
+        this.projectModuleDTOS = projectModuleDTOS;
     }
 
-    public List<LibraryDTO> getLibraries() {
-        return libraries;
+    public void setProjectVersionDTOid(long projectVersionDTOid) {
+        this.projectVersionDTOid = projectVersionDTOid;
     }
 
-    public void setLibraries(List<LibraryDTO> libraries) {
-        this.libraries = libraries;
+    public void setSha(String sha) {
+        this.sha = sha;
     }
 }

@@ -28,9 +28,8 @@ public class StartAnalysis {
     public static List<String> testArrayNew = new ArrayList<>();
     public static List<String> listForAllTheDirectClasses = new ArrayList<>();
     public List<LibraryDTO> listOfLibrariesPDO = new ArrayList<>();
-    public static ProjectDTO projectDTO = new ProjectDTO();
 
-    public ProjectVersionDTO startAnalysisOfEach(String s, String projectName, String sha) throws IOException {
+    public ProjectModuleDTO startAnalysisOfEach(String s, String projectName, String sha) throws IOException {
 
         allMethodsCalledByProjectNew.clear();
         allMethodsCalledByProject.clear();
@@ -206,10 +205,9 @@ public class StartAnalysis {
                 }
             }
 
-            ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName,
-                    countForNUL,listOfLibrariesPDO,sha);
+            ProjectModuleDTO projectModuleDTO = new ProjectModuleDTO(projectName,countForNUL,listOfLibrariesPDO);
 
-            return projectVersionDTO;
+            return projectModuleDTO;
         } catch (
                 IOException e) {
             e.printStackTrace();

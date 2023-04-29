@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
 public class Commands {
 
     //Get all the dependencies in order to parse all the project

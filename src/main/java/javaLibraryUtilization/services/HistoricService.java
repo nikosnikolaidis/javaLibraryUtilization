@@ -1,11 +1,13 @@
 package javaLibraryUtilization.services;
 
 import javaLibraryUtilization.StartAnalysis;
-import javaLibraryUtilization.models.ProjectVersionDTO;
+import javaLibraryUtilization.models.*;
+import javaLibraryUtilization.repositories.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utils.Commands;
 import java.io.File;
@@ -14,12 +16,23 @@ import java.util.ArrayList;
 import java.util.List;
 @Service
 public class HistoricService {
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private ProjectVersionRepository projectVersionRepository;
+    @Autowired
+    private ProjectModuleRepository projectModuleRepository;
+    @Autowired
+    private LibraryRepository libraryRepository;
+    @Autowired
+    private MethodDetailsRepository methodDetailsRepository;
+    @Autowired
+    private CallRepository callRepository;
     public List<ProjectVersionDTO> historicAnalysis(String url,int number) throws IOException, GitAPIException {
 
         String home = System.getProperty("user.dir");
         Commands.makeFolderForProject(home, url);
 
-        ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO();
         List<ProjectVersionDTO> projectVersionDTOList = new ArrayList<>();
 
         List<String> shaList = new ArrayList<>();
@@ -72,16 +85,71 @@ public class HistoricService {
                     path= home + "\\project\\" + projectName;
                 }
                 Commands.checkoutSha(path, sha);
-                StartAnalysis startAnalysis = new StartAnalysis();
-                projectVersionDTO = startAnalysis.startAnalysisOfEach(path, projectName, sha);
+
+                List<String>  allTheFilesForAnalysis = new ArrayList<>();
+                List<ProjectModuleDTO> listForAllProjectsOfMultiMaven=new ArrayList<>();
+                checkerForMultiplePoms(path , allTheFilesForAnalysis);
+
+                for (String s : allTheFilesForAnalysis) {
+                    if (allTheFilesForAnalysis.size() >= 1) {
+                        Commands.mvnPackage(s);
+                    }
+                    StartAnalysis startAnalysis = new StartAnalysis();
+                    ProjectModuleDTO projectModuleDTO = startAnalysis.startAnalysisOfEach(path, projectName, sha);
+                    listForAllProjectsOfMultiMaven.add(projectModuleDTO);
+                }
+                allTheFilesForAnalysis.clear();
+
+                System.out.println("The sha" + sha);
+                ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName,sha,listForAllProjectsOfMultiMaven);
                 projectVersionDTOList.add(projectVersionDTO);
+
+                for(ProjectVersionDTO s: projectVersionDTOList ) {
+                    for (ProjectModuleDTO projectModuleDTO : listForAllProjectsOfMultiMaven) {
+                        for (LibraryDTO libraryDTO : projectModuleDTO.getLibraries()) {
+                            for (MethodDetailsDTO methodDetailsDTO : libraryDTO.methodDetailsDTOList) {
+                                for (CallDTO callDTO : methodDetailsDTO.callDTOList) {
+                                    callRepository.save(callDTO);
+                                }
+                                methodDetailsRepository.save(methodDetailsDTO);
+                            }
+                            libraryRepository.save(libraryDTO);
+                        }
+                        projectModuleRepository.save(projectModuleDTO);
+                    }
+                    projectVersionRepository.save(projectVersionDTO);
+                }
+                projectRepository.save(new ProjectDTO());
 
             } catch (IOException e) {
                 System.err.println("This version couldnt be analyzed!");
                 e.printStackTrace();
             }
+
         }
         Commands.deleteProject(home, projectName);
         return projectVersionDTOList;
+    }
+    public void checkerForMultiplePoms(String path,List<String> allTheFilesForAnalysis) {
+
+        int add=0;
+        File f = new File (path);
+        File[] files=f.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                checkerForMultiplePoms(file.toString(),allTheFilesForAnalysis);
+                if  (file.getName().equals("src")) {
+                    add++;
+                }
+            }
+            if (file.isFile()) {
+                if  (file.getName().equals("pom.xml")) {
+                    add++;
+                }
+            }
+        }
+        if  (add==2){
+            allTheFilesForAnalysis.add(path);
+        }
     }
 }

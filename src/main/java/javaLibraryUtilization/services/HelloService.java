@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.util.*;
 import javaLibraryUtilization.StartAnalysis;
 import javaLibraryUtilization.models.*;
-import javaLibraryUtilization.repositories.CallRepository;
-import javaLibraryUtilization.repositories.LibraryRepository;
-import javaLibraryUtilization.repositories.MethodDetailsRepository;
-import javaLibraryUtilization.repositories.ProjectRepository;
+import javaLibraryUtilization.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utils.Commands;
@@ -18,6 +15,10 @@ public class HelloService {
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
+    private ProjectVersionRepository projectVersionRepository;
+    @Autowired
+    private ProjectModuleRepository projectModuleRepository;
+    @Autowired
     private LibraryRepository libraryRepository;
     @Autowired
     private MethodDetailsRepository methodDetailsRepository;
@@ -25,7 +26,6 @@ public class HelloService {
     private CallRepository callRepository;
     public static String home;
     public static List<String> shaList = new ArrayList<>();
-    public static ProjectDTO projectDTO = new ProjectDTO();
 
     public ProjectVersionDTO projectAnalysis(String projectURLfromEndpoint) throws IOException {
 
@@ -53,10 +53,15 @@ public class HelloService {
         //check if project is multimaven
         checkerForMultiplePoms(home , allTheFilesForAnalysis);
 
-        ProjectVersionDTO projectVersionDTO = null;
-        if (projectRepository.findBySha(sha)!=null) {
+
+        ProjectDTO projectDTO = new ProjectDTO();
+        ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName, sha);
+
+        List<ProjectModuleDTO> listForAllProjectsOfMultiMaven=new ArrayList<>();
+
+        if (projectVersionRepository.findBySha(sha)!=null) {
             System.out.println("Exists");
-            return projectRepository.findBySha(sha);
+            return projectVersionRepository.findBySha(sha);
         }
         else {
             shaList.add(sha);
@@ -66,25 +71,34 @@ public class HelloService {
                         Commands.mvnPackage(s);
                     }
                     StartAnalysis startAnalysis = new StartAnalysis();
-                    projectVersionDTO = startAnalysis.startAnalysisOfEach(s, projectName, sha);
+                    ProjectModuleDTO projectModuleDTO = startAnalysis.startAnalysisOfEach(s, projectName, sha);
+                    listForAllProjectsOfMultiMaven.add(projectModuleDTO);
                 }
 
             allTheFilesForAnalysis.clear();
                 System.out.println("before the delete home"+home);
             Commands.deleteProject(home, projectName);
 
-            for (LibraryDTO libraryDTO: projectVersionDTO.getLibraries()){
-                for (MethodDetailsDTO methodDetailsDTO : libraryDTO.methodDetailsDTOList) {
-                    for (CallDTO callDTO: methodDetailsDTO.callDTOList) {
-                        callRepository.save(callDTO);
-                    }
-                    methodDetailsRepository.save(methodDetailsDTO);
-                }
-                libraryRepository.save(libraryDTO);
-            }
-            projectRepository.save(projectVersionDTO);
 
+            projectVersionDTO.setProjectModuleDTOS(listForAllProjectsOfMultiMaven);
             projectDTO.setProjVersion(projectVersionDTO);
+
+
+            for(ProjectModuleDTO projectModuleDTO: listForAllProjectsOfMultiMaven) {
+                for (LibraryDTO libraryDTO : projectModuleDTO.getLibraries()) {
+                    for (MethodDetailsDTO methodDetailsDTO : libraryDTO.methodDetailsDTOList) {
+                        for (CallDTO callDTO : methodDetailsDTO.callDTOList) {
+                            callRepository.save(callDTO);
+                        }
+                        methodDetailsRepository.save(methodDetailsDTO);
+                    }
+                    libraryRepository.save(libraryDTO);
+                }
+                projectModuleRepository.save(projectModuleDTO);
+            }
+            projectVersionRepository.save(projectVersionDTO);
+
+            projectRepository.save(projectDTO);
 
             return projectVersionDTO;
         }

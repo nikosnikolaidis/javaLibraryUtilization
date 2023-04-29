@@ -27,14 +27,7 @@ public class LibUtil {
 
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(Paths.get(project));
 
-        System.out.println("Paths.get(project): "+Paths.get(project));
-        System.out.println(project);
-        System.out.println("ProjectRoot:" +projectRoot);
-        System.out.println();
-
         List<SourceRoot> sourceRoots = projectRoot.getSourceRoots();
-
-        System.out.println("SourceRoots" +sourceRoots);
           
         try { 
             createSymbolSolver(project);
@@ -47,7 +40,6 @@ public class LibUtil {
                     try {
                         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
                         if (!System.getProperty("os.name").toLowerCase().contains("win")) {
-                            System.out.println("Mjksanjdasknj");
                             parseResults
                                     .stream()
                                     .filter(res -> res.getResult().isPresent())

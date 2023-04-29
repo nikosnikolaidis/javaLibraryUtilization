@@ -1,12 +1,12 @@
 package javaLibraryUtilization.repositories;
 
-import javaLibraryUtilization.models.ProjectDTO;
 import javaLibraryUtilization.models.ProjectVersionDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 @Repository
+public interface ProjectVersionRepository extends JpaRepository<ProjectVersionDTO,Long> {
 
-public interface ProjectRepository extends JpaRepository<ProjectDTO,Long> {
-    ProjectDTO findByProjectName(String projectName);
+    ProjectVersionDTO findByProjectName(String projectName);
+    ProjectVersionDTO findBySha(String sha);
 }
-
