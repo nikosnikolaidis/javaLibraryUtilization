@@ -100,7 +100,6 @@ public class HistoricService {
                 }
                 allTheFilesForAnalysis.clear();
 
-                System.out.println("The sha" + sha);
                 ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName,sha,listForAllProjectsOfMultiMaven);
                 projectVersionDTOList.add(projectVersionDTO);
 
@@ -125,9 +124,8 @@ public class HistoricService {
                 System.err.println("This version couldnt be analyzed!");
                 e.printStackTrace();
             }
-
         }
-        Commands.deleteProject(home, projectName);
+       // Commands.deleteProject(home, projectName);
         return projectVersionDTOList;
     }
     public void checkerForMultiplePoms(String path,List<String> allTheFilesForAnalysis) {

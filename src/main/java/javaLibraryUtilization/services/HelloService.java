@@ -66,7 +66,6 @@ public class HelloService {
         else {
             shaList.add(sha);
                 for (String s : allTheFilesForAnalysis) {
-                    System.out.println("All files for analysis element" +s);
                     if (allTheFilesForAnalysis.size() >= 1) {
                         Commands.mvnPackage(s);
                     }
@@ -76,9 +75,6 @@ public class HelloService {
                 }
 
             allTheFilesForAnalysis.clear();
-                System.out.println("before the delete home"+home);
-            Commands.deleteProject(home, projectName);
-
 
             projectVersionDTO.setProjectModuleDTOS(listForAllProjectsOfMultiMaven);
             projectDTO.setProjVersion(projectVersionDTO);
@@ -99,6 +95,8 @@ public class HelloService {
             projectVersionRepository.save(projectVersionDTO);
 
             projectRepository.save(projectDTO);
+
+            Commands.deleteProject(home, projectName);
 
             return projectVersionDTO;
         }

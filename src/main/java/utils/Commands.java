@@ -225,7 +225,7 @@ public class Commands {
         //For Linux
         if (!System.getProperty("os.name").toLowerCase().contains("win")) {
             ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +
-                    "; rm -rf " + projectPath + "/" + projectName);
+                    "; rm -rf " + projectPath + "/" + projectName+"maria");
             File err2 = new File("err2.txt");
             pbuilder2.redirectError(err2);
             Process p2 = pbuilder2.start();
@@ -239,9 +239,10 @@ public class Commands {
                 System.out.println(line2);
             }
         } else {
+            System.out.println("Testing" +projectPath+"\\"+projectName);
             //for windows
             Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && " +
-                    "rmdir /s /q " + projectPath + "\\" + projectName);
+                    "rmdir /s /q " + projectPath + "\\" + projectName+ "maria");
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
             String line1;
             while ((line1 = reader1.readLine()) != null) {
