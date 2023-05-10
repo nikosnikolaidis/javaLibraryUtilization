@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31131e53-082a-40be-92c9-a17a837abfa3" name="Changes" comment="&quot;new changes&quot;">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/maria/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/maria/target/classes/META-INF/maven/maria/maria/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/maria/target/classes/META-INF/maven/maria/maria/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/maria/target/classes/maria/main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/services/HistoricService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/services/HistoricService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Commands.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
