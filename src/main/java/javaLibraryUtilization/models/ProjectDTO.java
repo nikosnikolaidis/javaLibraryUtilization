@@ -16,6 +16,9 @@ public class ProjectDTO {
 
     public ProjectDTO() {
     }
+    public ProjectDTO(String projectName) {
+        this.projectName=projectName;
+    }
     public ProjectDTO(ProjectVersionDTO projVersion) {
         ProjVersion = projVersion;
     }

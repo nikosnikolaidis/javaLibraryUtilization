@@ -8,28 +8,28 @@ public class ProjectModuleDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long projectModuleID;
-    public String projectName;
+    public String moduleName;
     private int NUL;
     @OneToMany
     public List<LibraryDTO> libraries;
     public ProjectModuleDTO() {
     }
     public ProjectModuleDTO(String projectName) {
-        this.projectName = projectName;
+        this.moduleName = projectName;
     }
 
     public ProjectModuleDTO( String projectName, int NUL, List<LibraryDTO> libraries) {
-        this.projectName = projectName;
+        this.moduleName = projectName;
         this.NUL = NUL;
         this.libraries = libraries;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getModuleName() {
+        return moduleName;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 
     public int getNUL() {

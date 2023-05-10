@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class HistoricService {
     @Autowired
@@ -75,6 +77,17 @@ public class HistoricService {
             updatedShaList.add(shaList.get(i));
         }
 
+        ///
+        ProjectDTO projectDTO_DB= projectRepository.findByProjectName(projectName);
+        if(projectDTO_DB!=null && projectDTO_DB.getProjectVersionDTOList().size()==shaList.size()){
+            return projectDTO_DB.getProjectVersionDTOList();
+        }
+        ///
+
+        ProjectDTO projectDTO = new ProjectDTO(projectName);
+        projectDTO.setProjectVersionDTOList(projectVersionDTOList);
+
+
         for (String sha : updatedShaList) {
             try {
                 String path;
@@ -103,29 +116,30 @@ public class HistoricService {
                 ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName,sha,listForAllProjectsOfMultiMaven);
                 projectVersionDTOList.add(projectVersionDTO);
 
-                for(ProjectVersionDTO s: projectVersionDTOList ) {
-                    for (ProjectModuleDTO projectModuleDTO : listForAllProjectsOfMultiMaven) {
-                        for (LibraryDTO libraryDTO : projectModuleDTO.getLibraries()) {
-                            for (MethodDetailsDTO methodDetailsDTO : libraryDTO.methodDetailsDTOList) {
-                                for (CallDTO callDTO : methodDetailsDTO.callDTOList) {
-                                    callRepository.save(callDTO);
-                                }
-                                methodDetailsRepository.save(methodDetailsDTO);
-                            }
-                            libraryRepository.save(libraryDTO);
-                        }
-                        projectModuleRepository.save(projectModuleDTO);
-                    }
-                    projectVersionRepository.save(projectVersionDTO);
-                }
-                projectRepository.save(new ProjectDTO());
-
             } catch (IOException e) {
                 System.err.println("This version couldnt be analyzed!");
                 e.printStackTrace();
             }
         }
-       // Commands.deleteProject(home, projectName);
+
+        for(ProjectVersionDTO s: projectVersionDTOList ) {
+            for (ProjectModuleDTO projectModuleDTO : s.getProjectModuleDTOS()) {
+                for (LibraryDTO libraryDTO : projectModuleDTO.getLibraries()) {
+                    for (MethodDetailsDTO methodDetailsDTO : libraryDTO.methodDetailsDTOList) {
+                        for (CallDTO callDTO : methodDetailsDTO.callDTOList) {
+                            callRepository.save(callDTO);
+                        }
+                        methodDetailsRepository.save(methodDetailsDTO);
+                    }
+                    libraryRepository.save(libraryDTO);
+                }
+                projectModuleRepository.save(projectModuleDTO);
+            }
+            projectVersionRepository.save(s);
+        }
+        projectRepository.save(projectDTO);
+
+        // Commands.deleteProject(home, projectName);
         return projectVersionDTOList;
     }
     public void checkerForMultiplePoms(String path,List<String> allTheFilesForAnalysis) {

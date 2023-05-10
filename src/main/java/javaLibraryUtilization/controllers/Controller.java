@@ -42,7 +42,7 @@ public class Controller {
 	@CrossOrigin("*")
 	@GetMapping(path="/startHistoryAnalysis")
 	public List<ProjectVersionDTO> startNewAnalysis(@RequestParam("url")String url,
-													@RequestParam("numberOfCommits")int number){
+											 		@RequestParam("numberOfCommits")int number){
 		try {
 			return HistoricService.historicAnalysis(url,number);
 		} catch (IOException | GitAPIException e) {

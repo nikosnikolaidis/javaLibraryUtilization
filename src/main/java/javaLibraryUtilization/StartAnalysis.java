@@ -36,6 +36,7 @@ public class StartAnalysis {
 
         project = new Project(s);
         Commands.methodForMvnCleanCommand(project.getProjectPath());
+        Commands.mvnPackage(project.getProjectPath());
         Commands.getJarDependenciesForInitParsing(project.getProjectPath());
 
         methodsGetter = new MethodsGetter(project.getProjectPath());
@@ -205,7 +206,9 @@ public class StartAnalysis {
                 }
             }
 
-            ProjectModuleDTO projectModuleDTO = new ProjectModuleDTO(projectName,countForNUL,listOfLibrariesPDO);
+            String moduleName = project.getProjectPath().split("/")[project.getProjectPath().split("/").length-1];
+
+            ProjectModuleDTO projectModuleDTO = new ProjectModuleDTO(moduleName,countForNUL,listOfLibrariesPDO);
 
             return projectModuleDTO;
         } catch (

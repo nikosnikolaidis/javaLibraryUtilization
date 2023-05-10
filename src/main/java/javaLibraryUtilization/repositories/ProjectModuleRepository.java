@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectModuleRepository extends JpaRepository<ProjectModuleDTO,Long> {
 
-      ProjectModuleDTO findByProjectName(String projectName);
+      ProjectModuleDTO findByModuleName(String moduleName);
 }
