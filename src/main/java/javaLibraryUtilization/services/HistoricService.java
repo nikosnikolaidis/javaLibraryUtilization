@@ -139,7 +139,7 @@ public class HistoricService {
         }
         projectRepository.save(projectDTO);
 
-        // Commands.deleteProject(home, projectName);
+        Commands.deleteProject(home, projectName);
         return projectVersionDTOList;
     }
     public void checkerForMultiplePoms(String path,List<String> allTheFilesForAnalysis) {
