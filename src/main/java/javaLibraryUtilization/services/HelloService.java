@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utils.Commands;
 
+import javax.transaction.Transactional;
+
 @Service
 public class HelloService {
     @Autowired
@@ -25,8 +27,8 @@ public class HelloService {
     @Autowired
     private CallRepository callRepository;
     public static String home;
-    public static List<String> shaList = new ArrayList<>();
 
+    @Transactional
     public ProjectVersionDTO projectAnalysis(String projectURLfromEndpoint) throws IOException {
 
         home = System.getProperty("user.dir");
@@ -40,21 +42,28 @@ public class HelloService {
         Commands.makeFolderForProject(home,projectURLfromEndpoint);
 
         //get project path
+        String path;
         if (!System.getProperty("os.name").toLowerCase().contains("win")) {
-            home = home + "project/" +projectName;
+            path = home + "project/" +projectName;
         }
         else {
-            home = home + "\\project\\"+projectName;
+            path = home + "\\project\\"+projectName;
         }
 
         //Get project's sha
-        String sha = Commands.revParse(home,projectURLfromEndpoint);
+        String sha = Commands.revParse(path,projectURLfromEndpoint);
 
         //check if project is multimaven
-        checkerForMultiplePoms(home , allTheFilesForAnalysis);
+        checkerForMultiplePoms(path , allTheFilesForAnalysis);
 
-
-        ProjectDTO projectDTO = new ProjectDTO();
+        ProjectDTO projectDTO;
+        Optional<ProjectDTO> projectDTO_DB= projectRepository.findByProjectName(projectName);
+        if(projectDTO_DB.isPresent()){
+            projectDTO =projectDTO_DB.get();
+        }
+        else {
+            projectDTO = new ProjectDTO(projectName);
+        }
         ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName, sha);
 
         List<ProjectModuleDTO> listForAllProjectsOfMultiMaven=new ArrayList<>();
@@ -64,15 +73,14 @@ public class HelloService {
             return projectVersionRepository.findBySha(sha);
         }
         else {
-            shaList.add(sha);
-                for (String s : allTheFilesForAnalysis) {
-                    if (allTheFilesForAnalysis.size() >= 1) {
-                        Commands.mvnPackage(s);
-                    }
-                    StartAnalysis startAnalysis = new StartAnalysis();
-                    ProjectModuleDTO projectModuleDTO = startAnalysis.startAnalysisOfEach(s, projectName, sha);
-                    listForAllProjectsOfMultiMaven.add(projectModuleDTO);
+            for (String s : allTheFilesForAnalysis) {
+                if (allTheFilesForAnalysis.size() >= 1) {
+                    Commands.mvnPackage(s);
                 }
+                StartAnalysis startAnalysis = new StartAnalysis();
+                ProjectModuleDTO projectModuleDTO = startAnalysis.startAnalysisOfEach(s, projectName, sha);
+                listForAllProjectsOfMultiMaven.add(projectModuleDTO);
+            }
 
             allTheFilesForAnalysis.clear();
 
@@ -94,7 +102,9 @@ public class HelloService {
             }
             projectVersionRepository.save(projectVersionDTO);
 
-            projectRepository.save(projectDTO);
+            if(!projectDTO_DB.isPresent()){
+                projectRepository.save(projectDTO);
+            }
 
             Commands.deleteProject(home, projectName);
 

@@ -193,12 +193,14 @@ public class StartAnalysis {
                 //ο αριθμητής να είναι ο αριθμός των μεθόδων που χρησιμοποιήθηκαν από τις κλάσεις
                 //προς τον αριθμό των public μεθόδων των συγκεκριμένων κλάσεων - getMethodsCalled?
 
+                if(!methodDetailsDTOList.isEmpty()) {
                     listOfLibrariesPDO.add(new LibraryDTO(value,
                             ((listForAllTheDirectClasses.size() * 1.0) / paronomastisPUCD) * 100,
                             ((classList.size() * 1.0) / paronomastisPUCD) * 100,
                             ((numberOfUsedMethods * 1.0) / paronomastisLDUF) * 100,
                             ((arithmitisLIUF * 1.0) / paronomastisLIUF) * 100,
                             methodDetailsDTOList));
+                }
 
                 //count used for NUL - Number of Used Libraries
                 if (count == 1) {

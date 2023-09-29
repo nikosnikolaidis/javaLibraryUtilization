@@ -10,6 +10,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import utils.Commands;
+
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,17 +21,19 @@ import java.util.Optional;
 @Service
 public class HistoricService {
     @Autowired
-    private ProjectRepository projectRepository;
+    ProjectRepository projectRepository;
     @Autowired
-    private ProjectVersionRepository projectVersionRepository;
+    ProjectVersionRepository projectVersionRepository;
     @Autowired
-    private ProjectModuleRepository projectModuleRepository;
+    ProjectModuleRepository projectModuleRepository;
     @Autowired
-    private LibraryRepository libraryRepository;
+    LibraryRepository libraryRepository;
     @Autowired
-    private MethodDetailsRepository methodDetailsRepository;
+    MethodDetailsRepository methodDetailsRepository;
     @Autowired
-    private CallRepository callRepository;
+    CallRepository callRepository;
+
+    @Transactional
     public List<ProjectVersionDTO> historicAnalysis(String url,int number) throws IOException, GitAPIException {
 
         String home = System.getProperty("user.dir");
@@ -78,44 +82,54 @@ public class HistoricService {
         }
 
         ///
-        ProjectDTO projectDTO_DB= projectRepository.findByProjectName(projectName);
-        if(projectDTO_DB!=null && projectDTO_DB.getProjectVersionDTOList().size()==shaList.size()){
-            return projectDTO_DB.getProjectVersionDTOList();
+        Optional<ProjectDTO> projectDTO_DB= projectRepository.findByProjectName(projectName);
+        if(projectDTO_DB.isPresent() && projectDTO_DB.get().getProjectVersionDTOList().size()==shaList.size()){
+            return projectDTO_DB.get().getProjectVersionDTOList();
         }
         ///
 
-        ProjectDTO projectDTO = new ProjectDTO(projectName);
-        projectDTO.setProjectVersionDTOList(projectVersionDTOList);
+        ProjectDTO projectDTO;
+        if(projectDTO_DB.isPresent()){
+            projectDTO =projectDTO_DB.get();
+        }
+        else {
+            projectDTO = new ProjectDTO(projectName);
+        }
 
 
         for (String sha : updatedShaList) {
             try {
-                String path;
-                if (!System.getProperty("os.name").toLowerCase().contains("win")) {
-                    path= home + "/project/" + projectName;
+                if (projectVersionRepository.findBySha(sha)!=null) {
+                    System.out.println("Exists "+ sha);
+                    ProjectVersionDTO projectVersionDTO= projectVersionRepository.findBySha(sha);
+                    projectVersionDTOList.add(projectVersionDTO);
                 }
                 else {
-                    path= home + "\\project\\" + projectName;
-                }
-                Commands.checkoutSha(path, sha);
-
-                List<String>  allTheFilesForAnalysis = new ArrayList<>();
-                List<ProjectModuleDTO> listForAllProjectsOfMultiMaven=new ArrayList<>();
-                checkerForMultiplePoms(path , allTheFilesForAnalysis);
-
-                for (String s : allTheFilesForAnalysis) {
-                    if (allTheFilesForAnalysis.size() >= 1) {
-                        Commands.mvnPackage(s);
+                    String path;
+                    if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+                        path = home + "/project/" + projectName;
+                    } else {
+                        path = home + "\\project\\" + projectName;
                     }
-                    StartAnalysis startAnalysis = new StartAnalysis();
-                    ProjectModuleDTO projectModuleDTO = startAnalysis.startAnalysisOfEach(path, projectName, sha);
-                    listForAllProjectsOfMultiMaven.add(projectModuleDTO);
+                    Commands.checkoutSha(path, sha);
+
+                    List<String> allTheFilesForAnalysis = new ArrayList<>();
+                    List<ProjectModuleDTO> listForAllProjectsOfMultiMaven = new ArrayList<>();
+                    checkerForMultiplePoms(path, allTheFilesForAnalysis);
+
+                    for (String s : allTheFilesForAnalysis) {
+                        if (allTheFilesForAnalysis.size() >= 1) {
+                            Commands.mvnPackage(s);
+                        }
+                        StartAnalysis startAnalysis = new StartAnalysis();
+                        ProjectModuleDTO projectModuleDTO = startAnalysis.startAnalysisOfEach(path, projectName, sha);
+                        listForAllProjectsOfMultiMaven.add(projectModuleDTO);
+                    }
+                    allTheFilesForAnalysis.clear();
+
+                    ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName, sha, listForAllProjectsOfMultiMaven);
+                    projectVersionDTOList.add(projectVersionDTO);
                 }
-                allTheFilesForAnalysis.clear();
-
-                ProjectVersionDTO projectVersionDTO = new ProjectVersionDTO(projectName,sha,listForAllProjectsOfMultiMaven);
-                projectVersionDTOList.add(projectVersionDTO);
-
             } catch (IOException e) {
                 System.err.println("This version couldnt be analyzed!");
                 e.printStackTrace();
@@ -137,7 +151,11 @@ public class HistoricService {
             }
             projectVersionRepository.save(s);
         }
-        projectRepository.save(projectDTO);
+
+        projectDTO.setProjectVersionDTOList(projectVersionDTOList);
+        if(!projectDTO_DB.isPresent()){
+            projectRepository.save(projectDTO);
+        }
 
         Commands.deleteProject(home, projectName);
         return projectVersionDTOList;

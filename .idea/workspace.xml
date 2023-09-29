@@ -5,8 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31131e53-082a-40be-92c9-a17a837abfa3" name="Changes" comment="&quot;new changes&quot;">
+      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/StartAnalysis.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/StartAnalysis.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/controllers/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/controllers/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/repositories/ProjectRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/repositories/ProjectRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/services/HelloService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/services/HelloService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/services/HistoricService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/javaLibraryUtilization/services/HistoricService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Commands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,21 +28,19 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2PWUKE9qv2nz107WMiL0P9JFrTb" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/kolid/Desktop/tmp/javaLibraryUtilization"
-  }
-}]]></component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../uom-strategic-planning/backend" />
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="javaLibraryUtilization.Main" />
@@ -111,6 +117,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />

@@ -224,8 +224,8 @@ public class Commands {
     public static void deleteProject(String projectPath,String projectName) throws IOException {
         //For Linux
         if (!System.getProperty("os.name").toLowerCase().contains("win")) {
-            ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +
-                    "; rm -rf " + projectPath);
+            ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +"/project"+
+                    "; rm -rf " + projectName);
             File err2 = new File("err2.txt");
             pbuilder2.redirectError(err2);
             Process p2 = pbuilder2.start();
@@ -240,8 +240,8 @@ public class Commands {
             }
         } else {
             //for windows
-            Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath + " && " +
-                    "rmdir /s /q " + projectPath);
+            Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath +"\\project"+ " && " +
+                    "rmdir /s /q " + projectName);
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
             String line1;
             while ((line1 = reader1.readLine()) != null) {
