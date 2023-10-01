@@ -28,9 +28,9 @@ public class Controller {
 
 	@CrossOrigin("*")
 	@GetMapping(path="/startAnalysisWithMetricsForOneProjectVersion")
-	public ProjectVersionDTO metricsAnalysis(@RequestParam("url")String url){
+	public ProjectVersionDTO metricsAnalysis(@RequestParam("url")String url, @RequestParam(required = false) String sha){
 		try {
-			return HelloService.projectAnalysis(url);
+			return HelloService.projectAnalysis(url, sha);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

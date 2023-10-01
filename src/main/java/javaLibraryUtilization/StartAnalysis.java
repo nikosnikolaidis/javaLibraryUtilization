@@ -7,7 +7,8 @@ import domain.MethodOfLibrary;
 import domain.Project;
 import javaLibraryUtilization.models.*;
 import utils.Commands;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,7 +36,6 @@ public class StartAnalysis {
         allMethodsCalledByProject.clear();
 
         project = new Project(s);
-        Commands.methodForMvnCleanCommand(project.getProjectPath());
         Commands.mvnPackage(project.getProjectPath());
         Commands.getJarDependenciesForInitParsing(project.getProjectPath());
 
@@ -57,6 +57,20 @@ public class StartAnalysis {
             }
         }
         listOfLibrariesPDO.clear();
+
+        //stop if it doesnt call any methods
+        boolean externalCalls=false;
+        for (String m: allMethodsCalledByProjectNew){
+            if (!m.startsWith("java.") && !m.startsWith("javax.")) {
+                externalCalls = true;
+                break;
+            }
+        }
+        if(allMethodsCalledByProjectNew.size()==0 || !externalCalls){
+            String moduleName = project.getProjectPath().split("/")[project.getProjectPath().split("/").length-1];
+            ProjectModuleDTO projectModuleDTO = new ProjectModuleDTO(moduleName,0,listOfLibrariesPDO);
+            return projectModuleDTO;
+        }
 
         // List all files of Target
         Path path;
@@ -90,11 +104,54 @@ public class StartAnalysis {
                 int count = 0;
                 int paronomastisLDUF = 0;
 
+                String libPath="";
                 if (!System.getProperty("os.name").toLowerCase().contains("win")) {
                     Commands.makeFolder(project.getProjectPath() + "/target/dependency", value);
+                    libPath= value + "new/src/main";
                 }
                 else {
                     Commands.makeFolder(project.getProjectPath() + "\\target\\dependency", value);
+                    libPath= value + "new\\src\\main";
+                }
+
+                //get package name
+                String packageName="";
+                Optional<Path> javaFile = Files.walk(Path.of(libPath))
+                        .filter(Files::isRegularFile)
+                        .filter(p -> p.getFileName().toString().endsWith(".java"))
+                        .findFirst();
+                if(javaFile.isPresent()){
+                    try (BufferedReader br = new BufferedReader(new FileReader(String.valueOf(javaFile.get())))) {
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            if(line.trim().startsWith("package ")){
+                                packageName = line.trim().replace("package ","").replace(";","");
+                                String[] packageNameSplitted = packageName.split("\\.");
+                                if(packageNameSplitted.length>2) {
+                                    packageName = packageNameSplitted[0] + "." + packageNameSplitted[1]+ "." + packageNameSplitted[2];
+                                }
+                                else if(packageNameSplitted.length==2) {
+                                    packageName = packageNameSplitted[0] + "." + packageNameSplitted[1];
+                                }
+                                break;
+                            }
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("lib package: "+packageName);
+
+                //stop if no lib package in called methods
+                boolean continueFlag = false;
+                for (String m: allMethodsCalledByProjectNew){
+                    if (m.startsWith(packageName)) {
+                        continueFlag = true;
+                        break;
+                    }
+                }
+                if(!continueFlag){
+                    continue;
                 }
 
                 //get all methods of the file
@@ -111,8 +168,11 @@ public class StartAnalysis {
 
                 // check if it exists in our list of methods
                 for (String meth : allMethodsCalledByProjectNew) {
+                    System.out.println("---");
+                    System.out.println(meth);
 
                     for (MethodOfLibrary j : allMethodsOfLibrary) {
+                        System.out.println("- "+j);
 
                         if (j.toString().contains(meth)) {
 

@@ -29,7 +29,7 @@ public class HelloService {
     public static String home;
 
     @Transactional
-    public ProjectVersionDTO projectAnalysis(String projectURLfromEndpoint) throws IOException {
+    public ProjectVersionDTO projectAnalysis(String projectURLfromEndpoint, String commit) throws IOException {
 
         home = System.getProperty("user.dir");
 
@@ -48,6 +48,11 @@ public class HelloService {
         }
         else {
             path = home + "\\project\\"+projectName;
+        }
+
+        //checkout to sha
+        if(commit!=null && !commit.equals("")){
+            Commands.checkoutSha(path, commit);
         }
 
         //Get project's sha
@@ -73,13 +78,24 @@ public class HelloService {
             return projectVersionRepository.findBySha(sha);
         }
         else {
+            System.out.println("-------------");
+            System.out.println("Size: "+allTheFilesForAnalysis.size());
+            System.out.println("-------------");
+            allTheFilesForAnalysis.forEach(System.out::println);
+            System.out.println("-------------");
+            int counter=1;
             for (String s : allTheFilesForAnalysis) {
+                System.out.println("-----------");
+                System.out.println("Module: " +counter+ "/" +allTheFilesForAnalysis.size());
+                counter++;
                 if (allTheFilesForAnalysis.size() >= 1) {
                     Commands.mvnPackage(s);
                 }
                 StartAnalysis startAnalysis = new StartAnalysis();
                 ProjectModuleDTO projectModuleDTO = startAnalysis.startAnalysisOfEach(s, projectName, sha);
-                listForAllProjectsOfMultiMaven.add(projectModuleDTO);
+                if(projectModuleDTO != null) {
+                    listForAllProjectsOfMultiMaven.add(projectModuleDTO);
+                }
             }
 
             allTheFilesForAnalysis.clear();

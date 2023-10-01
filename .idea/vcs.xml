@@ -2,6 +2,14 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/project/brooklyn-server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/project/hadoop" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/project/incubator-baremaps" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/project/maria" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/project/metrics_calculator" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/project/ozone" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/project/qpid-jms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/project/sedona" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/project/zookeeper" vcs="Git" />
   </component>
 </project>

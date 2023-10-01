@@ -9,6 +9,7 @@ public class Commands {
 
     //Get all the dependencies in order to parse all the project
     public static void getJarDependenciesForInitParsing(String projectPath) throws IOException {
+        System.out.println("mvn dependencies...");
         //For Linux
         if(!System.getProperty("os.name").toLowerCase().contains("win")) {
             ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +
@@ -19,14 +20,13 @@ public class Commands {
             BufferedReader reader2 = new BufferedReader(new InputStreamReader(p2.getInputStream()));
             String line2; 
             while ((line2 = reader2.readLine()) != null) {
-               System.out.println(line2);
+                //System.out.println(line2);
             }
             BufferedReader reader3 = new BufferedReader(new InputStreamReader(p2.getErrorStream()));
             while ((line2 = reader3.readLine()) != null) {
                System.out.println(line2);
             }
-        }  
-    
+        }
         //For Windows
         else {
             Process proc1 = Runtime.getRuntime().exec("cmd /c \"cd " + projectPath+ " && "+
@@ -34,7 +34,7 @@ public class Commands {
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
             String line1;
             while ((line1 = reader1.readLine()) != null) {
-                System.out.println(line1);
+                //System.out.println(line1);
             }
             BufferedReader reader2 = new BufferedReader(new InputStreamReader(proc1.getErrorStream()));
             String line2;
@@ -46,6 +46,7 @@ public class Commands {
     }
     public static void methodForMvnCleanCommand(String projectPath) throws IOException {
         //For Linux
+        System.out.println("mvn clean...");
         if(!System.getProperty("os.name").toLowerCase().contains("win")) {
             ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +
                     "; mvn clean");
@@ -55,7 +56,7 @@ public class Commands {
             BufferedReader reader2 = new BufferedReader(new InputStreamReader(p2.getInputStream()));
             String line2;
             while ((line2 = reader2.readLine()) != null) {
-                System.out.println(line2);
+                //System.out.println(line2);
             }
             BufferedReader reader3 = new BufferedReader(new InputStreamReader(p2.getErrorStream()));
             while ((line2 = reader3.readLine()) != null) {
@@ -69,7 +70,7 @@ public class Commands {
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
             String line1;
             while ((line1 = reader1.readLine()) != null) {
-                System.out.println(line1);
+                //System.out.println(line1);
             }
             BufferedReader reader2 = new BufferedReader(new InputStreamReader(proc1.getErrorStream()));
             String line2;
@@ -325,6 +326,7 @@ public class Commands {
     }
     public static void mvnPackage(String projectPath) throws IOException {
         //For Linux
+        System.out.println("mvn package...");
         if (!System.getProperty("os.name").toLowerCase().contains("win")) {
             ProcessBuilder pbuilder2 = new ProcessBuilder("bash", "-c", "cd " + projectPath +
                     "; mvn package -DskipTests");
@@ -334,7 +336,7 @@ public class Commands {
             BufferedReader reader2 = new BufferedReader(new InputStreamReader(p2.getInputStream()));
             String line2;
             while ((line2 = reader2.readLine()) != null) {
-                System.out.println(line2);
+                //System.out.println(line2);
             }
             BufferedReader reader3 = new BufferedReader(new InputStreamReader(p2.getErrorStream()));
             while ((line2 = reader3.readLine()) != null) {
@@ -347,7 +349,7 @@ public class Commands {
             BufferedReader reader1 = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
             String line1;
             while ((line1 = reader1.readLine()) != null) {
-                System.out.println(line1);
+                //System.out.println(line1);
             }
             BufferedReader reader2 = new BufferedReader(new InputStreamReader(proc1.getErrorStream()));
             String line2;
