@@ -168,12 +168,7 @@ public class StartAnalysis {
 
                 // check if it exists in our list of methods
                 for (String meth : allMethodsCalledByProjectNew) {
-                    System.out.println("---");
-                    System.out.println(meth);
-
                     for (MethodOfLibrary j : allMethodsOfLibrary) {
-                        System.out.println("- "+j);
-
                         if (j.toString().contains(meth)) {
 
                             //calculate arithmiti PUCD (WITHOUT tracing)
