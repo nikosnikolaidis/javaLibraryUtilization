@@ -118,6 +118,7 @@ public class StartAnalysis {
                 String packageName="";
                 Optional<Path> javaFile = Files.walk(Path.of(libPath))
                         .filter(Files::isRegularFile)
+                        .filter(p -> !p.getFileName().toString().contains("META-INF"))
                         .filter(p -> p.getFileName().toString().endsWith(".java"))
                         .findFirst();
                 if(javaFile.isPresent()){
@@ -127,10 +128,7 @@ public class StartAnalysis {
                             if(line.trim().startsWith("package ")){
                                 packageName = line.trim().replace("package ","").replace(";","");
                                 String[] packageNameSplitted = packageName.split("\\.");
-                                if(packageNameSplitted.length>2) {
-                                    packageName = packageNameSplitted[0] + "." + packageNameSplitted[1]+ "." + packageNameSplitted[2];
-                                }
-                                else if(packageNameSplitted.length==2) {
+                                if(packageNameSplitted.length>1) {
                                     packageName = packageNameSplitted[0] + "." + packageNameSplitted[1];
                                 }
                                 break;
